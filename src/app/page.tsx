@@ -5,9 +5,6 @@ import Hero from '@/components/solana-hub/Hero';
 import Process from '@/components/solana-hub/Process';
 import Features from '@/components/solana-hub/Features';
 import Partners from '@/components/solana-hub/Partners';
-import Projects from '@/components/solana-hub/Projects';
-// import Blog from '@/components/solana-hub/Blog';
-import Testimonial from '@/components/solana-hub/Testimonial';
 import FooterOne from '@/components/shared/footer/FooterOne';
 import NavbarOne from '@/components/shared/header/NavbarOne';
 import { Metadata } from 'next';
@@ -33,9 +30,6 @@ const Homepage = () => {
         <Stats />
         <Partners />
         <Features />
-        {/* <Projects /> */}
-        {/* <Testimonial /> */}
-        {/* <Blog /> */}
         <CTA />
       </main>
       <FooterOne className="bg-black border-t border-white/10" />

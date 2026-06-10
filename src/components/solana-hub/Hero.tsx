@@ -37,9 +37,9 @@ const Hero = () => {
             <RevealAnimation delay={0.3} direction="left" offset={50}>
               <li className="w-full sm:w-auto">
                 <LinkButton
-                  href="/login-01"
+                  href="/dashboard/startups/new"
                   className="btn btn-primary btn-md md:btn-xl hover:btn-white w-[90%] md:w-auto shadow-lg shadow-primary-500/20">
-                  Connect Wallet
+                  Register Startup
                 </LinkButton>
               </li>
             </RevealAnimation>
