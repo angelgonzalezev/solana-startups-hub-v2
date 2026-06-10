@@ -115,6 +115,13 @@ Delivery docs:
 - [Task Backlog](docs/delivery/TASK_BACKLOG.md)
 - [QA Checklist](QA_CHECKLIST.md)
 
+Public documentation site:
+
+- Source package: [docs-site](docs-site)
+- Local dev: `npm run docs:dev` at `http://localhost:3001/docs/`
+- Static build: `npm run docs:build`
+- Served path after build: `/docs`
+
 ## Getting Started
 
 Prerequisites:
@@ -145,6 +152,9 @@ http://localhost:3000
 ```bash
 npm run dev          # Start the local development server
 npm run build        # Build for production
+npm run build:with-docs # Build Docusaurus docs and then the app
+npm run docs:dev     # Start Docusaurus locally
+npm run docs:build   # Generate static Docusaurus files under public/docs
 npm run start        # Start the production server
 npm run lint         # Run lint command configured in package.json
 npm run lint:fix     # Run lint autofix command configured in package.json

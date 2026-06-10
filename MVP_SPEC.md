@@ -101,9 +101,9 @@ Delivery:
 
 Last audited: 2026-06-10.
 
-- Done: 26/42 tasks.
-- Partial: 12/42 tasks.
-- Pending: 4/42 tasks.
+- Done: 27/43 tasks.
+- Partial: 12/43 tasks.
+- Pending: 4/43 tasks.
 
 See [Task Backlog](docs/delivery/TASK_BACKLOG.md) for task-level tracking.
 

@@ -16,6 +16,12 @@
 # next.js
 /.next/
 /out/
+/public/docs/
+
+# docusaurus
+/docs-site/.docusaurus/
+/docs-site/build/
+/docs-site/node_modules/
 
 # production
 /build

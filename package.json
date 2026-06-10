@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:with-docs": "npm run docs:build && npm run build",
+    "docs:build": "npm --prefix docs-site run build",
+    "docs:dev": "npm --prefix docs-site run start",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",

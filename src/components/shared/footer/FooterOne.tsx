@@ -31,7 +31,7 @@ const FooterOne = ({ className }: { className?: string }) => {
                   <Image src={darkLogo} alt="NextSass Logo" />
                 </figure>
                 <p className="text-accent/60 text-tagline-1 mt-4 mb-7 font-normal">
-                  Turpis tortor nunc sed amet et faucibus vitae morbi congue sed id mauris.
+                  A curated marketplace directory for Solana startups, founders, investors, and ecosystem teams.
                 </p>
                 <div className="flex items-center gap-3">
                   <Link target="_blank" href="https://www.facebook.com" className="footer-social-link">
@@ -75,17 +75,17 @@ const FooterOne = ({ className }: { className?: string }) => {
                   <ul className="space-y-3 sm:space-y-5">
                     <li>
                       <Link href="/about-01" className="footer-link">
-                        About Us
+                        About
                       </Link>
                     </li>
                     <li>
-                      <Link href="/career" className="footer-link">
-                        Career
+                      <Link href="/startups" className="footer-link">
+                        Marketplace
                       </Link>
                     </li>
                     <li>
-                      <Link href="/case-study" className="footer-link">
-                        Case Studies
+                      <Link href="/dashboard" className="footer-link">
+                        Dashboard
                       </Link>
                     </li>
                     <li>
@@ -100,26 +100,26 @@ const FooterOne = ({ className }: { className?: string }) => {
             <div className="col-span-12 md:col-span-4">
               <RevealAnimation delay={0.5}>
                 <div className="space-y-8">
-                  <p className="sm:text-heading-6 text-tagline-1 text-primary-50 font-normal">Support</p>
+                  <p className="sm:text-heading-6 text-tagline-1 text-primary-50 font-normal">Resources</p>
                   <ul className="space-y-3 sm:space-y-5">
                     <li>
-                      <Link href="/faq" className="footer-link">
-                        FAQ
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/documentation" className="footer-link">
+                      <Link href="/docs" className="footer-link">
                         Documentation
                       </Link>
                     </li>
                     <li>
-                      <Link href="/tutorial" className="footer-link">
-                        Tutorial
+                      <Link href="/docs/roadmap/current-roadmap" className="footer-link">
+                        Roadmap
                       </Link>
                     </li>
                     <li>
-                      <Link href="/support" className="footer-link">
-                        Support
+                      <Link href="/docs/tasks/progress" className="footer-link">
+                        Tasks
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/docs/technology/stack" className="footer-link">
+                        Technology
                       </Link>
                     </li>
                   </ul>
@@ -166,7 +166,7 @@ const FooterOne = ({ className }: { className?: string }) => {
           <FooterDivider />
           <RevealAnimation delay={0.7} offset={10} start="top 105%">
             <p className="text-tagline-1 text-primary-50 font-normal">
-              Copyright &copy;NextSaaS – smart application for modern business
+              Copyright &copy; Solana Startups Hub - curated marketplace directory for the Solana ecosystem
             </p>
           </RevealAnimation>
         </div>

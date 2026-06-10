@@ -1,0 +1,223 @@
+:root {
+  --ifm-color-primary: #14f195;
+  --ifm-color-primary-dark: #0ed684;
+  --ifm-color-primary-darker: #0bc57a;
+  --ifm-color-primary-darkest: #07955c;
+  --ifm-color-primary-light: #47f5ac;
+  --ifm-color-primary-lighter: #6bf8bd;
+  --ifm-color-primary-lightest: #9dfbd4;
+  --ifm-background-color: #070711;
+  --ifm-navbar-background-color: rgba(7, 7, 17, 0.92);
+  --ifm-footer-background-color: #080813;
+  --ifm-font-color-base: #f7f3ff;
+  --ifm-heading-color: #ffffff;
+  --ifm-menu-color: rgba(247, 243, 255, 0.78);
+  --ifm-menu-color-active: #14f195;
+  --ifm-navbar-link-color: #f7f3ff;
+  --ifm-table-head-color: #ffffff;
+  --ifm-table-stripe-background: rgba(255, 255, 255, 0.035);
+  --ifm-font-family-base: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ifm-heading-font-weight: 700;
+  --ifm-code-font-size: 95%;
+}
+
+[data-theme='dark'] {
+  --ifm-background-color: #070711;
+  --ifm-background-surface-color: #10101e;
+  --ifm-navbar-background-color: rgba(7, 7, 17, 0.92);
+  --ifm-color-content: #f7f3ff;
+  --ifm-color-content-secondary: rgba(247, 243, 255, 0.72);
+}
+
+body {
+  color: #f7f3ff;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(153, 69, 255, 0.22), transparent 32rem),
+    radial-gradient(circle at 95% 10%, rgba(20, 241, 149, 0.14), transparent 28rem), #070711;
+}
+
+.main-wrapper,
+.theme-doc-markdown,
+.markdown,
+.markdown p,
+.markdown li,
+.markdown td,
+.markdown blockquote,
+.table-of-contents,
+.pagination-nav__label,
+.pagination-nav__sublabel,
+.breadcrumbs__link {
+  color: #f7f3ff;
+}
+
+.markdown a,
+.table-of-contents__link,
+.breadcrumbs__link:hover {
+  color: #14f195;
+}
+
+.markdown a:hover,
+.table-of-contents__link:hover {
+  color: #6bf8bd;
+}
+
+.navbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.navbar__brand,
+.navbar__link,
+.footer__link-item {
+  color: #f7f3ff;
+}
+
+.navbar__link:hover,
+.footer__link-item:hover {
+  color: #14f195;
+}
+
+.theme-doc-sidebar-container {
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.menu__link {
+  color: rgba(247, 243, 255, 0.78);
+  border-radius: 8px;
+}
+
+.menu__link:hover {
+  color: #f7f3ff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.menu__link--active {
+  color: #14f195 !important;
+  background: rgba(20, 241, 149, 0.1);
+}
+
+.menu__caret::before,
+.menu__link--sublist-caret::after {
+  filter: invert(1) brightness(1.35);
+  opacity: 0.86;
+}
+
+.menu__link:hover .menu__link--sublist-caret::after,
+.menu__list-item-collapsible:hover .menu__caret::before {
+  opacity: 1;
+}
+
+[class*='collapseSidebarButtonIcon'] {
+  color: #f7f3ff;
+  filter: invert(1) brightness(1.35);
+}
+
+.theme-doc-markdown {
+  max-width: 860px;
+}
+
+.markdown h1 {
+  color: #ffffff;
+  letter-spacing: 0;
+}
+
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  color: #ffffff;
+}
+
+.markdown strong {
+  color: #ffffff;
+}
+
+.markdown table {
+  display: table;
+  width: 100%;
+}
+
+.markdown th,
+.markdown td {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.markdown th {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.markdown tr:nth-child(2n) {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.theme-code-block,
+code {
+  color: #f7f3ff;
+}
+
+.alert,
+.card,
+.dropdown__menu,
+.navbar-sidebar,
+.pagination-nav__link,
+.breadcrumbs__item:not(.breadcrumbs__item--active),
+input,
+textarea,
+select {
+  color: #111827;
+}
+
+.alert *,
+.card *,
+.dropdown__menu *,
+.navbar-sidebar *,
+.pagination-nav__link *,
+.breadcrumbs__item:not(.breadcrumbs__item--active) * {
+  color: inherit;
+}
+
+.alert a,
+.card a,
+.dropdown__menu a,
+.navbar-sidebar a,
+.pagination-nav__link a {
+  color: #0b6b45;
+}
+
+.alert code,
+.card code {
+  color: #111827;
+  background: rgba(17, 24, 39, 0.08);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.info-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1rem;
+}
+
+.info-card strong {
+  color: #14f195;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(20, 241, 149, 0.35);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  color: #14f195;
+  background: rgba(20, 241, 149, 0.08);
+  font-size: 0.85rem;
+  font-weight: 600;
+}

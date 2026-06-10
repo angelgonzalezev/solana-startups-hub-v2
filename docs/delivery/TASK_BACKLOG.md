@@ -27,9 +27,9 @@ Audit date: 2026-06-10.
 
 Current progress:
 
-- Done: 26/42.
-- Partial: 12/42.
-- Pending: 4/42.
+- Done: 27/43.
+- Partial: 12/43.
+- Pending: 4/43.
 
 Build status:
 
@@ -127,8 +127,9 @@ Build status:
 
 ## Phase K: Release Preparation
 
-| Status | Priority | Task                                    | Notes                                                                                                    |
-| :----- | :------- | :-------------------------------------- | :------------------------------------------------------------------------------------------------------- |
-| [x]    | P0       | TASK-040 - MVP v1.0 checklist           | `QA_CHECKLIST.md` exists.                                                                                |
-| [x]    | P2       | TASK-041 - Post-MVP technical decisions | Documented in `QA_CHECKLIST.md`.                                                                         |
-| [x]    | P1       | TASK-042 - Update project README        | Replaced template README with project-specific product, setup, docs, route, status, and commit guidance. |
+| Status | Priority | Task                                     | Notes                                                                                                                              |
+| :----- | :------- | :--------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| [x]    | P0       | TASK-040 - MVP v1.0 checklist            | `QA_CHECKLIST.md` exists.                                                                                                          |
+| [x]    | P2       | TASK-041 - Post-MVP technical decisions  | Documented in `QA_CHECKLIST.md`.                                                                                                   |
+| [x]    | P1       | TASK-042 - Update project README         | Replaced template README with project-specific product, setup, docs, route, status, and commit guidance.                           |
+| [x]    | P1       | TASK-043 - Create public Docusaurus docs | Adds a Docusaurus docs package served under `/docs`, with product, flow, roadmap, task, technology, and contributor documentation. |

@@ -37,6 +37,12 @@ export const navigationItems: NavigationItem[] = [
     hasDropdown: false,
   },
   {
+    id: 'docs',
+    label: 'Docs',
+    href: '/docs',
+    hasDropdown: false,
+  },
+  {
     id: 'contact',
     label: 'Contact Us',
     href: '/contact-us',
