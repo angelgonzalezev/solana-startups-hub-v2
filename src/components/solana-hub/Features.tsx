@@ -114,10 +114,10 @@ const Features = () => {
         </div>
         <RevealAnimation delay={0.9}>
           <div className="flex flex-col md:flex-row items-center gap-y-5 md:gap-x-3 justify-center">
-            <LinkButton href="/use-case" className="btn btn-primary btn-md hover:btn-white w-[90%] md:w-auto">
+            <LinkButton href="/startups" className="btn btn-primary btn-md hover:btn-white w-[90%] md:w-auto">
               Explore the Hub
             </LinkButton>
-            <LinkButton href="/login-01" className="btn btn-white-dark btn-md hover:btn-primary w-[90%] md:w-auto">
+            <LinkButton href="/dashboard/startups/new" className="btn btn-white-dark btn-md hover:btn-primary w-[90%] md:w-auto">
               Register Startup
             </LinkButton>
           </div>

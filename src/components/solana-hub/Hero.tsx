@@ -46,7 +46,7 @@ const Hero = () => {
             <RevealAnimation delay={0.5} direction="left" offset={60}>
               <li className="w-full sm:w-auto">
                 <LinkButton
-                  href="/case-study"
+                  href="/startups"
                   className="btn btn-white-dark btn-md md:btn-xl hover:btn-primary w-[90%] md:w-auto border border-white/10">
                   Explore Startups
                 </LinkButton>

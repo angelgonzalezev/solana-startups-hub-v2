@@ -22,7 +22,7 @@ const CTA = () => {
           <RevealAnimation delay={0.4}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <LinkButton
-                href="/login-01"
+                href="/dashboard/startups/new"
                 className="btn btn-primary btn-md md:btn-xl hover:btn-white w-full sm:w-auto">
                 List Your Startup
               </LinkButton>
