@@ -17,20 +17,28 @@ export default function StartupsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadStartups();
-  }, [filters]);
+    let cancelled = false;
 
-  const loadStartups = async () => {
-    setIsLoading(true);
-    try {
-      const data = await startupService.listPublishedStartups(filters);
-      setStartups(data);
-    } catch (error) {
-      console.error('Error loading startups:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    (async () => {
+      setIsLoading(true);
+      try {
+        const data = await startupService.listPublishedStartups(filters);
+        if (!cancelled) {
+          setStartups(data);
+        }
+      } catch (error) {
+        console.error('Error loading startups:', error);
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [filters]);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
@@ -52,7 +60,8 @@ export default function StartupsPage() {
                     </span>
                   </h1>
                   <p className="text-white/60 text-lg md:text-xl max-w-[600px]">
-                    Discover verified projects, track their progress, and connect with founders building the future of Web3.
+                    Discover verified projects, track their progress, and connect with founders building the future of
+                    Web3.
                   </p>
                 </div>
               </RevealAnimation>
@@ -77,11 +86,7 @@ export default function StartupsPage() {
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       {startups.map((startup, index) => (
-                        <StartupCard
-                          key={startup.id}
-                          startup={startup}
-                          index={index}
-                        />
+                        <StartupCard key={startup.id} startup={startup} index={index} />
                       ))}
                     </div>
                   )}

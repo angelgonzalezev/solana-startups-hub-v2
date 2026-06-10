@@ -2,7 +2,7 @@ import { Startup, StartupStage, AcquisitionStatus } from '@/interface/startup';
 import startupsMock from '@/data/mock/startups.json';
 import { validateStartup, shouldResetVerification } from '@/utils/validation';
 
-let startups: Startup[] = [...startupsMock] as any;
+const startups: Startup[] = startupsMock as Startup[];
 
 export type StartupFilters = {
   search?: string;
@@ -13,18 +13,28 @@ export type StartupFilters = {
   acquisitionStatus?: AcquisitionStatus;
 };
 
+const isPublicStartup = (startup: Startup) =>
+  startup.verificationStatus === 'verified' && startup.listingStatus === 'published';
+
+const canViewStartup = (startup: Startup, viewerWallet?: string): boolean =>
+  isPublicStartup(startup) || Boolean(viewerWallet && startup.ownerWallet === viewerWallet);
+
 export const startupService = {
   listPublishedStartups: async (filters: StartupFilters): Promise<Startup[]> => {
     return startups.filter((s) => {
-      if (s.verificationStatus !== 'verified' || s.listingStatus !== 'published') {
+      if (!isPublicStartup(s)) {
         return false;
       }
 
-      if (filters.search && !s.name.toLowerCase().includes(filters.search.toLowerCase()) && !s.oneLiner.toLowerCase().includes(filters.search.toLowerCase())) {
+      if (
+        filters.search &&
+        !s.name.toLowerCase().includes(filters.search.toLowerCase()) &&
+        !s.oneLiner.toLowerCase().includes(filters.search.toLowerCase())
+      ) {
         return false;
       }
 
-      if (filters.category && filters.category.length > 0 && !filters.category.some(c => s.category.includes(c))) {
+      if (filters.category && filters.category.length > 0 && !filters.category.some((c) => s.category.includes(c))) {
         return false;
       }
 
@@ -32,7 +42,11 @@ export const startupService = {
         return false;
       }
 
-      if (filters.techStack && filters.techStack.length > 0 && !filters.techStack.some(t => s.techStack.includes(t))) {
+      if (
+        filters.techStack &&
+        filters.techStack.length > 0 &&
+        !filters.techStack.some((t) => s.techStack.includes(t))
+      ) {
         return false;
       }
 
@@ -50,6 +64,15 @@ export const startupService = {
 
   getStartupById: async (id: string): Promise<Startup | null> => {
     return startups.find((s) => s.id === id) || null;
+  },
+
+  getAccessibleStartupById: async (id: string, viewerWallet?: string): Promise<Startup | null> => {
+    const startup = startups.find((s) => s.id === id) || null;
+    if (!startup || !canViewStartup(startup, viewerWallet)) {
+      return null;
+    }
+
+    return startup;
   },
 
   listStartupsByOwner: async (walletAddress: string): Promise<Startup[]> => {
@@ -123,7 +146,7 @@ export const startupService = {
       domainVerificationStatus,
       xVerificationStatus,
       updatedAt: new Date().toISOString(),
-    } as Startup;
+    };
 
     return startups[index];
   },
