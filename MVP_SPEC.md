@@ -61,17 +61,17 @@ Out of scope:
 
 ## Key Routes
 
-| Route | Access | Purpose |
-| :--- | :--- | :--- |
-| `/` | Public | Landing page. |
-| `/startups` | Logged-in only | Marketplace. |
-| `/startups/[id]` | Logged-in only | Startup detail and founder contact. |
-| `/dashboard` | Logged-in only | Private overview. |
-| `/dashboard/profile` | Logged-in only | Edit profile. |
-| `/dashboard/startups` | Logged-in only | Manage owned startups. |
-| `/dashboard/startups/new` | Logged-in with profile | Create startup. |
-| `/dashboard/startups/[id]/edit` | Owner only | Edit startup. |
-| `/dashboard/startups/[id]/verification` | Owner only | Verification and publication. |
+| Route                                   | Access                 | Purpose                             |
+| :-------------------------------------- | :--------------------- | :---------------------------------- |
+| `/`                                     | Public                 | Landing page.                       |
+| `/startups`                             | Logged-in only         | Marketplace.                        |
+| `/startups/[id]`                        | Logged-in only         | Startup detail and founder contact. |
+| `/dashboard`                            | Logged-in only         | Private overview.                   |
+| `/dashboard/profile`                    | Logged-in only         | Edit profile.                       |
+| `/dashboard/startups`                   | Logged-in only         | Manage owned startups.              |
+| `/dashboard/startups/new`               | Logged-in with profile | Create startup.                     |
+| `/dashboard/startups/[id]/edit`         | Owner only             | Edit startup.                       |
+| `/dashboard/startups/[id]/verification` | Owner only             | Verification and publication.       |
 
 ## Documentation Map
 
@@ -101,9 +101,9 @@ Delivery:
 
 Last audited: 2026-06-10.
 
-- Done: 25/41 tasks.
-- Partial: 12/41 tasks.
-- Pending: 4/41 tasks.
+- Done: 26/42 tasks.
+- Partial: 12/42 tasks.
+- Pending: 4/42 tasks.
 
 See [Task Backlog](docs/delivery/TASK_BACKLOG.md) for task-level tracking.
 

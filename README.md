@@ -1,457 +1,192 @@
-# NextSaaS - Modern SaaS Template Collection 
+# Solana Startups Hub
 
-A comprehensive, modern Next.js 15 SaaS template collection with 20+ homepage variations and complete inner pages. Built with React 19, TypeScript, Tailwind CSS 4, and cutting-edge web technologies for SaaS businesses, startups, and web applications.
+Solana Startups Hub is a curated marketplace directory for startups building in the Solana ecosystem.
 
-![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black)
-![React](https://img.shields.io/badge/React-19.1.0-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-blue)
-![GSAP](https://img.shields.io/badge/GSAP-3.12.5-green)
-![Lenis](https://img.shields.io/badge/Lenis-1.0.38-orange)
+The MVP lets founders connect a wallet, complete a professional profile, list a startup, request mock verification, publish verified startups, and make them discoverable to logged-in users.
 
-## 📦 What's Included
+In v1, "marketplace" means structured discovery and founder contact through public social links. It does not include chat, offers, payments, USDC acquisition flows, or deal rooms.
 
-- ✅ **Complete Source Code** - Full Next.js 15 project
-- ✅ **20+ Homepage Variations** - Different layouts and styles
-- ✅ **50+ Inner Pages** - Authentication, pricing, blog, and more
-- ✅ **500+ Components** - Reusable React components
-- ✅ **Documentation** - Comprehensive setup guide
-- ✅ **Free Updates** - Future improvements included
-- ✅ **Premium Support** - Email support from our team
+## Current Status
 
-## ✨ Features
+Last audited: 2026-06-10.
 
-### 🏠 **34+ Homepage Variations**
+- Core product routes are implemented.
+- Mock wallet authentication is implemented.
+- User profile, dashboard, startup CRUD, verification, marketplace, detail page, and founder contact screens exist.
+- Product and implementation documentation lives under `docs/`.
+- The project is not release-ready yet because `npm run build` still fails during lint/type validity checks.
 
-- Multiple design styles for different business needs
-- Crypto, Finance, Analytics, SaaS, and more themes
-- Modern layouts with unique hero sections and components
+Current task progress is tracked in [docs/delivery/TASK_BACKLOG.md](docs/delivery/TASK_BACKLOG.md).
 
-### 📄 **Complete Page Collection**
+## Product Scope
 
-- **Authentication**: Login/Signup pages with multiple variants
-- **Pricing**: Multiple pricing page designs with feature comparisons
-- **Blog**: Blog listing, details, and markdown support
-- **About**: Team, company story, and mission pages
-- **Services**: Service listings and detailed service pages
-- **Contact**: Contact forms with integrated maps
-- **Legal**: Privacy policy, terms, GDPR compliance pages
-- **Support**: FAQ, documentation, and help pages
+Included in the MVP:
 
-### 🎨 **Modern Design System**
+- Wallet login or mock wallet login.
+- Founder profile.
+- Private dashboard.
+- Create, edit, archive, verify, and publish owned startups.
+- Protected marketplace for logged-in users.
+- Protected startup detail pages.
+- Filters by category, stage, tech stack, fundraising, and acquisition status.
+- Founder contact through the startup creator's X and Telegram links.
 
-- **Dark/Light Mode**: Seamless theme switching with next-themes
-- **Responsive Design**: Mobile-first approach with Tailwind CSS
-- **Smooth Animations**: GSAP and Lenis for premium interactions
-- **Interactive Components**: Sliders, modals, and dynamic elements
-- **Professional UI**: Clean, modern design with consistent spacing
+Out of scope for v1:
 
-### ⚡ **Performance & Developer Experience**
+- XMTP.
+- Anonymous chat.
+- Internal contact forms.
+- Saved contact requests.
+- Offers.
+- USDC payments.
+- Deal room.
+- Real domain verification.
+- Real X API integration.
+- Supabase/PostgreSQL.
+- Notifications.
+- Admin/reviewer dashboard.
 
-- **Next.js 15**: Latest features with Turbopack support
-- **TypeScript**: Full type safety and better developer experience
-- **Component Architecture**: Reusable, modular components
-- **Code Quality**: ESLint, Prettier, and Husky pre-commit hooks
-- **Conventional Commits**: Structured commit messages with Commitlint
+## Key Routes
 
-## 🛠️ Tech Stack
+| Route                                   | Access                 | Purpose                                         |
+| :-------------------------------------- | :--------------------- | :---------------------------------------------- |
+| `/`                                     | Public                 | Landing page.                                   |
+| `/startups`                             | Logged-in only         | Marketplace of verified and published startups. |
+| `/startups/[id]`                        | Logged-in only         | Startup detail and founder contact.             |
+| `/dashboard`                            | Logged-in only         | Private overview.                               |
+| `/dashboard/profile`                    | Logged-in only         | Edit founder profile.                           |
+| `/dashboard/startups`                   | Logged-in only         | Manage owned startups.                          |
+| `/dashboard/startups/new`               | Logged-in with profile | Create startup draft.                           |
+| `/dashboard/startups/[id]/edit`         | Owner only             | Edit startup.                                   |
+| `/dashboard/startups/[id]/verification` | Owner only             | Verification and publication.                   |
 
-- **Framework**: Next.js 15.4.6 with App Router
-- **Language**: TypeScript 5.0
-- **Styling**: Tailwind CSS 4.0
-- **UI Components**: Custom component library
-- **Animations**: GSAP 3.13, Lenis smooth scrolling
-- **Maps**: Leaflet with React integration
-- **Content**: Markdown support with gray-matter
-- **Theme**: next-themes for dark/light mode
-- **Development**: ESLint, Prettier, Husky, lint-staged
+## Tech Stack
 
-## 📋 Prerequisites
+- Next.js 15 App Router.
+- React 19.
+- TypeScript.
+- Tailwind CSS 4.
+- GSAP and Lenis for animation and smooth scrolling.
+- Static mock data in JSON files.
+- Mock services for users, startups, verification, and wallet auth.
 
-Before getting started, ensure you have:
+## Project Structure
 
-- **Node.js** 18.0 or higher
-- **npm** or **yarn** package manager
-- **Git** for version control
-
-## 🚀 Quick Start
-
-### 1. Download & Extract
-
-1. **Download** the template files from ThemeForest
-2. **Extract** the ZIP file to your development directory
-3. **Navigate** to the project folder:
-
-```bash
-cd nextsaas-next
+```text
+src/app/                         App Router pages
+src/components/solana-hub/       Landing page sections
+src/components/startup/          Startup marketplace and form components
+src/components/profile/          Founder profile form
+src/components/shared/           Shared shell, auth gate, states, badges, wallet button
+src/context/                     React contexts, including mock auth
+src/data/mock/                   Mock users and startups
+src/data/startupTaxonomy.ts      Product taxonomy constants
+src/interface/                   TypeScript interfaces
+src/services/                    Mock product services
+src/utils/validation.ts          Validation helpers
+docs/product/                    Product definition and rules
+docs/implementation/             Implementation blueprint and contracts
+docs/delivery/                   Roadmap and task backlog
+skills/create-commit/            Repo copy of the commit helper skill
 ```
 
-### 2. Install Dependencies
+## Documentation Map
+
+Start with [MVP_SPEC.md](MVP_SPEC.md) for the compact source-of-truth index.
+
+Product docs:
+
+- [Product Brief](docs/product/PRODUCT_BRIEF.md)
+- [Access and Permissions](docs/product/ACCESS_AND_PERMISSIONS.md)
+- [Metrics](docs/product/METRICS.md)
+
+Implementation docs:
+
+- [Implementation Blueprint](docs/implementation/IMPLEMENTATION_BLUEPRINT.md)
+- [Data Models](docs/implementation/DATA_MODELS.md)
+- [Validation Rules](docs/implementation/VALIDATION_RULES.md)
+- [Services Contracts](docs/implementation/SERVICES_CONTRACTS.md)
+- [Taxonomy](docs/implementation/TAXONOMY.md)
+- [Mock Data Requirements](docs/implementation/MOCK_DATA_REQUIREMENTS.md)
+
+Delivery docs:
+
+- [Roadmap](docs/delivery/ROADMAP.md)
+- [Task Backlog](docs/delivery/TASK_BACKLOG.md)
+- [QA Checklist](QA_CHECKLIST.md)
+
+## Getting Started
+
+Prerequisites:
+
+- Node.js 18 or higher.
+- npm.
+
+Install dependencies:
 
 ```bash
-# Using npm
 npm install
-
-# Using yarn
-yarn install
 ```
 
-### 3. Start Development Server
+Run the development server:
 
 ```bash
-# Using npm
 npm run dev
-
-# Using yarn
-yarn dev
 ```
 
-The application will be available at `http://localhost:3000`
+Open:
 
-## 📁 Project Structure
-
-```
-nextsaas-next/
-├── public/                     # Static assets
-│   ├── images/                # Images organized by components
-│   ├── icons/                 # SVG icons and graphics
-│   └── favicon.ico           # Site favicon
-├── src/
-│   ├── app/                  # Next.js 15 App Router
-│   │   ├── (pages)/         # Route groups for different pages
-│   │   ├── globals.css      # Global styles
-│   │   └── layout.tsx       # Root layout component
-│   ├── components/          # React components
-│   │   ├── homepage-*/      # Homepage variations (01-20)
-│   │   ├── authentication/  # Login/signup components
-│   │   ├── pricing-*/       # Pricing page components
-│   │   ├── blog-*/          # Blog-related components
-│   │   ├── shared/          # Reusable components
-│   │   │   ├── header/      # Navigation components
-│   │   │   ├── footer/      # Footer components
-│   │   │   └── ui/          # Base UI components
-│   │   └── ui/              # Core UI components
-│   ├── context/             # React contexts
-│   ├── data/                # Static data and content
-│   │   ├── blogs/           # Markdown blog posts
-│   │   ├── services/        # Service descriptions
-│   │   └── team/            # Team member data
-│   ├── hooks/               # Custom React hooks
-│   ├── styles/              # CSS modules and styles
-│   ├── types/               # TypeScript type definitions
-│   └── utils/               # Utility functions
-├── next.config.ts           # Next.js configuration
-├── tailwind.config.ts       # Tailwind CSS configuration
-├── tsconfig.json            # TypeScript configuration
-└── package.json             # Dependencies and scripts
+```text
+http://localhost:3000
 ```
 
-## 🎯 Available Pages
-
-### Homepage Variations
-
-Access different homepage designs:
-
-- `/` - Default homepage (Homepage 01)
-- `/homepage-02` through `/homepage-20` - Additional variations
-
-### Core Pages
-
-- **Authentication**: `/login-01`, `/signup-01`, `/login-02`, etc.
-- **Pricing**: `/pricing-01`, `/pricing-02`, `/pricing-03`
-- **About**: `/about-01`, `/about-02`, `/about-03`
-- **Blog**: `/blog-01`, `/blog-02`, `/blog-03`, `/blog/[slug]`
-- **Services**: `/our-services-01`, `/our-services/[slug]`
-- **Team**: `/our-team-01`, `/team/[slug]`
-- **Features**: `/features-01`, `/features-02`
-- **Contact**: `/contact-us`
-- **Legal**: `/privacy`, `/terms-conditions`, `/gdpr`
-
-## 🔧 Development
-
-### Available Scripts
+## Available Scripts
 
 ```bash
-# Development
-npm run dev          # Start development server with Turbopack
+npm run dev          # Start the local development server
 npm run build        # Build for production
-npm run start        # Start production server
-
-# Code Quality
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix ESLint issues
-npm run format       # Format code with Prettier
-npm run format:check # Check code formatting
+npm run start        # Start the production server
+npm run lint         # Run lint command configured in package.json
+npm run lint:fix     # Run lint autofix command configured in package.json
+npm run format       # Format files with Prettier
+npm run format:check # Check formatting with Prettier
 ```
 
-### Code Quality Tools
+## Mock Auth
 
-This project uses several tools to maintain code quality:
+The app currently uses mock wallet auth for MVP development.
 
-- **ESLint**: JavaScript/TypeScript linting
-- **Prettier**: Code formatting
-- **Husky**: Git hooks for pre-commit checks
-- **lint-staged**: Run linters on staged files only
-- **Commitlint**: Enforce conventional commit messages
+The current mock wallet is defined in [src/context/AuthContext.tsx](src/context/AuthContext.tsx).
 
-### Commit Message Format
+Use the shared wallet button to connect or disconnect in local development. Startup data routes are protected and should show an auth gate when the wallet is disconnected.
 
-Follow [Conventional Commits](https://www.conventionalcommits.org/) specification:
+## Known Gaps
 
-```bash
-feat: add new homepage variation.
-fix: resolve responsive layout issue.
-docs: update installation guide.
+The product is still mid-MVP. Before release:
+
+- Make `npm run build` pass fully.
+- Fix remaining lint/type errors, including `no-explicit-any`, unused imports, unescaped apostrophes, and hook dependency warnings.
+- Align all landing copy with v1 messaging.
+- Ensure service-level startup visibility cannot return unavailable startups to non-owners.
+- Add the missing tech stack filter UI.
+- Fix unconditional `IS RAISING` badges.
+- Add direct `Save and request verification` flow.
+- Add analytics mock.
+- Add unit tests for validation and services.
+- Update QA evidence after manual/browser checks.
+
+## Commit Convention
+
+This project uses task-based commits for product work:
+
+```text
+agonzalez/TASK-ID/commit-title
 ```
 
-## 🎨 Customization
+Example:
 
-### Theme Customization
-
-1. **Colors**: Edit `src/styles/variables.css` for color schemes
-2. **Typography**: Modify font settings in `src/utils/font.ts`
-3. **Components**: Customize components in `src/components/ui/`
-4. **Tailwind**: Update `tailwind.config.ts` for design tokens
-
-### Adding New Pages
-
-Here's a complete example of creating a new "Portfolio" page:
-
-#### Step 1: Create the Page Route
-
-Create `src/app/portfolio/page.tsx`:
-
-```tsx
-import Portfolio from '@/components/portfolio/Portfolio';
-import FooterOne from '@/components/shared/footer/FooterOne';
-import NavbarOne from '@/components/shared/header/NavbarOne';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Portfolio - NextSaaS',
-  description: 'Showcase of our amazing projects and work',
-};
-
-const PortfolioPage = () => {
-  return (
-    <>
-      <NavbarOne />
-      <Portfolio />
-      <FooterOne />
-    </>
-  );
-};
-
-export default PortfolioPage;
+```text
+agonzalez/TASK-042/update-readme
 ```
 
-#### Step 2: Create Page Components
-
-Create `src/components/portfolio/Portfolio.tsx`:
-
-```tsx
-import Image from 'next/image';
-import RevealAnimation from '@/components/animation/RevealAnimation';
-
-const portfolioData = [
-  {
-    id: 1,
-    title: 'E-commerce Platform',
-    category: 'Web Development',
-    image: '/images/portfolio/project-1.jpg',
-    description: 'Modern e-commerce solution built with Next.js',
-  },
-  // Add more portfolio items...
-];
-
-const Portfolio = () => {
-  return (
-    <section className="pb-[100px] pt-[100px]">
-      <div className="main-container">
-        <div className="text-center space-y-3 mb-14">
-          <RevealAnimation delay={0.3}>
-            <h1 className="max-w-[742px] mx-auto">Our Portfolio</h1>
-          </RevealAnimation>
-          <RevealAnimation delay={0.4}>
-            <p className="max-w-[482px] mx-auto">Discover our latest projects and creative solutions</p>
-          </RevealAnimation>
-        </div>
-
-        <div className="grid grid-cols-12 gap-8">
-          {portfolioData.map((item, index) => (
-            <RevealAnimation delay={0.5 + index * 0.1} key={item.id}>
-              <div className="col-span-12 md:col-span-6 lg:col-span-4">
-                <div className="bg-background-2 dark:bg-background-5 rounded-[20px] overflow-hidden">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    width={400}
-                    height={300}
-                    className="w-full h-[250px] object-cover"
-                  />
-                  <div className="p-6 space-y-3">
-                    <span className="text-sm text-primary">{item.category}</span>
-                    <h3 className="text-heading-5">{item.title}</h3>
-                    <p className="text-body-text">{item.description}</p>
-                  </div>
-                </div>
-              </div>
-            </RevealAnimation>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default Portfolio;
-```
-
-#### Step 3: Add Navigation Link
-
-Update the header component to include the new page. In `src/components/shared/header/NavbarOne.tsx`, add:
-
-```tsx
-// Add to the navigation items array
-{
-  id: 7,
-  name: 'Portfolio',
-  path: '/portfolio',
-},
-```
-
-#### Step 4: Add Data (Optional)
-
-Create `src/data/portfolio.ts` for dynamic content:
-
-```tsx
-export const portfolioItems = [
-  {
-    id: 1,
-    title: 'E-commerce Platform',
-    category: 'Web Development',
-    image: '/images/portfolio/project-1.jpg',
-    description: 'Modern e-commerce solution built with Next.js',
-    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS'],
-    link: 'https://example.com',
-  },
-  // Add more items...
-];
-```
-
-#### Step 5: Add Images
-
-Place your portfolio images in:
-
-```
-public/images/portfolio/
-├── project-1.jpg
-├── project-2.jpg
-└── project-3.jpg
-```
-
-#### Step 6: Test Your Page
-
-1. Start the development server: `npm run dev`
-2. Navigate to `http://localhost:3000/portfolio`
-3. Check that the page loads correctly
-4. Test navigation from the header menu
-
-**That's it!** Your new portfolio page is ready with proper routing, components, navigation, and SEO metadata.
-
-### Content Management
-
-- **Blog Posts**: Add markdown files in `src/data/blogs/`
-- **Services**: Update service data in `src/data/services/`
-- **Team Members**: Modify team data in `src/data/team/`
-- **Static Content**: Edit component files directly
-
-## 🏗️ Building for Production
-
-### Build Process
-
-```bash
-# Create production build
-npm run build
-
-# Start production server
-npm run start
-```
-
-### Build Output
-
-- Static assets are optimized and compressed
-- JavaScript is minified and tree-shaken
-- CSS is purged and optimized
-- Images are automatically optimized by Next.js
-
-### Performance Features
-
-- **Image Optimization**: Automatic WebP conversion and lazy loading
-- **Code Splitting**: Automatic route-based code splitting
-- **Static Generation**: Pre-rendered pages for better performance
-- **Bundle Analysis**: Built-in bundle analyzer
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-Vercel is the easiest way to deploy your Next.js application:
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
-
-### Other Platforms
-
-The project can be deployed to:
-
-- **Netlify**: Static site deployment with automatic builds
-- **Railway**: Full-stack deployment with database support
-- **DigitalOcean**: App Platform with automatic scaling
-- **AWS**: Amplify or EC2 for enterprise solutions
-- **Hostinger**: Shared hosting with Node.js support
-
-### Deployment Guide
-
-1. **Build the project**: Run `npm run build` locally to test
-2. **Choose platform**: Select your preferred hosting provider
-3. **Configure environment**: Set up any required environment variables
-4. **Deploy**: Follow platform-specific deployment instructions
-
-Need help with deployment? Contact us at [hello@pixel71.com](mailto:hello@pixel71.com)
-
-## 🔍 Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## 📖 Documentation
-
-- [Development Guide](./DEVELOPMENT.md) - Detailed development workflow
-- [Component Documentation](https://nextsaas-documentation.vercel.app/nextjs/get-started) - Usage guide
-
-## 📧 Support & Contact
-
-We provide comprehensive support for all our customers:
-
-- **Email Support**: [hello@pixel71.com](mailto:hello@pixel71.com)
-- **Response Time**: Within 24 hours on business days
-- **Support Includes**:
-  - Installation assistance
-  - Bug fixes and troubleshooting
-  - Customization guidance
-  - Feature clarifications
-
----
-
-**Made by [Pixel71](mailto:hello@pixel71.com)**
-
-\_Happy coding!
+Use [docs/delivery/TASK_BACKLOG.md](docs/delivery/TASK_BACKLOG.md) to choose the task ID. The helper skill is documented in [skills/create-commit/SKILL.md](skills/create-commit/SKILL.md).
