@@ -51,7 +51,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
     setIsActionLoading(true);
     setMessage(null);
     try {
-      await verificationService.requestVerification(startup.id, walletAddress);
+      await verificationService.requestVerification(startup.id);
       setMessage({ type: 'success', text: 'Verification requested successfully!' });
       await refreshStartup();
     } catch (error) {
@@ -67,7 +67,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
     setIsActionLoading(true);
     setMessage(null);
     try {
-      await startupService.publishStartup(startup.id, walletAddress);
+      await startupService.publishStartup(startup.id);
       setMessage({ type: 'success', text: 'Startup published to marketplace!' });
       await refreshStartup();
     } catch (error) {
@@ -191,27 +191,29 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
             </div>
 
             {/* Dev Mock Actions */}
-            <div className="bg-white/5 p-8 md:p-10 border border-white/10 rounded-[30px] border-dashed space-y-6">
-              <h3 className="text-lg font-bold text-white/60 uppercase tracking-widest">Dev Mock Actions</h3>
-              <div className="flex flex-wrap gap-4">
-                <button
-                  onClick={handleMockApprove}
-                  disabled={isActionLoading}
-                  className="btn btn-white-dark btn-md border-green-500/20 hover:bg-green-500/10 text-green-500">
-                  Mock Approve
-                </button>
-                <button
-                  onClick={handleMockReject}
-                  disabled={isActionLoading}
-                  className="btn btn-white-dark btn-md border-red-500/20 hover:bg-red-500/10 text-red-500">
-                  Mock Reject
-                </button>
+            {process.env.NEXT_PUBLIC_ENABLE_DEV_VERIFICATION === 'true' && (
+              <div className="bg-white/5 p-8 md:p-10 border border-white/10 rounded-[30px] border-dashed space-y-6">
+                <h3 className="text-lg font-bold text-white/60 uppercase tracking-widest">Dev Mock Actions</h3>
+                <div className="flex flex-wrap gap-4">
+                  <button
+                    onClick={handleMockApprove}
+                    disabled={isActionLoading}
+                    className="btn btn-white-dark btn-md border-green-500/20 hover:bg-green-500/10 text-green-500">
+                    Mock Approve
+                  </button>
+                  <button
+                    onClick={handleMockReject}
+                    disabled={isActionLoading}
+                    className="btn btn-white-dark btn-md border-red-500/20 hover:bg-red-500/10 text-red-500">
+                    Mock Reject
+                  </button>
+                </div>
+                <p className="text-white/30 text-xs">
+                  These actions are only for development/demo purposes to simulate a reviewer approving or rejecting the
+                  startup.
+                </p>
               </div>
-              <p className="text-white/30 text-xs">
-                These actions are only for development/demo purposes to simulate a reviewer approving or rejecting the
-                startup.
-              </p>
-            </div>
+            )}
 
             {message && (
               <div
