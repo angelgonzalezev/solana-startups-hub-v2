@@ -14,6 +14,8 @@ Related files:
 
 The database stores this product model in `profiles`. `profiles.auth_user_id` binds it to `auth.users`; `walletAddress` remains the public Solana identity exposed to the UI.
 
+`avatar` stores a `media` bucket object path for managed uploads. Legacy absolute URLs remain supported while reading existing data.
+
 ```ts
 export interface User {
   walletAddress: string;
@@ -30,6 +32,8 @@ export interface User {
 ## Startup
 
 The database stores this model in `startups` using `owner_profile_id`; `ownerWallet` is derived when mapping database results to the UI model.
+
+`logo` stores a `media` bucket object path for managed uploads. Client rendering resolves managed paths to public Storage URLs.
 
 ```ts
 export type StartupStage = 'Idea' | 'MVP' | 'Early-stage' | 'Scaling' | 'Established';

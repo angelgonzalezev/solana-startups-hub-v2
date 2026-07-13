@@ -148,6 +148,8 @@ npm run db:reset
 
 Use the API URL, publishable key, and service-role key printed by `supabase:start`. For hosted environments, enable the Solana Web3 provider in Supabase Auth and provide the hosted project values instead. `SUPABASE_SERVICE_ROLE_KEY` provisions a profile only after the server verifies the SIWS identity; it also powers the optional development verification endpoint. It must never use a `NEXT_PUBLIC_` prefix.
 
+Database migrations also provision the public `media` Storage bucket used for profile images and startup logos. Upload mutations require authentication and are restricted to the current user's object prefix. Images are cropped in the browser and stored as 512x512 WebP files; anyone with a resulting public URL can read the asset.
+
 Run the development server:
 
 ```bash

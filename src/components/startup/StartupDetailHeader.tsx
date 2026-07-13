@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { StartupStageBadge, MarketSignalBadge } from '../shared/Badges';
 import Link from 'next/link';
 import Image from 'next/image';
+import { resolveMediaUrl } from '@/services/mediaService';
 
 interface StartupDetailHeaderProps {
   startup: Startup;
@@ -14,6 +15,7 @@ interface StartupDetailHeaderProps {
 const StartupDetailHeader: React.FC<StartupDetailHeaderProps> = ({ startup }) => {
   const { walletAddress } = useAuth();
   const isOwner = walletAddress === startup.ownerWallet;
+  const logoUrl = resolveMediaUrl(startup.logo);
 
   return (
     <div className="space-y-10">
@@ -21,8 +23,8 @@ const StartupDetailHeader: React.FC<StartupDetailHeaderProps> = ({ startup }) =>
         {/* Left Side: Logo & Info */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 text-center sm:text-left">
           <div className="w-32 h-32 rounded-[40px] bg-[#0A0A0A] border border-white/10 flex-shrink-0 overflow-hidden relative shadow-2xl shadow-primary-500/10">
-            {startup.logo ? (
-              <Image src={startup.logo} alt={startup.name} fill className="object-cover p-4" />
+            {logoUrl ? (
+              <Image src={logoUrl} alt={startup.name} fill className="object-cover p-4" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white/10 font-bold text-4xl">
                 {startup.name.slice(0, 2).toUpperCase()}

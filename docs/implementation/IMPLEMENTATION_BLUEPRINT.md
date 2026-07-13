@@ -67,7 +67,7 @@ Template routes like `/case-study` and `/use-case` are not final product routes.
 ### `/dashboard/profile`
 
 - Protected by `AuthGate`.
-- Fields: display name, job title, X, Telegram, avatar, bio.
+- Fields: display name, job title, X, Telegram, uploaded/cropped profile image, bio.
 - Saves with `userService.upsertProfile`.
 - Must show per-field errors.
 
@@ -85,11 +85,13 @@ Template routes like `/case-study` and `/use-case` are not final product routes.
 - Blocks with CTA `Complete profile` if profile is incomplete.
 - Uses `StartupForm`.
 - Saves startup as `draft`.
+- Supports an optional uploaded/cropped logo, deferred until the draft is saved.
 
 ### `/dashboard/startups/[id]/edit`
 
 - Protected and owner-only.
 - Uses `StartupForm`.
+- Supports keeping, replacing, or removing the existing logo.
 - Non-owner gets permission error.
 - Changing website/X on a verified startup resets verification.
 

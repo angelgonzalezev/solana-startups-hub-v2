@@ -27,9 +27,9 @@ Audit date: 2026-06-11.
 
 Current progress:
 
-- Done: 36/45.
-- Partial: 7/45.
-- Pending: 2/45.
+- Done: 43/55.
+- Partial: 10/55.
+- Pending: 2/55.
 
 Build status:
 
@@ -149,3 +149,13 @@ Build status:
 | [x]    | P0       | TASK-048 - Move verification transitions to SQL | Request, publish, archive, and verification-reset rules execute in protected DB functions. |
 | [~]    | P1       | TASK-049 - Hosted auth and wallet QA            | Hosted Supabase and MetaMask SIWS are validated; broader wallet/browser evidence remains.  |
 | [ ]    | P0       | TASK-050 - Production reviewer workflow         | Replace the explicitly gated development verification endpoint before production launch.   |
+
+## Phase N: Managed Profile and Startup Media
+
+| Status | Priority | Task                                           | Notes                                                                                        |
+| :----- | :------- | :--------------------------------------------- | :------------------------------------------------------------------------------------------- |
+| [~]    | P0       | TASK-051 - Configure Supabase media storage    | Migration and pgTAP coverage exist; local execution awaits an available Docker stack.        |
+| [x]    | P0       | TASK-052 - Build image crop and upload tooling | Reusable square cropper, WebP conversion, previews, replacement, removal, and media service. |
+| [x]    | P0       | TASK-053 - Add managed profile image           | Profile saves coordinate Storage upload, database path update, rollback, and cleanup.        |
+| [x]    | P0       | TASK-054 - Add managed startup logos           | New and existing startups support deferred logo upload with owner-scoped paths.              |
+| [~]    | P1       | TASK-055 - Media compatibility, docs, and QA   | Unit/build/route checks pass; interactive browser QA remains unevidenced.                    |

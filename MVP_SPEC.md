@@ -100,12 +100,12 @@ Delivery:
 
 Last audited: 2026-07-13.
 
-- Done: 40/50 tasks.
-- Partial: 8/50 tasks.
-- Pending: 2/50 tasks.
+- Done: 43/55 tasks.
+- Partial: 10/55 tasks.
+- Pending: 2/55 tasks.
 
 See [Task Backlog](docs/delivery/TASK_BACKLOG.md) for task-level tracking.
 
 ## Current Technical Status
 
-Wallet authentication and product persistence use Solana Wallet Standard and Supabase. Database authorization is enforced by RLS and protected RPCs; local fixtures and pgTAP policy tests live under `supabase/`. Remaining release work is focused on the production reviewer flow, hosted wallet QA, final route cleanup, analytics, and broader test coverage.
+Wallet authentication and product persistence use Solana Wallet Standard and Supabase. Profile images and startup logos use owner-scoped Supabase Storage paths with public asset delivery. Database authorization is enforced by RLS and protected RPCs; local fixtures and pgTAP policy tests live under `supabase/`. Remaining release work is focused on the production reviewer flow, hosted wallet QA, final route cleanup, analytics, and broader test coverage.

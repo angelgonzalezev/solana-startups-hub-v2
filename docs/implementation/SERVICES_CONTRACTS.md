@@ -17,13 +17,14 @@ Services isolate the UI from Supabase. Authorization is enforced by PostgreSQL R
 
 - `getCurrentUser()`
 - `getUserByWallet(walletAddress)`
-- `upsertProfile(input)`
+- `upsertProfile(input, avatarMutation?)`
 
 Rules:
 
 - Validate profile input.
 - Return `null` when user does not exist.
 - Only update the profile bound to the authenticated Supabase user.
+- Upload a replacement avatar before updating the profile, remove it if the database update fails, and clean up replaced managed media after success.
 
 ## startupService
 
@@ -44,8 +45,8 @@ Expected methods:
 - `getStartupById(id)`
 - `getAccessibleStartupById(id)`
 - `listStartupsByOwner()`
-- `createStartup(input)`
-- `updateStartup(id, input)`
+- `createStartup(input, logoMutation?)`
+- `updateStartup(id, input, logoMutation?)`
 - `archiveStartup(id)`
 - `publishStartup(id)`
 
@@ -56,6 +57,14 @@ Rules:
 - `publishStartup` fails unless startup is `verified`.
 - `archiveStartup` sets `listingStatus = archived`.
 - Changing website/X on verified startup resets verification.
+- Logo mutations use explicit `keep`, `replace`, and `remove` states so unrelated saves never alter media.
+
+## mediaService
+
+- Validate JPEG, PNG, and WebP inputs up to 2 MB.
+- Upload processed WebP files under the authenticated user's Storage prefix.
+- Resolve managed object paths to public URLs while passing legacy absolute URLs through unchanged.
+- Delete only managed paths; cleanup failures after a successful database save are logged and do not revert the saved record.
 
 ## verificationService
 

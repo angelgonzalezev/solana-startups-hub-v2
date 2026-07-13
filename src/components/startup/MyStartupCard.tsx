@@ -5,6 +5,7 @@ import { Startup } from '@/interface/startup';
 import { VerificationStatusBadge, ListingStatusBadge, StartupStageBadge } from '../shared/Badges';
 import Link from 'next/link';
 import Image from 'next/image';
+import { resolveMediaUrl } from '@/services/mediaService';
 
 interface MyStartupCardProps {
   startup: Startup;
@@ -12,11 +13,13 @@ interface MyStartupCardProps {
 }
 
 const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive }) => {
+  const logoUrl = resolveMediaUrl(startup.logo);
+
   return (
     <div className="bg-[#0A0A0A] border border-white/5 rounded-[30px] p-6 flex flex-col md:flex-row items-center gap-6 hover:border-white/10 transition-all duration-300">
       <div className="w-24 h-24 rounded-2xl bg-black border border-white/5 flex-shrink-0 overflow-hidden relative">
-        {startup.logo ? (
-          <Image src={startup.logo} alt={startup.name} fill className="object-cover p-2" />
+        {logoUrl ? (
+          <Image src={logoUrl} alt={startup.name} fill className="object-cover p-2" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white/20 font-bold text-2xl">
             {startup.name.slice(0, 2).toUpperCase()}

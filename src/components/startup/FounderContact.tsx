@@ -3,6 +3,7 @@
 import React from 'react';
 import { User } from '@/interface/user';
 import Image from 'next/image';
+import { resolveMediaUrl } from '@/services/mediaService';
 
 interface FounderContactProps {
   founder: User | null;
@@ -12,6 +13,7 @@ const FounderContact: React.FC<FounderContactProps> = ({ founder }) => {
   if (!founder) return null;
 
   const hasSocials = !!founder.twitterHandle || !!founder.telegramHandle;
+  const avatarUrl = resolveMediaUrl(founder.avatar);
 
   return (
     <div className="bg-[#0A0A0A] border border-white/5 rounded-[30px] p-8 md:p-10 space-y-8">
@@ -22,8 +24,8 @@ const FounderContact: React.FC<FounderContactProps> = ({ founder }) => {
 
       <div className="flex flex-col sm:flex-row items-center gap-6 pb-8 border-b border-white/5">
         <div className="w-20 h-20 rounded-2xl bg-black border border-white/10 overflow-hidden relative flex-shrink-0">
-          {founder.avatar ? (
-            <Image src={founder.avatar} alt={founder.displayName} fill className="object-cover" />
+          {avatarUrl ? (
+            <Image src={avatarUrl} alt={founder.displayName} fill className="object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-white/10 font-bold text-2xl">
               {founder.displayName.slice(0, 1).toUpperCase()}

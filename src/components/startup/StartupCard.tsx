@@ -6,6 +6,7 @@ import { StartupStageBadge, MarketSignalBadge } from '../shared/Badges';
 import Link from 'next/link';
 import Image from 'next/image';
 import RevealAnimation from '../animation/RevealAnimation';
+import { resolveMediaUrl } from '@/services/mediaService';
 
 interface StartupCardProps {
   startup: Startup;
@@ -13,6 +14,8 @@ interface StartupCardProps {
 }
 
 const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
+  const logoUrl = resolveMediaUrl(startup.logo);
+
   return (
     <RevealAnimation delay={0.1 * (index % 4)}>
       <div className="bg-[#0A0A0A] border border-white/5 rounded-[30px] p-8 flex flex-col h-full hover:border-primary-500/30 transition-all duration-500 group relative overflow-hidden">
@@ -26,8 +29,8 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
           {/* Header: Logo & Name */}
           <div className="flex items-center gap-5">
             <div className="w-16 h-16 rounded-2xl bg-black border border-white/10 flex-shrink-0 overflow-hidden relative group-hover:border-primary-500/50 transition-colors">
-              {startup.logo ? (
-                <Image src={startup.logo} alt={startup.name} fill className="object-cover p-2" />
+              {logoUrl ? (
+                <Image src={logoUrl} alt={startup.name} fill className="object-cover p-2" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-white/20 font-bold text-xl">
                   {startup.name.slice(0, 2).toUpperCase()}

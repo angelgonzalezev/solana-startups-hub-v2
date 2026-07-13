@@ -56,6 +56,14 @@ Este documento valida el cumplimiento de los requisitos del MVP v1.0 según la e
 - [x] Loading states durante la carga de servicios mock
 - [x] Estética visual coherente con la landing page (Solana dark mode)
 
+## 8. Imágenes Gestionadas
+
+- [ ] Avatar y logo aceptan JPG, PNG y WebP de hasta 2 MB (pendiente QA interactiva)
+- [ ] Recorte 1:1 con preview y salida WebP de 512x512 (pendiente QA interactiva)
+- [ ] Sustitución y eliminación conservan los datos anteriores si falla el guardado (pendiente QA con Storage)
+- [ ] Políticas de Storage restringen mutaciones al prefijo del propietario (pendiente ejecutar pgTAP)
+- [x] URLs externas heredadas mantienen compatibilidad de renderizado
+
 ---
 
 ## Decisiones Técnicas Pendientes (Post-MVP / v2)
