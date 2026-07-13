@@ -11,7 +11,7 @@ export const ErrorState: React.FC<{ message?: string; onRetry?: () => void }> = 
   message = 'Something went wrong while loading data.',
   onRetry,
 }) => (
-  <div className="min-h-[400px] flex items-center justify-center text-center p-8 bg-[#0A0A0A] border border-red-500/10 rounded-[30px]">
+  <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-red-500/10 bg-[#0A0A0A] p-5 text-center sm:min-h-[400px] sm:p-8">
     <div className="space-y-6">
       <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto">
         <svg
@@ -48,7 +48,7 @@ export const EmptyState: React.FC<{
   actionLabel?: string;
   icon?: React.ReactNode;
 }> = ({ title, description, actionHref, actionLabel, icon }) => (
-  <div className="min-h-[400px] flex items-center justify-center text-center p-10 bg-[#0A0A0A] border border-white/5 rounded-[30px]">
+  <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-white/10 bg-[#0A0A0A] p-5 text-center sm:min-h-[400px] sm:p-8">
     <div className="space-y-8 max-w-[400px]">
       {icon ? (
         <div className="mx-auto">{icon}</div>
@@ -71,7 +71,7 @@ export const EmptyState: React.FC<{
       )}
       <div className="space-y-3">
         <h3 className="text-2xl font-bold text-white">{title}</h3>
-        <p className="text-white/60 text-lg">{description}</p>
+        <p className="text-base leading-7 text-white/60 sm:text-lg">{description}</p>
       </div>
       {actionHref && actionLabel && (
         <Link href={actionHref} className="btn btn-primary btn-md w-full sm:w-auto">

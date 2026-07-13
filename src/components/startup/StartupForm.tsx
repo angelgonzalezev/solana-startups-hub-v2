@@ -114,7 +114,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
 
   return (
     <form onSubmit={handleSubmit} className="space-y-12">
-      <div className="bg-[#0A0A0A] p-8 md:p-10 border border-white/5 rounded-[30px] space-y-10">
+      <div className="space-y-8 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
         <h2 className="text-2xl font-bold text-white border-b border-white/5 pb-4">Basic Information</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -128,7 +128,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               onChange={handleChange}
               placeholder="e.g. Solana Pay Pro"
               className={cn(
-                'w-full bg-black border rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+                'w-full rounded-md border bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4',
                 getError('name') ? 'border-red-500/50' : 'border-white/10',
               )}
             />
@@ -153,7 +153,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               placeholder="The ultimate payment gateway for Solana merchants."
               maxLength={160}
               className={cn(
-                'w-full bg-black border rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+                'w-full rounded-md border bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4',
                 getError('oneLiner') ? 'border-red-500/50' : 'border-white/10',
               )}
             />
@@ -175,7 +175,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               placeholder="Describe your startup, the problem it solves, and its unique value proposition..."
               rows={6}
               className={cn(
-                'w-full bg-black border rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+                'w-full rounded-md border bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4',
                 getError('description') ? 'border-red-500/50' : 'border-white/10',
               )}
             />
@@ -187,7 +187,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
         </div>
       </div>
 
-      <div className="bg-[#0A0A0A] p-8 md:p-10 border border-white/5 rounded-[30px] space-y-10">
+      <div className="space-y-8 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
         <h2 className="text-2xl font-bold text-white border-b border-white/5 pb-4">Links & Socials</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Website */}
@@ -200,7 +200,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               onChange={handleChange}
               placeholder="https://..."
               className={cn(
-                'w-full bg-black border rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+                'w-full rounded-md border bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4',
                 getError('website') ? 'border-red-500/50' : 'border-white/10',
               )}
             />
@@ -217,7 +217,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               onChange={handleChange}
               placeholder="https://x.com/..."
               className={cn(
-                'w-full bg-black border rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+                'w-full rounded-md border bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4',
                 getError('twitter') ? 'border-red-500/50' : 'border-white/10',
               )}
             />
@@ -233,7 +233,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               value={formData.discord ?? ''}
               onChange={handleChange}
               placeholder="https://discord.gg/..."
-              className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+              className="w-full rounded-md border border-white/10 bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4"
             />
           </div>
 
@@ -246,13 +246,13 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               value={formData.github ?? ''}
               onChange={handleChange}
               placeholder="https://github.com/..."
-              className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+              className="w-full rounded-md border border-white/10 bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4"
             />
           </div>
         </div>
       </div>
 
-      <div className="bg-[#0A0A0A] p-8 md:p-10 border border-white/5 rounded-[30px] space-y-10">
+      <div className="space-y-8 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
         <h2 className="text-2xl font-bold text-white border-b border-white/5 pb-4">Stage & Metrics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Stage */}
@@ -262,7 +262,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               name="stage"
               value={formData.stage ?? 'Idea'}
               onChange={handleChange}
-              className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all appearance-none">
+              className="w-full appearance-none rounded-md border border-white/10 bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4">
               {STARTUP_STAGES.map((s) => (
                 <option key={s} value={s}>
                   {s}
@@ -280,7 +280,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               value={formData.teamSize ?? ''}
               onChange={handleChange}
               min={1}
-              className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+              className="w-full rounded-md border border-white/10 bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4"
             />
           </div>
 
@@ -293,7 +293,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               value={formData.mrr ?? ''}
               onChange={handleChange}
               min={0}
-              className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+              className="w-full rounded-md border border-white/10 bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4"
             />
           </div>
 
@@ -320,7 +320,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
         </div>
       </div>
 
-      <div className="bg-[#0A0A0A] p-8 md:p-10 border border-white/5 rounded-[30px] space-y-10">
+      <div className="space-y-8 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
         <h2 className="text-2xl font-bold text-white border-b border-white/5 pb-4">Market Signals</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Is Raising */}
@@ -387,7 +387,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
         </div>
       </div>
 
-      <div className="bg-[#0A0A0A] p-8 md:p-10 border border-white/5 rounded-[30px] space-y-10">
+      <div className="space-y-8 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
         <h2 className="text-2xl font-bold text-white border-b border-white/5 pb-4">Taxonomy</h2>
 
         {/* Categories */}
@@ -400,7 +400,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
                 type="button"
                 onClick={() => handleArrayToggle('category', cat)}
                 className={cn(
-                  'px-5 py-2.5 rounded-full border text-sm font-medium transition-all duration-300',
+                  'rounded-md border px-4 py-2.5 text-sm font-medium transition-all duration-300',
                   formData.category?.includes(cat)
                     ? 'bg-primary-500/10 border-primary-500 text-primary-500'
                     : 'bg-black border-white/10 text-white/50 hover:border-white/30 hover:text-white',
@@ -422,7 +422,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
                 type="button"
                 onClick={() => handleArrayToggle('techStack', tech)}
                 className={cn(
-                  'px-5 py-2.5 rounded-full border text-sm font-medium transition-all duration-300',
+                  'rounded-md border px-4 py-2.5 text-sm font-medium transition-all duration-300',
                   formData.techStack?.includes(tech)
                     ? 'bg-primary-500/10 border-primary-500 text-primary-500'
                     : 'bg-black border-white/10 text-white/50 hover:border-white/30 hover:text-white',
@@ -435,8 +435,8 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
         </div>
       </div>
 
-      <div className="sticky bottom-10 z-30">
-        <div className="bg-black/80 backdrop-blur-md border border-white/10 p-6 rounded-[30px] shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div className="z-30 sm:sticky sm:bottom-6">
+        <div className="flex flex-col items-stretch justify-between gap-5 rounded-lg border border-white/10 bg-black/90 p-5 shadow-2xl backdrop-blur-md sm:flex-row sm:items-center sm:p-6">
           <div className="text-white/60 text-sm">* Required fields for verification.</div>
 
           <div className="flex items-center gap-4 w-full sm:w-auto">
@@ -452,7 +452,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
         {message && (
           <div
             className={cn(
-              'mt-6 p-4 rounded-2xl text-center font-medium border animate-in fade-in slide-in-from-bottom-4 duration-300',
+              'mt-6 rounded-md border p-4 text-center font-medium animate-in fade-in slide-in-from-bottom-4 duration-300',
               message.type === 'success'
                 ? 'bg-green-500/10 border-green-500/20 text-green-500'
                 : 'bg-red-500/10 border-red-500/20 text-red-500',

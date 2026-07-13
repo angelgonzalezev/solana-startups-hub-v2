@@ -74,7 +74,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
   const getError = (field: string) => errors.find((e) => e.field === field)?.message;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 bg-[#0A0A0A] p-8 md:p-10 border border-white/5 rounded-[30px]">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-8 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Display Name */}
         <div className="space-y-2">
@@ -86,7 +88,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
             onChange={handleChange}
             placeholder="Alex Rivera"
             className={cn(
-              'w-full bg-black border rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+              'w-full rounded-md border bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4',
               getError('displayName') ? 'border-red-500/50' : 'border-white/10',
             )}
           />
@@ -103,7 +105,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
             onChange={handleChange}
             placeholder="Founder, Lead Dev, Designer..."
             className={cn(
-              'w-full bg-black border rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+              'w-full rounded-md border bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4',
               getError('jobTitle') ? 'border-red-500/50' : 'border-white/10',
             )}
           />
@@ -122,7 +124,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               placeholder="username"
               className={cn(
-                'w-full bg-black border rounded-2xl pl-11 pr-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+                'w-full rounded-md border bg-black py-3.5 pl-10 pr-4 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:py-4 sm:pl-11 sm:pr-5',
                 getError('twitterHandle') ? 'border-red-500/50' : 'border-white/10',
               )}
             />
@@ -142,7 +144,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               placeholder="username"
               className={cn(
-                'w-full bg-black border rounded-2xl pl-11 pr-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all',
+                'w-full rounded-md border bg-black py-3.5 pl-10 pr-4 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:py-4 sm:pl-11 sm:pr-5',
                 getError('telegramHandle') ? 'border-red-500/50' : 'border-white/10',
               )}
             />
@@ -160,7 +162,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
           onChange={handleChange}
           placeholder="Tell the community about yourself..."
           rows={4}
-          className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+          className="w-full rounded-md border border-white/10 bg-black px-4 py-3.5 text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50 sm:px-5 sm:py-4"
         />
       </div>
 
@@ -174,7 +176,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
       {message && (
         <div
           className={cn(
-            'p-4 rounded-2xl text-center font-medium border',
+            'rounded-md border p-4 text-center font-medium',
             message.type === 'success'
               ? 'bg-green-500/10 border-green-500/20 text-green-500'
               : 'bg-red-500/10 border-red-500/20 text-red-500',

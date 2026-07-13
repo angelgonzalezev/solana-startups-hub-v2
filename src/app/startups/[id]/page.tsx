@@ -66,7 +66,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
         btnClassName="btn-primary hover:btn-white"
       />
 
-      <main className="flex-grow pt-[150px] pb-20">
+      <main className="flex-grow pb-16 pt-[120px] md:pb-20 md:pt-[150px]">
         <AuthGate>
           <div className="main-container">
             {isLoading ? (
@@ -74,16 +74,16 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
             ) : !startup ? (
               <ErrorState message="Startup not found or not available." />
             ) : (
-              <div className="grid grid-cols-12 gap-12">
+              <div className="grid grid-cols-12 gap-10 lg:gap-12">
                 {/* Main Content */}
-                <div className="col-span-12 lg:col-span-8 space-y-16">
+                <div className="col-span-12 space-y-12 lg:col-span-8 lg:space-y-16">
                   <RevealAnimation delay={0.1}>
                     <StartupDetailHeader startup={startup} />
                   </RevealAnimation>
 
                   <RevealAnimation delay={0.2}>
                     <div className="space-y-8">
-                      <h3 className="text-3xl font-bold text-white tracking-tight underline decoration-primary-500/30 decoration-4 underline-offset-8">
+                      <h3 className="text-2xl font-bold tracking-tight text-white underline decoration-primary-500/30 decoration-4 underline-offset-8 sm:text-3xl">
                         About the Project
                       </h3>
                       <div className="prose prose-invert prose-lg max-w-none text-white/70 leading-relaxed whitespace-pre-wrap">
@@ -94,14 +94,14 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
 
                   {/* Team & Stack Section */}
                   <RevealAnimation delay={0.3}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-10 border-t border-white/5">
+                    <div className="grid grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-12 md:pt-10">
                       <div className="space-y-6">
                         <h4 className="text-xl font-bold text-white uppercase tracking-widest">Tech Stack</h4>
                         <div className="flex flex-wrap gap-3">
                           {startup.techStack.map((tech) => (
                             <span
                               key={tech}
-                              className="px-4 py-2 bg-primary-500/5 border border-primary-500/20 rounded-xl text-primary-400 font-medium">
+                              className="rounded-md border border-primary-500/20 bg-primary-500/5 px-3 py-2 font-medium text-primary-400">
                               {tech}
                             </span>
                           ))}
@@ -113,7 +113,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                           {startup.category.map((cat) => (
                             <span
                               key={cat}
-                              className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white/60 font-medium">
+                              className="rounded-md border border-white/10 bg-white/5 px-3 py-2 font-medium text-white/60">
                               {cat}
                             </span>
                           ))}
@@ -126,7 +126,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                 {/* Sidebar */}
                 <aside className="col-span-12 lg:col-span-4 space-y-8">
                   <RevealAnimation delay={0.4}>
-                    <div className="bg-[#0A0A0A] border border-white/5 rounded-[30px] p-8 space-y-6">
+                    <div className="space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6">
                       <h4 className="text-lg font-bold text-white uppercase tracking-widest">Key Metrics</h4>
                       <div className="space-y-4">
                         <MetricItem label="Stage" value={startup.stage} />

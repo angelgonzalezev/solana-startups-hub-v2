@@ -13,6 +13,7 @@ import Link from 'next/link';
 import RevealAnimation from '@/components/animation/RevealAnimation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { ChevronRight } from 'lucide-react';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -60,13 +61,13 @@ export default function DashboardPage() {
   return (
     <AuthGate>
       <DashboardShell title="Dashboard" subtitle={`Welcome back, ${user?.displayName || 'Builder'}`}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Profile Summary */}
-          <div className="md:col-span-4 space-y-8">
+          <div className="space-y-6 lg:col-span-4 lg:space-y-8">
             <RevealAnimation delay={0.1}>
-              <div className="bg-[#0A0A0A] border border-white/5 rounded-[30px] p-8 space-y-6">
+              <div className="space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-black border border-white/10 overflow-hidden relative">
+                  <div className="relative size-14 shrink-0 overflow-hidden rounded-md border border-white/10 bg-black sm:size-16">
                     {user?.avatar ? (
                       <Image src={user.avatar} alt={user.displayName} fill className="object-cover" />
                     ) : (
@@ -75,9 +76,11 @@ export default function DashboardPage() {
                       </div>
                     )}
                   </div>
-                  <div className="space-y-0.5">
-                    <h3 className="font-bold text-white text-lg">{user?.displayName || 'Anonymous'}</h3>
-                    <p className="text-primary-500 text-sm font-medium">{user?.jobTitle || 'Role not set'}</p>
+                  <div className="min-w-0 space-y-0.5">
+                    <h3 className="break-words text-lg font-bold text-white">{user?.displayName || 'Anonymous'}</h3>
+                    <p className="break-words text-sm font-medium text-primary-500">
+                      {user?.jobTitle || 'Role not set'}
+                    </p>
                   </div>
                 </div>
 
@@ -111,26 +114,26 @@ export default function DashboardPage() {
 
             {/* Quick Stats */}
             <RevealAnimation delay={0.2}>
-              <div className="bg-[#0A0A0A] border border-white/5 rounded-[30px] p-8 space-y-6">
+              <div className="space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6">
                 <h4 className="text-sm font-bold text-white/40 uppercase tracking-widest">My Stats</h4>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-black border border-white/5 rounded-2xl space-y-1">
+                  <div className="space-y-1 rounded-md border border-white/10 bg-black p-3 sm:p-4">
                     <p className="text-2xl font-bold text-white">{startups.length}</p>
                     <p className="text-[10px] text-white/30 uppercase font-bold">Total Projects</p>
                   </div>
-                  <div className="p-4 bg-black border border-white/5 rounded-2xl space-y-1">
+                  <div className="space-y-1 rounded-md border border-white/10 bg-black p-3 sm:p-4">
                     <p className="text-2xl font-bold text-primary-500">
                       {startups.filter((s) => s.listingStatus === 'published').length}
                     </p>
                     <p className="text-[10px] text-white/30 uppercase font-bold">Published</p>
                   </div>
-                  <div className="p-4 bg-black border border-white/5 rounded-2xl space-y-1">
+                  <div className="space-y-1 rounded-md border border-white/10 bg-black p-3 sm:p-4">
                     <p className="text-2xl font-bold text-green-500">
                       {startups.filter((s) => s.verificationStatus === 'verified').length}
                     </p>
                     <p className="text-[10px] text-white/30 uppercase font-bold">Verified</p>
                   </div>
-                  <div className="p-4 bg-black border border-white/5 rounded-2xl space-y-1">
+                  <div className="space-y-1 rounded-md border border-white/10 bg-black p-3 sm:p-4">
                     <p className="text-2xl font-bold text-yellow-500">
                       {startups.filter((s) => s.verificationStatus === 'pending').length}
                     </p>
@@ -142,16 +145,16 @@ export default function DashboardPage() {
           </div>
 
           {/* Right Column: Recent Startups & Actions */}
-          <div className="md:col-span-8 space-y-8">
+          <div className="space-y-8 lg:col-span-8">
             <RevealAnimation delay={0.3}>
-              <div className="bg-[#0A0A0A] border border-white/5 rounded-[30px] p-8 space-y-8 text-center sm:text-left">
+              <div className="space-y-7 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6">
                 <div className="space-y-2">
                   <h3 className="text-2xl font-bold text-white">Start Building</h3>
                   <p className="text-white/60">
                     Ready to showcase another project? List your startup and get discovered by the Solana ecosystem.
                   </p>
                 </div>
-                <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/dashboard/startups/new"
                     className="btn btn-primary btn-xl shadow-lg shadow-primary-500/20 w-full sm:w-auto">
@@ -165,7 +168,7 @@ export default function DashboardPage() {
             </RevealAnimation>
 
             <div className="space-y-6">
-              <div className="flex items-center justify-between px-4">
+              <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold text-white">Recent Startups</h3>
                 <Link href="/dashboard/startups" className="text-sm text-primary-500 font-bold hover:underline">
                   View All
@@ -175,20 +178,20 @@ export default function DashboardPage() {
               {isLoading ? (
                 <LoadingState />
               ) : startups.length === 0 ? (
-                <div className="p-10 bg-white/5 border border-white/5 border-dashed rounded-[30px] text-center">
+                <div className="rounded-lg border border-dashed border-white/10 bg-white/5 p-8 text-center">
                   <p className="text-white/30 italic">You haven&apos;t listed any startups yet.</p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {startups.slice(0, 3).map((startup) => (
                     <Link key={startup.id} href={`/dashboard/startups/${startup.id}/edit`}>
-                      <div className="bg-black border border-white/5 rounded-2xl p-6 flex items-center justify-between hover:border-white/20 transition-all group">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-[#0A0A0A] border border-white/10 flex-shrink-0 flex items-center justify-center font-bold text-white/20">
+                      <div className="group flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black p-4 transition-colors hover:border-white/20 sm:p-5">
+                        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                          <div className="flex size-11 flex-shrink-0 items-center justify-center rounded-md border border-white/10 bg-[#0A0A0A] font-bold text-white/20 sm:size-12">
                             {startup.name.slice(0, 1).toUpperCase()}
                           </div>
-                          <div className="space-y-1">
-                            <h4 className="font-bold text-white group-hover:text-primary-500 transition-colors">
+                          <div className="min-w-0 space-y-1">
+                            <h4 className="truncate font-bold text-white transition-colors group-hover:text-primary-500">
                               {startup.name}
                             </h4>
                             <div className="flex gap-2">
@@ -196,14 +199,10 @@ export default function DashboardPage() {
                             </div>
                           </div>
                         </div>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 text-white/10 group-hover:text-white transition-all translate-x-0 group-hover:translate-x-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <ChevronRight
+                          aria-hidden="true"
+                          className="size-5 shrink-0 text-white/20 transition-all group-hover:translate-x-1 group-hover:text-white"
+                        />
                       </div>
                     </Link>
                   ))}

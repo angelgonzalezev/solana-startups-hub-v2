@@ -11,6 +11,7 @@ import { VerificationStatusBadge, ListingStatusBadge } from '@/components/shared
 import { LoadingState, ErrorState } from '@/components/shared/States';
 import { canRequestVerification } from '@/utils/validation';
 import { cn } from '@/utils/cn';
+import { Check } from 'lucide-react';
 
 export default function VerificationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -131,7 +132,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
         ) : (
           <div className="max-w-4xl space-y-8">
             {/* Status Overview */}
-            <div className="bg-[#0A0A0A] p-8 md:p-10 border border-white/5 rounded-[30px] space-y-6">
+            <div className="space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
               <div className="flex flex-wrap items-center gap-6">
                 <div className="space-y-1">
                   <p className="text-sm text-white/40 uppercase tracking-widest font-medium">Verification</p>
@@ -142,11 +143,11 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
                   <ListingStatusBadge status={startup.listingStatus} />
                 </div>
               </div>
-              <p className="text-xl text-white font-medium">{getStatusMessage()}</p>
+              <p className="text-lg font-medium leading-8 text-white sm:text-xl">{getStatusMessage()}</p>
             </div>
 
             {/* Verification Checklist */}
-            <div className="bg-[#0A0A0A] p-8 md:p-10 border border-white/5 rounded-[30px] space-y-8">
+            <div className="space-y-7 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
               <h3 className="text-2xl font-bold text-white">Verification Checklist</h3>
               <div className="space-y-4">
                 <CheckItem label="Profile Minimum Complete" isDone={!!user?.displayName && !!user?.jobTitle} />
@@ -163,12 +164,12 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
                 />
               </div>
 
-              <div className="pt-6 border-t border-white/5 flex flex-wrap gap-4">
+              <div className="flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:flex-wrap">
                 {startup.verificationStatus !== 'verified' && (
                   <button
                     onClick={handleRequestVerification}
                     disabled={!canRequest || isActionLoading || startup.verificationStatus === 'pending'}
-                    className="btn btn-primary btn-xl disabled:opacity-50">
+                    className="btn btn-primary btn-xl w-full disabled:opacity-50 sm:w-auto">
                     {startup.verificationStatus === 'pending' ? 'Verification Pending' : 'Request Verification'}
                   </button>
                 )}
@@ -177,13 +178,13 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
                   <button
                     onClick={handlePublish}
                     disabled={isActionLoading}
-                    className="btn btn-primary btn-xl shadow-lg shadow-primary-500/20">
+                    className="btn btn-primary btn-xl w-full shadow-lg shadow-primary-500/20 sm:w-auto">
                     Publish to Marketplace
                   </button>
                 )}
 
                 {startup.listingStatus === 'published' && (
-                  <div className="px-6 py-4 bg-green-500/10 border border-green-500/20 rounded-2xl text-green-500 font-bold">
+                  <div className="rounded-md border border-green-500/20 bg-green-500/10 px-5 py-4 text-center font-bold text-green-500">
                     ALREADY PUBLISHED
                   </div>
                 )}
@@ -192,7 +193,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
 
             {/* Dev Mock Actions */}
             {process.env.NEXT_PUBLIC_ENABLE_DEV_VERIFICATION === 'true' && (
-              <div className="bg-white/5 p-8 md:p-10 border border-white/10 rounded-[30px] border-dashed space-y-6">
+              <div className="space-y-6 rounded-lg border border-dashed border-white/10 bg-white/5 p-5 sm:p-6 md:p-8">
                 <h3 className="text-lg font-bold text-white/60 uppercase tracking-widest">Dev Mock Actions</h3>
                 <div className="flex flex-wrap gap-4">
                   <button
@@ -218,7 +219,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
             {message && (
               <div
                 className={cn(
-                  'p-4 rounded-2xl text-center font-medium border',
+                  'rounded-md border p-4 text-center font-medium',
                   message.type === 'success'
                     ? 'bg-green-500/10 border-green-500/20 text-green-500'
                     : 'bg-red-500/10 border-red-500/20 text-red-500',
@@ -237,19 +238,11 @@ const CheckItem = ({ label, isDone }: { label: string; isDone: boolean }) => (
   <div className="flex items-center gap-4">
     <div
       className={cn(
-        'w-6 h-6 rounded-full flex items-center justify-center border',
+        'flex size-6 shrink-0 items-center justify-center rounded-full border',
         isDone ? 'bg-green-500/20 border-green-500/40 text-green-500' : 'bg-white/5 border-white/10 text-white/20',
       )}>
-      {isDone && (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-          <path
-            fillRule="evenodd"
-            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-            clipRule="evenodd"
-          />
-        </svg>
-      )}
+      {isDone && <Check aria-hidden="true" className="size-4" />}
     </div>
-    <span className={cn('text-lg', isDone ? 'text-white/80' : 'text-white/30')}>{label}</span>
+    <span className={cn('text-base leading-6 sm:text-lg', isDone ? 'text-white/80' : 'text-white/30')}>{label}</span>
   </div>
 );

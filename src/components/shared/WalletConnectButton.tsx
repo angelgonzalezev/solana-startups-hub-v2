@@ -71,7 +71,7 @@ const WalletConnectButton: React.FC<WalletConnectButtonProps> = ({ className = '
               role="dialog"
               aria-modal="true"
               aria-labelledby="wallet-dialog-title"
-              className="my-auto max-h-[calc(100dvh-3rem)] w-full max-w-md overflow-y-auto rounded-[28px] border border-white/10 bg-[#0A0A0A] p-7 shadow-2xl shadow-primary-500/10">
+              className="my-auto max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-lg border border-white/10 bg-[#0A0A0A] p-5 shadow-2xl shadow-primary-500/10 sm:max-h-[calc(100dvh-3rem)] sm:p-7">
               <div className="mb-6 flex items-start justify-between gap-6">
                 <div>
                   <h2 id="wallet-dialog-title" className="text-xl font-semibold text-white">
@@ -98,7 +98,7 @@ const WalletConnectButton: React.FC<WalletConnectButtonProps> = ({ className = '
                     key={wallet.id}
                     disabled={!wallet.ready || isSigningIn}
                     onClick={() => void signIn(wallet.id)}
-                    className="flex w-full items-center gap-4 rounded-2xl border border-white/10 bg-black px-5 py-4 text-left text-white transition hover:border-primary-500/50 hover:bg-primary-500/5 disabled:cursor-not-allowed disabled:opacity-45">
+                    className="flex w-full items-center gap-4 rounded-md border border-white/10 bg-black px-4 py-3.5 text-left text-white transition hover:border-primary-500/50 hover:bg-primary-500/5 disabled:cursor-not-allowed disabled:opacity-45 sm:px-5 sm:py-4">
                     <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#9945FF]/25 to-[#14F195]/20 font-semibold">
                       {wallet.name.slice(0, 1).toUpperCase()}
                     </span>

@@ -94,7 +94,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ label, mutation, onMutati
       </label>
 
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-        <div className="relative size-28 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black">
+        <div className="relative size-24 shrink-0 overflow-hidden rounded-md border border-white/10 bg-black sm:size-28">
           {preview ? (
             <Image src={preview} alt={`${label} preview`} fill unoptimized className="object-cover" />
           ) : (
@@ -145,7 +145,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ label, mutation, onMutati
           aria-modal="true"
           aria-label={`Crop ${label.toLowerCase()}`}
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-2xl rounded-2xl border border-white/10 bg-[#0A0A0A] p-5 shadow-2xl sm:p-6">
+          <div className="w-full max-w-2xl rounded-lg border border-white/10 bg-[#0A0A0A] p-4 shadow-2xl sm:p-6">
             <div className="mb-5 flex items-center justify-between">
               <h3 className="text-lg font-bold text-white">Crop image</h3>
               <button
@@ -157,7 +157,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ label, mutation, onMutati
               </button>
             </div>
 
-            <div className="relative aspect-square max-h-[55vh] w-full overflow-hidden rounded-xl bg-black">
+            <div className="relative aspect-square max-h-[55vh] w-full overflow-hidden rounded-md bg-black">
               <Cropper
                 image={cropSource}
                 crop={crop}

@@ -27,9 +27,9 @@ Audit date: 2026-06-11.
 
 Current progress:
 
-- Done: 52/65.
+- Done: 53/65.
 - Partial: 9/65.
-- Pending: 4/65.
+- Pending: 3/65.
 
 Build status:
 
@@ -177,5 +177,5 @@ Build status:
 | [x]    | P0       | TASK-061 - Redesign honest product landing   | Removes fabricated scale and partner claims, documents the live MVP, and exposes the roadmap. |
 | [x]    | P1       | TASK-062 - Reorganize contextual navigation  | Landing anchors, a Marketplace action, and the wallet now provide contextual navigation.      |
 | [x]    | P0       | TASK-063 - Improve marketplace mobile UX     | Mobile filters use an accessible drawer; cards no longer overlap at narrow widths.            |
-| [ ]    | P0       | TASK-064 - Improve protected mobile surfaces | Rework dashboard navigation and audit every protected product screen at mobile widths.        |
+| [x]    | P0       | TASK-064 - Improve protected mobile surfaces | Dashboard tabs, forms, cards, detail views, states, and dialogs now adapt to narrow screens.  |
 | [ ]    | P1       | TASK-065 - Validate responsive product UI    | Run full checks, capture responsive evidence, and record verified QA outcomes.                |
