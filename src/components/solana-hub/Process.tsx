@@ -28,17 +28,19 @@ const Process = () => {
               </div>
             </div>
           </RevealAnimation>
-          <div className="space-y-6 text-center p-8 bg-[#0A0A0A] border border-primary-500/30 rounded-[20px] h-full shadow-2xl shadow-primary-500/5">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#9945FF] to-[#14F195] text-white rounded-full flex items-center justify-center text-heading-4 font-bold mx-auto shadow-lg shadow-primary-500/20">
-              2
+          <RevealAnimation delay={0.5} direction="up">
+            <div className="space-y-6 text-center p-8 bg-[#0A0A0A] border border-white/5 rounded-[20px] h-full hover:border-primary-500/20 transition-all">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#9945FF] to-[#14F195] text-white rounded-full flex items-center justify-center text-heading-4 font-bold mx-auto shadow-lg shadow-primary-500/20">
+                2
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-heading-5 font-bold text-white">Create Profile</h3>
+                <p className="text-white/60">
+                  Fill in your project details, category, and stage. Upload assets and link your social channels.
+                </p>
+              </div>
             </div>
-            <div className="space-y-3">
-              <h3 className="text-heading-5 font-bold text-white">Create Profile</h3>
-              <p className="text-white/60">
-                Fill in your project details, category, and stage. Upload assets and link your social channels.
-              </p>
-            </div>
-          </div>
+          </RevealAnimation>
           <RevealAnimation delay={0.6} direction="up">
             <div className="space-y-6 text-center p-8 bg-[#0A0A0A] border border-white/5 rounded-[20px] h-full hover:border-primary-500/20 transition-all">
               <div className="w-16 h-16 bg-gradient-to-br from-[#9945FF] to-[#14F195] text-white rounded-full flex items-center justify-center text-heading-4 font-bold mx-auto shadow-lg shadow-primary-500/20">
