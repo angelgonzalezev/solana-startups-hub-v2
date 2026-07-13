@@ -89,6 +89,9 @@ export const AuthProvider = ({
       const supabase = getSupabaseBrowserClient();
       const { error: signInError } = await supabase.auth.signInWithWeb3({
         chain: 'solana',
+        options: {
+          url: `${window.location.origin}/`,
+        },
         statement: 'Sign in to Solana Startups Hub.',
         wallet: {
           publicKey: { toBase58: () => address },
