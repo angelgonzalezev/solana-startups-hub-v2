@@ -14,8 +14,8 @@ const Process = () => {
             </p>
           </RevealAnimation>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <RevealAnimation delay={0.4} direction="up">
+        <RevealAnimation delay={0.4} direction="up">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="space-y-6 text-center p-8 bg-[#0A0A0A] border border-white/5 rounded-[20px] h-full hover:border-primary-500/20 transition-all">
               <div className="w-16 h-16 bg-gradient-to-br from-[#9945FF] to-[#14F195] text-white rounded-full flex items-center justify-center text-heading-4 font-bold mx-auto shadow-lg shadow-primary-500/20">
                 1
@@ -27,8 +27,6 @@ const Process = () => {
                 </p>
               </div>
             </div>
-          </RevealAnimation>
-          <RevealAnimation delay={0.5} direction="up">
             <div className="space-y-6 text-center p-8 bg-[#0A0A0A] border border-white/5 rounded-[20px] h-full hover:border-primary-500/20 transition-all">
               <div className="w-16 h-16 bg-gradient-to-br from-[#9945FF] to-[#14F195] text-white rounded-full flex items-center justify-center text-heading-4 font-bold mx-auto shadow-lg shadow-primary-500/20">
                 2
@@ -40,8 +38,6 @@ const Process = () => {
                 </p>
               </div>
             </div>
-          </RevealAnimation>
-          <RevealAnimation delay={0.6} direction="up">
             <div className="space-y-6 text-center p-8 bg-[#0A0A0A] border border-white/5 rounded-[20px] h-full hover:border-primary-500/20 transition-all">
               <div className="w-16 h-16 bg-gradient-to-br from-[#9945FF] to-[#14F195] text-white rounded-full flex items-center justify-center text-heading-4 font-bold mx-auto shadow-lg shadow-primary-500/20">
                 3
@@ -53,8 +49,8 @@ const Process = () => {
                 </p>
               </div>
             </div>
-          </RevealAnimation>
-        </div>
+          </div>
+        </RevealAnimation>
       </div>
     </section>
   );

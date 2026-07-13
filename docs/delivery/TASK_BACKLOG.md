@@ -27,9 +27,9 @@ Audit date: 2026-06-11.
 
 Current progress:
 
-- Done: 48/59.
-- Partial: 9/59.
-- Pending: 2/59.
+- Done: 49/60.
+- Partial: 9/60.
+- Pending: 2/60.
 
 Build status:
 
@@ -168,3 +168,4 @@ Build status:
 | [x]    | P1       | TASK-057 - Prune orphan template code  | Removed unreachable template components, mock content, style bundles, assets, and packages. |
 | [x]    | P1       | TASK-058 - Restore How it Works step 2 | Restored the missing central Create Profile step and its original content.                  |
 | [x]    | P1       | TASK-059 - Align How it Works cards    | Step 2 now uses the same card treatment and reveal animation pattern as steps 1 and 3.      |
+| [x]    | P1       | TASK-060 - Stabilize How it Works grid | All three cards render inside one reveal animation so no individual step can remain hidden. |
