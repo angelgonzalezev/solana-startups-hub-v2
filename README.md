@@ -190,16 +190,16 @@ Verification approval/rejection can be enabled only outside production with both
 
 Connect this repository to Netlify and select `main` as the production branch. The committed `netlify.toml` configures Node.js 22, builds the Docusaurus site under `/docs`, runs the Next.js production build, and publishes the `.next` output. Netlify detects Next.js and provisions its OpenNext adapter automatically; do not add or pin a legacy Next.js plugin.
 
-Add these environment variables in **Project configuration → Environment variables** with access to both Builds and Functions:
+Add these environment variables in **Project configuration → Environment variables**:
 
-```text
-NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-NEXT_PUBLIC_SOLANA_RPC_URL
-SUPABASE_SERVICE_ROLE_KEY
-```
+| Variable                               | Recommended scopes   | Secret |
+| :------------------------------------- | :------------------- | :----- |
+| `NEXT_PUBLIC_SUPABASE_URL`             | Builds and Functions | No     |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Builds and Functions | No     |
+| `NEXT_PUBLIC_SOLANA_RPC_URL`           | Builds               | No     |
+| `SUPABASE_SERVICE_ROLE_KEY`            | Functions only       | Yes    |
 
-Use the hosted Supabase project values, not the local `127.0.0.1` values. Keep `SUPABASE_SERVICE_ROLE_KEY` secret. Leave `ENABLE_DEV_VERIFICATION` and `NEXT_PUBLIC_ENABLE_DEV_VERIFICATION` unset or set to `false` in production.
+Use the hosted Supabase project values, not the local `127.0.0.1` values. Store `SUPABASE_SERVICE_ROLE_KEY` only in the Netlify UI, mark it as containing a secret value if that option is available, and never add it to `netlify.toml` or prefix it with `NEXT_PUBLIC_`. If your Netlify plan supports custom scopes, restrict it to Functions; otherwise, the default scope still does not expose it to the browser. Leave `ENABLE_DEV_VERIFICATION` and `NEXT_PUBLIC_ENABLE_DEV_VERIFICATION` unset or set to `false` in production.
 
 In Supabase, keep the Solana Web3 provider enabled and set **Authentication → URL Configuration → Site URL** to the final Netlify production URL (or the custom domain). After saving the variables and URL, trigger a new production deploy.
 
