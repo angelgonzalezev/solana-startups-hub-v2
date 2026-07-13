@@ -89,10 +89,10 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
     try {
       let result: Startup;
       if (isEditing && formData.id) {
-        result = await startupService.updateStartup(formData.id, walletAddress, formData);
+        result = await startupService.updateStartup(formData.id, formData);
         setMessage({ type: 'success', text: 'Startup updated successfully!' });
       } else {
-        result = await startupService.createStartup(walletAddress, formData);
+        result = await startupService.createStartup(formData);
         setMessage({ type: 'success', text: 'Startup created as draft!' });
       }
       if (onSave) onSave(result);
@@ -121,7 +121,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="text"
               name="name"
-              value={formData.name}
+              value={formData.name ?? ''}
               onChange={handleChange}
               placeholder="e.g. Solana Pay Pro"
               className={cn(
@@ -138,7 +138,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="text"
               name="logo"
-              value={formData.logo}
+              value={formData.logo ?? ''}
               onChange={handleChange}
               placeholder="https://..."
               className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
@@ -151,7 +151,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="text"
               name="oneLiner"
-              value={formData.oneLiner}
+              value={formData.oneLiner ?? ''}
               onChange={handleChange}
               placeholder="The ultimate payment gateway for Solana merchants."
               maxLength={160}
@@ -173,7 +173,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             </label>
             <textarea
               name="description"
-              value={formData.description}
+              value={formData.description ?? ''}
               onChange={handleChange}
               placeholder="Describe your startup, the problem it solves, and its unique value proposition..."
               rows={6}
@@ -199,7 +199,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="text"
               name="website"
-              value={formData.website}
+              value={formData.website ?? ''}
               onChange={handleChange}
               placeholder="https://..."
               className={cn(
@@ -216,7 +216,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="text"
               name="twitter"
-              value={formData.twitter}
+              value={formData.twitter ?? ''}
               onChange={handleChange}
               placeholder="https://x.com/..."
               className={cn(
@@ -233,7 +233,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="text"
               name="discord"
-              value={formData.discord}
+              value={formData.discord ?? ''}
               onChange={handleChange}
               placeholder="https://discord.gg/..."
               className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
@@ -246,7 +246,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="text"
               name="github"
-              value={formData.github}
+              value={formData.github ?? ''}
               onChange={handleChange}
               placeholder="https://github.com/..."
               className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
@@ -263,7 +263,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <label className="text-sm font-medium text-white/60 ml-1">Startup Stage *</label>
             <select
               name="stage"
-              value={formData.stage}
+              value={formData.stage ?? 'Idea'}
               onChange={handleChange}
               className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all appearance-none">
               {STARTUP_STAGES.map((s) => (
@@ -280,7 +280,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="number"
               name="teamSize"
-              value={formData.teamSize}
+              value={formData.teamSize ?? ''}
               onChange={handleChange}
               min={1}
               className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
@@ -293,7 +293,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
             <input
               type="number"
               name="mrr"
-              value={formData.mrr}
+              value={formData.mrr ?? ''}
               onChange={handleChange}
               min={0}
               className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"

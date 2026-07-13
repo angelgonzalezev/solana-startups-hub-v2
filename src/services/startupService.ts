@@ -1,179 +1,149 @@
-import { Startup, StartupStage, AcquisitionStatus } from '@/interface/startup';
-import startupsMock from '@/data/mock/startups.json';
-import { validateStartup, shouldResetVerification } from '@/utils/validation';
-
-const startups: Startup[] = startupsMock as Startup[];
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { isStartupRow, mapStartupRow } from '@/lib/supabase/mappers';
+import { validateStartup } from '@/utils/validation';
+import type { AcquisitionStatus, Startup, StartupStage } from '@/interface/startup';
+import type { Json, StartupRow } from '@/types/database';
 
 export type StartupFilters = {
-  search?: string;
+  acquisitionStatus?: AcquisitionStatus;
   category?: string[];
+  isRaising?: boolean;
+  search?: string;
   stage?: StartupStage[];
   techStack?: string[];
-  isRaising?: boolean;
-  acquisitionStatus?: AcquisitionStatus;
 };
 
-const isPublicStartup = (startup: Startup) =>
-  startup.verificationStatus === 'verified' && startup.listingStatus === 'published';
+const getCurrentProfile = async () => {
+  const supabase = getSupabaseBrowserClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error('Authentication required.');
 
-const canViewStartup = (startup: Startup, viewerWallet?: string): boolean =>
-  isPublicStartup(startup) || Boolean(viewerWallet && startup.ownerWallet === viewerWallet);
+  const { data, error } = await supabase.from('profiles').select('*').eq('auth_user_id', user.id).single();
+  if (error) throw error;
+  return data;
+};
+
+const toEditableRow = (input: Partial<Startup>) => ({
+  acquisition_status: input.acquisitionStatus,
+  category: input.category,
+  description: input.description,
+  discord: input.discord || null,
+  github: input.github || null,
+  is_raising: input.isRaising,
+  logo: input.logo,
+  mrr: input.mrr ?? null,
+  name: input.name,
+  one_liner: input.oneLiner,
+  show_mrr: input.showMrr,
+  stage: input.stage,
+  team: input.team as unknown as Json,
+  team_size: input.teamSize,
+  tech_stack: input.techStack,
+  twitter: input.twitter,
+  website: input.website,
+});
+
+const mapRpcStartup = (value: Json | null, ownerWallet?: string): Startup | null => {
+  if (!isStartupRow(value)) return null;
+  return mapStartupRow(value, ownerWallet);
+};
 
 export const startupService = {
   listPublishedStartups: async (filters: StartupFilters): Promise<Startup[]> => {
-    return startups.filter((s) => {
-      if (!isPublicStartup(s)) {
-        return false;
-      }
+    const { data, error } = await getSupabaseBrowserClient().rpc('list_published_startups', {
+      acquisition: filters.acquisitionStatus || null,
+      categories: filters.category || null,
+      raising: filters.isRaising ?? null,
+      search_text: filters.search || null,
+      stages: filters.stage || null,
+      technologies: filters.techStack || null,
+    });
 
-      if (
-        filters.search &&
-        !s.name.toLowerCase().includes(filters.search.toLowerCase()) &&
-        !s.oneLiner.toLowerCase().includes(filters.search.toLowerCase())
-      ) {
-        return false;
-      }
-
-      if (filters.category && filters.category.length > 0 && !filters.category.some((c) => s.category.includes(c))) {
-        return false;
-      }
-
-      if (filters.stage && filters.stage.length > 0 && !filters.stage.includes(s.stage)) {
-        return false;
-      }
-
-      if (
-        filters.techStack &&
-        filters.techStack.length > 0 &&
-        !filters.techStack.some((t) => s.techStack.includes(t))
-      ) {
-        return false;
-      }
-
-      if (filters.isRaising !== undefined && s.isRaising !== filters.isRaising) {
-        return false;
-      }
-
-      if (filters.acquisitionStatus && s.acquisitionStatus !== filters.acquisitionStatus) {
-        return false;
-      }
-
-      return true;
+    if (error) throw error;
+    return (data || []).flatMap((row) => {
+      const startup = mapRpcStartup(row);
+      return startup ? [startup] : [];
     });
   },
 
   getStartupById: async (id: string): Promise<Startup | null> => {
-    return startups.find((s) => s.id === id) || null;
+    const { data, error } = await getSupabaseBrowserClient().rpc('get_accessible_startup', { startup_id: id });
+    if (error) throw error;
+    return mapRpcStartup(data);
   },
 
-  getAccessibleStartupById: async (id: string, viewerWallet?: string): Promise<Startup | null> => {
-    const startup = startups.find((s) => s.id === id) || null;
-    if (!startup || !canViewStartup(startup, viewerWallet)) {
-      return null;
-    }
+  getAccessibleStartupById: async (id: string): Promise<Startup | null> => {
+    const { data, error } = await getSupabaseBrowserClient().rpc('get_accessible_startup', { startup_id: id });
+    if (error) throw error;
+    return mapRpcStartup(data);
+  },
 
+  listStartupsByOwner: async (): Promise<Startup[]> => {
+    const profile = await getCurrentProfile();
+    const { data, error } = await getSupabaseBrowserClient()
+      .from('startups')
+      .select('*')
+      .eq('owner_profile_id', profile.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data as StartupRow[]).map((row) => mapStartupRow(row, profile.wallet_address));
+  },
+
+  createStartup: async (input: Partial<Startup>): Promise<Startup> => {
+    const errors = validateStartup(input);
+    if (errors.length > 0) throw new Error(errors[0].message);
+
+    const profile = await getCurrentProfile();
+    const { data, error } = await getSupabaseBrowserClient()
+      .from('startups')
+      .insert({
+        ...toEditableRow(input),
+        name: input.name || '',
+        one_liner: input.oneLiner || '',
+        owner_profile_id: profile.id,
+        team: (input.team || [{ role: 'Founder', walletAddress: profile.wallet_address }]) as unknown as Json,
+      })
+      .select('*')
+      .single();
+
+    if (error) throw error;
+    return mapStartupRow(data, profile.wallet_address);
+  },
+
+  updateStartup: async (id: string, input: Partial<Startup>): Promise<Startup> => {
+    const errors = validateStartup(input);
+    if (errors.length > 0) throw new Error(errors[0].message);
+
+    const profile = await getCurrentProfile();
+    const { data, error } = await getSupabaseBrowserClient()
+      .from('startups')
+      .update(toEditableRow(input))
+      .eq('id', id)
+      .select('*')
+      .single();
+
+    if (error) throw error;
+    return mapStartupRow(data, profile.wallet_address);
+  },
+
+  archiveStartup: async (id: string): Promise<Startup> => {
+    const profile = await getCurrentProfile();
+    const { data, error } = await getSupabaseBrowserClient().rpc('archive_startup', { startup_id: id });
+    if (error) throw error;
+    const startup = mapRpcStartup(data, profile.wallet_address);
+    if (!startup) throw new Error('Invalid startup response.');
     return startup;
   },
 
-  listStartupsByOwner: async (walletAddress: string): Promise<Startup[]> => {
-    return startups.filter((s) => s.ownerWallet === walletAddress);
-  },
-
-  createStartup: async (ownerWallet: string, input: Partial<Startup>): Promise<Startup> => {
-    const errors = validateStartup(input);
-    if (errors.length > 0) {
-      throw new Error(errors[0].message);
-    }
-
-    const newStartup: Startup = {
-      id: Math.random().toString(36).substring(2, 9),
-      ownerWallet,
-      name: input.name || '',
-      logo: input.logo || '',
-      oneLiner: input.oneLiner || '',
-      description: input.description || '',
-      website: input.website || '',
-      twitter: input.twitter || '',
-      discord: input.discord,
-      github: input.github,
-      stage: input.stage || 'Idea',
-      isRaising: input.isRaising || false,
-      acquisitionStatus: input.acquisitionStatus || 'not_open',
-      mrr: input.mrr,
-      showMrr: input.showMrr || false,
-      teamSize: input.teamSize || 1,
-      techStack: input.techStack || [],
-      category: input.category || [],
-      team: input.team || [{ walletAddress: ownerWallet, role: 'Founder' }],
-      verificationStatus: 'draft',
-      listingStatus: 'draft',
-      domainVerificationStatus: 'not_started',
-      xVerificationStatus: 'not_started',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    startups.push(newStartup);
-    return newStartup;
-  },
-
-  updateStartup: async (id: string, ownerWallet: string, input: Partial<Startup>): Promise<Startup> => {
-    const index = startups.findIndex((s) => s.id === id && s.ownerWallet === ownerWallet);
-    if (index === -1) {
-      throw new Error('Startup not found or unauthorized');
-    }
-
-    const errors = validateStartup(input);
-    if (errors.length > 0) {
-      throw new Error(errors[0].message);
-    }
-
-    const previous = startups[index];
-    let verificationStatus = previous.verificationStatus;
-    let domainVerificationStatus = previous.domainVerificationStatus;
-    let xVerificationStatus = previous.xVerificationStatus;
-
-    if (shouldResetVerification(previous, input)) {
-      verificationStatus = 'pending';
-      domainVerificationStatus = 'pending';
-      xVerificationStatus = 'pending';
-    }
-
-    startups[index] = {
-      ...previous,
-      ...input,
-      verificationStatus,
-      domainVerificationStatus,
-      xVerificationStatus,
-      updatedAt: new Date().toISOString(),
-    };
-
-    return startups[index];
-  },
-
-  archiveStartup: async (id: string, ownerWallet: string): Promise<Startup> => {
-    const index = startups.findIndex((s) => s.id === id && s.ownerWallet === ownerWallet);
-    if (index === -1) {
-      throw new Error('Startup not found or unauthorized');
-    }
-
-    startups[index].listingStatus = 'archived';
-    startups[index].updatedAt = new Date().toISOString();
-    return startups[index];
-  },
-
-  publishStartup: async (id: string, ownerWallet: string): Promise<Startup> => {
-    const index = startups.findIndex((s) => s.id === id && s.ownerWallet === ownerWallet);
-    if (index === -1) {
-      throw new Error('Startup not found or unauthorized');
-    }
-
-    if (startups[index].verificationStatus !== 'verified') {
-      throw new Error('Only verified startups can be published');
-    }
-
-    startups[index].listingStatus = 'published';
-    startups[index].updatedAt = new Date().toISOString();
-    return startups[index];
+  publishStartup: async (id: string): Promise<Startup> => {
+    const profile = await getCurrentProfile();
+    const { data, error } = await getSupabaseBrowserClient().rpc('publish_startup', { startup_id: id });
+    if (error) throw error;
+    const startup = mapRpcStartup(data, profile.wallet_address);
+    if (!startup) throw new Error('Invalid startup response.');
+    return startup;
   },
 };

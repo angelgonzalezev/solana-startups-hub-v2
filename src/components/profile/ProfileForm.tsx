@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { User } from '@/interface/user';
 import { validateProfile, ValidationError } from '@/utils/validation';
 import { userService } from '@/services/userService';
@@ -12,21 +12,25 @@ interface ProfileFormProps {
   onSave?: (user: User) => void;
 }
 
+const normalizeProfileFormData = (user: User | null): Partial<User> => ({
+  displayName: user?.displayName ?? '',
+  jobTitle: user?.jobTitle ?? '',
+  twitterHandle: user?.twitterHandle ?? '',
+  telegramHandle: user?.telegramHandle ?? '',
+  bio: user?.bio ?? '',
+  avatar: user?.avatar ?? '',
+});
+
 const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
-  const { walletAddress } = useAuth();
-  const [formData, setFormData] = useState<Partial<User>>(
-    initialData || {
-      displayName: '',
-      jobTitle: '',
-      twitterHandle: '',
-      telegramHandle: '',
-      bio: '',
-      avatar: '',
-    },
-  );
+  const { refreshUser, walletAddress } = useAuth();
+  const [formData, setFormData] = useState<Partial<User>>(() => normalizeProfileFormData(initialData));
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    setFormData(normalizeProfileFormData(initialData));
+  }, [initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -49,7 +53,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
     setMessage(null);
 
     try {
-      const updatedUser = await userService.upsertProfile(walletAddress, formData);
+      const updatedUser = await userService.upsertProfile(formData);
+      await refreshUser();
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
       if (onSave) onSave(updatedUser);
     } catch (error) {
@@ -71,7 +76,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
           <input
             type="text"
             name="displayName"
-            value={formData.displayName}
+            value={formData.displayName ?? ''}
             onChange={handleChange}
             placeholder="Alex Rivera"
             className={cn(
@@ -88,7 +93,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
           <input
             type="text"
             name="jobTitle"
-            value={formData.jobTitle}
+            value={formData.jobTitle ?? ''}
             onChange={handleChange}
             placeholder="Founder, Lead Dev, Designer..."
             className={cn(
@@ -107,7 +112,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
             <input
               type="text"
               name="twitterHandle"
-              value={formData.twitterHandle}
+              value={formData.twitterHandle ?? ''}
               onChange={handleChange}
               placeholder="username"
               className={cn(
@@ -127,7 +132,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
             <input
               type="text"
               name="telegramHandle"
-              value={formData.telegramHandle}
+              value={formData.telegramHandle ?? ''}
               onChange={handleChange}
               placeholder="username"
               className={cn(
@@ -145,7 +150,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
         <label className="text-sm font-medium text-white/60 ml-1">Bio</label>
         <textarea
           name="bio"
-          value={formData.bio}
+          value={formData.bio ?? ''}
           onChange={handleChange}
           placeholder="Tell the community about yourself..."
           rows={4}
@@ -159,7 +164,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
         <input
           type="text"
           name="avatar"
-          value={formData.avatar}
+          value={formData.avatar ?? ''}
           onChange={handleChange}
           placeholder="https://..."
           className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"

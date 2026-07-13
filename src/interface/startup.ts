@@ -37,6 +37,7 @@ export interface Startup {
   listingStatus: ListingStatus;
   domainVerificationStatus: VerificationCheckStatus;
   xVerificationStatus: VerificationCheckStatus;
+  verificationRejectionReason?: string;
   createdAt: string;
   updatedAt: string;
 }

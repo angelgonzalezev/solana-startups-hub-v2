@@ -59,10 +59,7 @@ export const isProfileMinimumComplete = (user: User): boolean => {
 
 export const isProfileRecommendedComplete = (user: User): boolean => {
   return (
-    isProfileMinimumComplete(user) &&
-    !!user.bio &&
-    !!user.avatar &&
-    (!!user.twitterHandle || !!user.telegramHandle)
+    isProfileMinimumComplete(user) && !!user.bio && !!user.avatar && (!!user.twitterHandle || !!user.telegramHandle)
   );
 };
 
@@ -82,11 +79,11 @@ export const validateStartup = (startup: Partial<Startup>): ValidationError[] =>
     });
   }
 
-  // Description is only strictly required for verification, but we can check it here too
-  if (startup.description && (startup.description.length < 200 || startup.description.length > 2000)) {
+  // Drafts may contain a short description. Verification applies the minimum length.
+  if (startup.description && startup.description.length > 2000) {
     errors.push({
       field: 'description',
-      message: 'Description must be between 200 and 2000 characters for verification.',
+      message: 'Description must be no longer than 2000 characters.',
     });
   }
 
@@ -100,8 +97,12 @@ export const validateStartup = (startup: Partial<Startup>): ValidationError[] =>
 
   if (startup.twitter) {
     // Simple validation for X URL or handle
-    if (!startup.twitter.includes('x.com') && !startup.twitter.includes('twitter.com') && startup.twitter.startsWith('http')) {
-        errors.push({ field: 'twitter', message: 'Must be a valid X/Twitter URL.' });
+    if (
+      !startup.twitter.includes('x.com') &&
+      !startup.twitter.includes('twitter.com') &&
+      startup.twitter.startsWith('http')
+    ) {
+      errors.push({ field: 'twitter', message: 'Must be a valid X/Twitter URL.' });
     }
   }
 
@@ -113,12 +114,12 @@ export const validateStartup = (startup: Partial<Startup>): ValidationError[] =>
     errors.push({ field: 'teamSize', message: 'Team size must be at least 1.' });
   }
 
-  if (startup.category && (startup.category.length < 1 || startup.category.length > 5)) {
-    errors.push({ field: 'category', message: 'Select between 1 and 5 categories.' });
+  if (startup.category && startup.category.length > 5) {
+    errors.push({ field: 'category', message: 'Select no more than 5 categories.' });
   }
 
-  if (startup.techStack && (startup.techStack.length < 1 || startup.techStack.length > 10)) {
-    errors.push({ field: 'techStack', message: 'Select between 1 and 10 technologies.' });
+  if (startup.techStack && startup.techStack.length > 10) {
+    errors.push({ field: 'techStack', message: 'Select no more than 10 technologies.' });
   }
 
   return errors;
@@ -154,11 +155,11 @@ export const canPublishStartup = (startup: Startup): boolean => {
 };
 
 export const shouldResetVerification = (previous: Startup, next: Partial<Startup>): boolean => {
-    if (previous.verificationStatus !== 'verified') return false;
-    
-    // Changing website or twitter resets verification
-    if (next.website && next.website !== previous.website) return true;
-    if (next.twitter && next.twitter !== previous.twitter) return true;
-    
-    return false;
+  if (previous.verificationStatus !== 'verified') return false;
+
+  // Changing website or twitter resets verification
+  if (next.website && next.website !== previous.website) return true;
+  if (next.twitter && next.twitter !== previous.twitter) return true;
+
+  return false;
 };

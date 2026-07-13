@@ -10,13 +10,21 @@ import StartupCard from '@/components/startup/StartupCard';
 import StartupFilters from '@/components/startup/StartupFilters';
 import { LoadingState, EmptyState } from '@/components/shared/States';
 import RevealAnimation from '@/components/animation/RevealAnimation';
+import { useAuth } from '@/context/AuthContext';
 
 export default function StartupsPage() {
+  const { isAuthenticated } = useAuth();
   const [startups, setStartups] = useState<Startup[]>([]);
   const [filters, setFilters] = useState<IStartupFilters>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setStartups([]);
+      setIsLoading(false);
+      return;
+    }
+
     let cancelled = false;
 
     (async () => {
@@ -38,7 +46,7 @@ export default function StartupsPage() {
     return () => {
       cancelled = true;
     };
-  }, [filters]);
+  }, [filters, isAuthenticated]);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">

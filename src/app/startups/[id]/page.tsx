@@ -19,10 +19,12 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
   const [startup, setStartup] = useState<Startup | null>(null);
   const [founder, setFounder] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { walletAddress } = useAuth();
+  const { isAuthenticated, walletAddress } = useAuth();
 
   useEffect(() => {
-    if (!id) {
+    if (!id || !isAuthenticated) {
+      setStartup(null);
+      setFounder(null);
       setIsLoading(false);
       return;
     }
@@ -31,7 +33,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
     (async () => {
       setIsLoading(true);
       try {
-        const s = await startupService.getAccessibleStartupById(id, walletAddress ?? undefined);
+        const s = await startupService.getAccessibleStartupById(id);
         if (!cancelled) {
           setStartup(s);
           if (s) {
@@ -55,7 +57,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
     return () => {
       cancelled = true;
     };
-  }, [id, walletAddress]);
+  }, [id, isAuthenticated, walletAddress]);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">

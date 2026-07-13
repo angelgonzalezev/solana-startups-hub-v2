@@ -24,7 +24,7 @@ export default function MyStartupsPage() {
 
     setIsLoading(true);
     try {
-      const data = await startupService.listStartupsByOwner(walletAddress);
+      const data = await startupService.listStartupsByOwner();
       setStartups(data);
     } catch (error) {
       console.error('Error loading startups:', error);
@@ -40,7 +40,7 @@ export default function MyStartupsPage() {
   const handleArchive = async (id: string) => {
     if (confirm('Are you sure you want to archive this startup? It will no longer be visible in the marketplace.')) {
       try {
-        await startupService.archiveStartup(id, walletAddress!);
+        await startupService.archiveStartup(id);
         await refreshStartups();
       } catch (error) {
         console.error('Error archiving startup:', error);

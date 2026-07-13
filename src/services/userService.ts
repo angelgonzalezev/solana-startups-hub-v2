@@ -1,45 +1,60 @@
-import { User } from '@/interface/user';
-import usersMock from '@/data/mock/users.json';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { mapProfileRow } from '@/lib/supabase/mappers';
 import { validateProfile } from '@/utils/validation';
-
-const users: User[] = usersMock as User[];
+import type { User } from '@/interface/user';
 
 export const userService = {
-  getCurrentUser: async (walletAddress: string): Promise<User | null> => {
-    return users.find((u) => u.walletAddress === walletAddress) || null;
+  getCurrentUser: async (): Promise<User | null> => {
+    const supabase = getSupabaseBrowserClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) return null;
+
+    const { data, error } = await supabase.from('profiles').select('*').eq('auth_user_id', user.id).maybeSingle();
+    if (error) throw error;
+    return data ? mapProfileRow(data) : null;
   },
 
   getUserByWallet: async (walletAddress: string): Promise<User | null> => {
-    return users.find((u) => u.walletAddress === walletAddress) || null;
+    const { data, error } = await getSupabaseBrowserClient()
+      .from('profiles')
+      .select('*')
+      .eq('wallet_address', walletAddress)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data ? mapProfileRow(data) : null;
   },
 
-  upsertProfile: async (walletAddress: string, input: Partial<User>): Promise<User> => {
+  upsertProfile: async (input: Partial<User>): Promise<User> => {
     const errors = validateProfile(input);
-    if (errors.length > 0) {
-      throw new Error(errors[0].message);
-    }
+    if (errors.length > 0) throw new Error(errors[0].message);
 
-    const index = users.findIndex((u) => u.walletAddress === walletAddress);
-    if (index >= 0) {
-      users[index] = {
-        ...users[index],
-        ...input,
-        updatedAt: new Date().toISOString(),
-      } as User;
-      return users[index];
-    } else {
-      const newUser: User = {
-        walletAddress,
-        displayName: input.displayName || '',
-        jobTitle: input.jobTitle || '',
-        twitterHandle: input.twitterHandle,
-        telegramHandle: input.telegramHandle,
-        avatar: input.avatar,
-        bio: input.bio,
-        joinedAt: new Date().toISOString(),
-      };
-      users.push(newUser);
-      return newUser;
-    }
+    const supabase = getSupabaseBrowserClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+    if (authError || !user) throw new Error('Authentication required.');
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({
+        avatar: input.avatar || null,
+        bio: input.bio || null,
+        display_name: input.displayName || '',
+        job_title: input.jobTitle || '',
+        telegram_handle: input.telegramHandle || null,
+        twitter_handle: input.twitterHandle || null,
+      })
+      .eq('auth_user_id', user.id)
+      .select('*')
+      .single();
+
+    if (error) throw error;
+    return mapProfileRow(data);
   },
 };
