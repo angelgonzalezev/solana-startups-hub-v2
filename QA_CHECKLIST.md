@@ -1,24 +1,24 @@
-# MVP v1.0 Release Checklist - Solana Startups Hub
+# Product Release Checklist - Solana Startups Hub
 
 ## Agent Context Guide
 
 Open this file when validating whether the current implementation satisfies the MVP release checklist. This file is for QA state, not product definition. If you need task status, use `docs/delivery/TASK_BACKLOG.md`; if you need product rules, start with `MVP_SPEC.md`.
 
-Este documento valida el cumplimiento de los requisitos del MVP v1.0 según la especificación.
+Este documento valida el estado real de la plataforma y las comprobaciones necesarias antes de una release.
 
 ## 1. Fundamentos y Auth
 
 - [x] Rutas de producto implementadas (`/startups`, `/dashboard`, etc.)
-- [x] Mock Wallet Auth funcional (Marco Vulcan como default)
+- [x] Solana Wallet Standard SIWS y sesiones Supabase SSR implementadas
 - [x] `AuthGate` protegiendo marketplace y dashboard
-- [x] Landing page alineada con messaging v1 (no promesas de trading/pagos)
+- [x] Landing sin estadísticas, partners, escala o capacidades ficticias
 
 ## 2. Perfil de Usuario
 
 - [x] Pantalla `/dashboard/profile` funcional
 - [x] Validación de perfil mínimo (Display Name, Job Title)
 - [x] Bloqueo de creación de startup si el perfil está incompleto
-- [x] Almacenamiento mock de redes sociales (X, Telegram)
+- [x] Perfil, avatar y redes sociales persistidos en Supabase
 
 ## 3. Gestión de Startups (Founder)
 
@@ -51,10 +51,15 @@ Este documento valida el cumplimiento de los requisitos del MVP v1.0 según la e
 
 ## 7. Calidad y UX
 
-- [x] Diseño responsive en todas las pantallas nuevas
+- [x] Landing, Marketplace, Dashboard y pantallas protegidas adaptadas para anchos móviles
+- [x] Marketplace mobile usa un drawer de filtros y las tarjetas no superponen badges o acciones
+- [x] Dashboard mobile usa tabs desplazables y los formularios no quedan tapados por acciones sticky
 - [x] Empty states en marketplace, dashboard y contacto
-- [x] Loading states durante la carga de servicios mock
+- [x] Loading states durante la carga de servicios
 - [x] Estética visual coherente con la landing page (Solana dark mode)
+- [x] `npm test`, lint, formato, TypeScript y build ejecutados correctamente el 2026-07-13
+- [x] Landing, Marketplace y rutas principales de Dashboard responden HTTP 200 en local
+- [ ] Capturas automatizadas desktop/mobile pendientes de un navegador disponible en el entorno de QA
 
 ## 8. Imágenes Gestionadas
 
@@ -66,14 +71,12 @@ Este documento valida el cumplimiento de los requisitos del MVP v1.0 según la e
 
 ---
 
-## Decisiones Técnicas Pendientes (Post-MVP / v2)
+## Decisiones Técnicas Pendientes
 
-Lo siguiente ha sido implementado como **MOCK** o **SIMULADO** para el MVP y debe ser reemplazado en la fase de producción real:
+Las siguientes capacidades permanecen fuera del flujo de producción actual:
 
-1. **Autenticación**: Reemplazar `AuthContext` mock por `Solana Wallet Adapter` real.
-2. **Persistencia**: Migrar de archivos JSON locales y estado en memoria a `Supabase` o `PostgreSQL`.
-3. **Verificación**: Implementar validación real de DNS/Dominio e integración con la API de X (Twitter).
-4. **Mensajería**: Implementar chat wallet-to-wallet mediante `XMTP` (Roadmap v2).
-5. **Admin**: Crear un panel de administración real para que los revisores aprueben/rechacen startups.
-6. **Analytics**: Integrar un proveedor real de analíticas en lugar de mocks.
-7. **Notificaciones**: Implementar sistema de alertas para cambios de estado en verificación.
+1. **Reviewer workflow**: sustituir el simulador de desarrollo por operaciones controladas de revisión.
+2. **Verificación**: implementar validación real de DNS/dominio e integración con la API de X.
+3. **Mensajería**: decidir e implementar comunicación wallet-to-wallet.
+4. **Analytics**: incorporar medición de eventos cuando se elija un proveedor.
+5. **Notificaciones**: implementar alertas para cambios de estado en verificación.
