@@ -4,7 +4,7 @@ import RevealAnimation from '../animation/RevealAnimation';
 const principles = [
   'Prioritize trustworthy, maintained listings over vanity growth.',
   'Keep startup data protected behind wallet authentication.',
-  'Separate capabilities that work today from ideas on the roadmap.',
+  'Keep the product focused on clear founder and discovery workflows.',
 ];
 
 const About = () => {

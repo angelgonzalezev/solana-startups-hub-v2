@@ -13,8 +13,8 @@ const CTA = () => {
           </RevealAnimation>
           <RevealAnimation delay={0.3}>
             <p className="max-w-[680px] text-lg leading-8 text-white/65">
-              Create a draft if you are building on Solana, or explore the current product and follow its progress in
-              the public documentation.
+              Create and manage a startup profile if you are building on Solana, or explore the directory to discover
+              other founders and projects.
             </p>
           </RevealAnimation>
           <RevealAnimation delay={0.4}>
@@ -25,9 +25,9 @@ const CTA = () => {
                 List Your Startup
               </LinkButton>
               <LinkButton
-                href="/#roadmap"
+                href="/#features"
                 className="btn btn-white-dark btn-md md:btn-xl hover:btn-primary w-full sm:w-auto">
-                Read the roadmap
+                Explore features
               </LinkButton>
             </div>
           </RevealAnimation>

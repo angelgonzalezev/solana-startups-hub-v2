@@ -3,7 +3,7 @@
 import { useMobileMenuContext } from '@/context/MobileMenuContext';
 import { navigationItems } from '@/data/header';
 import { cn } from '@/utils/cn';
-import { CircleHelp, Info, Map, Store, X } from 'lucide-react';
+import { CircleHelp, Info, LayoutGrid, Store, X } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import WalletConnectButton from './WalletConnectButton';
@@ -12,7 +12,7 @@ import Logo from './header/Logo';
 const navigationIcons = {
   overview: Info,
   process: CircleHelp,
-  roadmap: Map,
+  features: LayoutGrid,
 };
 
 const MobileMenu = () => {

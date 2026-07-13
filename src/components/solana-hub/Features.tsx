@@ -31,7 +31,7 @@ const Features = () => (
     <div className="main-container">
       <div className="mb-10 max-w-[760px] space-y-4 md:mb-14">
         <RevealAnimation delay={0.1}>
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#14F195]">Available in the MVP</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#14F195]">Available now</p>
         </RevealAnimation>
         <RevealAnimation delay={0.2}>
           <h2 className="text-heading-3 font-bold text-white md:text-heading-2">
@@ -40,8 +40,8 @@ const Features = () => (
         </RevealAnimation>
         <RevealAnimation delay={0.3}>
           <p className="text-lg leading-8 text-white/65">
-            These are implemented product capabilities. Production review operations, real domain verification, and
-            messaging remain roadmap work.
+            Founder profiles, managed startup listings, discovery filters, and direct contact context are available in
+            one focused product experience.
           </p>
         </RevealAnimation>
       </div>

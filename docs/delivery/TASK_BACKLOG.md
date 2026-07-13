@@ -27,9 +27,9 @@ Audit date: 2026-06-11.
 
 Current progress:
 
-- Done: 53/65.
-- Partial: 9/65.
-- Pending: 3/65.
+- Done: 54/66.
+- Partial: 9/66.
+- Pending: 3/66.
 
 Build status:
 
@@ -174,8 +174,9 @@ Build status:
 
 | Status | Priority | Task                                         | Notes                                                                                         |
 | :----- | :------- | :------------------------------------------- | :-------------------------------------------------------------------------------------------- |
-| [x]    | P0       | TASK-061 - Redesign honest product landing   | Removes fabricated scale and partner claims, documents the live MVP, and exposes the roadmap. |
+| [x]    | P0       | TASK-061 - Redesign honest product landing   | Removes fabricated scale and partner claims and documents live platform capabilities.         |
 | [x]    | P1       | TASK-062 - Reorganize contextual navigation  | Landing anchors, a Marketplace action, and the wallet now provide contextual navigation.      |
 | [x]    | P0       | TASK-063 - Improve marketplace mobile UX     | Mobile filters use an accessible drawer; cards no longer overlap at narrow widths.            |
 | [x]    | P0       | TASK-064 - Improve protected mobile surfaces | Dashboard tabs, forms, cards, detail views, states, and dialogs now adapt to narrow screens.  |
 | [ ]    | P1       | TASK-065 - Validate responsive product UI    | Run full checks, capture responsive evidence, and record verified QA outcomes.                |
+| [x]    | P1       | TASK-066 - Remove landing maturity messaging | Removes the roadmap section and visible MVP or early-stage language from the product landing. |

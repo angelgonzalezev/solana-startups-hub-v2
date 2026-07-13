@@ -4,16 +4,15 @@ import Hero from '@/components/solana-hub/Hero';
 import Process from '@/components/solana-hub/Process';
 import Features from '@/components/solana-hub/Features';
 import ProjectStatus from '@/components/solana-hub/ProjectStatus';
-import Roadmap from '@/components/solana-hub/Roadmap';
 import FooterOne from '@/components/shared/footer/FooterOne';
 import NavbarOne from '@/components/shared/header/NavbarOne';
 import { Metadata } from 'next';
 import { Fragment } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Solana Startups Hub - Startup Directory in Active Development',
+  title: 'Solana Startups Hub - The Directory for Solana Startups',
   description:
-    'An early-stage directory where Solana founders can create startup profiles and make projects easier to discover. Follow the public roadmap as the MVP evolves.',
+    'A structured directory where Solana founders can create startup profiles, publish reviewed projects, and make their work easier to discover.',
 };
 
 const Homepage = () => {
@@ -29,7 +28,6 @@ const Homepage = () => {
         <About />
         <Process />
         <Features />
-        <Roadmap />
         <CTA />
       </main>
       <FooterOne className="bg-black border-t border-white/10" />

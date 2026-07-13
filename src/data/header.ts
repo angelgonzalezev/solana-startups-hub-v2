@@ -16,8 +16,8 @@ export const navigationItems: NavigationItem[] = [
     href: '/#process',
   },
   {
-    id: 'roadmap',
-    label: 'Roadmap',
-    href: '/#roadmap',
+    id: 'features',
+    label: 'Available now',
+    href: '/#features',
   },
 ];

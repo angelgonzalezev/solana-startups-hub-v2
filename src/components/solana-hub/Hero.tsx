@@ -22,7 +22,7 @@ const Hero = () => {
           <RevealAnimation delay={0.1}>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-2 text-sm font-medium text-white/80 backdrop-blur-md">
               <span className="size-2 rounded-full bg-[#14F195]" />
-              MVP · Active development
+              Built for Solana founders
             </div>
           </RevealAnimation>
           <div className="space-y-5">
@@ -33,13 +33,13 @@ const Hero = () => {
             </RevealAnimation>
             <RevealAnimation delay={0.3}>
               <p className="max-w-[720px] text-lg leading-8 text-white/75 md:text-xl">
-                An early-stage directory for founders building on Solana. Create a structured startup profile, signal
-                what you are working on, and help make the ecosystem easier to navigate.
+                A structured directory for founders building on Solana. Create a startup profile, signal what you are
+                working on, and help make the ecosystem easier to navigate.
               </p>
             </RevealAnimation>
             <RevealAnimation delay={0.35}>
               <p className="text-sm font-medium text-white/50">
-                The product is evolving in public. Wallet sign-in is required to access startup listings.
+                Wallet sign-in keeps startup listings and founder data protected.
               </p>
             </RevealAnimation>
           </div>
@@ -56,9 +56,9 @@ const Hero = () => {
             <RevealAnimation delay={0.5} direction="left" offset={30}>
               <div className="w-full sm:w-auto">
                 <LinkButton
-                  href="/#roadmap"
+                  href="/dashboard/startups/new"
                   className="btn btn-white-dark btn-xl w-full border border-white/15 hover:btn-primary sm:w-auto">
-                  View roadmap
+                  List your startup
                 </LinkButton>
               </div>
             </RevealAnimation>

@@ -1,10 +1,10 @@
 import RevealAnimation from '../animation/RevealAnimation';
 
 const statusItems = [
-  { label: 'Product stage', value: 'MVP in active development' },
+  { label: 'Product focus', value: 'Founder-managed startup directory' },
   { label: 'Founder flow', value: 'Profiles and startup drafts available' },
   { label: 'Directory access', value: 'Protected by wallet sign-in' },
-  { label: 'Before production', value: 'Reviewer workflow and broader QA' },
+  { label: 'Listing quality', value: 'Structured review before publication' },
 ];
 
 const ProjectStatus = () => (

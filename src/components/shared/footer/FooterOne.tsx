@@ -31,7 +31,6 @@ const footerSections = [
       { label: 'Overview', href: '/#about' },
       { label: 'How it works', href: '/#process' },
       { label: 'Available now', href: '/#features' },
-      { label: 'Public roadmap', href: '/#roadmap' },
     ],
   },
 ];
@@ -60,8 +59,8 @@ const FooterOne = ({ className }: { className?: string }) => {
                   </span>
                 </Link>
                 <p className="mt-5 text-base leading-7 text-white/70">
-                  An early-stage directory for founders building on Solana. Create a structured startup profile and
-                  follow the public roadmap as the MVP evolves.
+                  A structured directory for founders building on Solana. Create and manage a startup profile, then
+                  publish reviewed projects to the protected marketplace.
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <Link
@@ -105,7 +104,7 @@ const FooterOne = ({ className }: { className?: string }) => {
           <FooterDivider />
           <RevealAnimation delay={0.7} offset={10} start="top 105%">
             <p className="text-tagline-1 font-normal text-white/55">
-              Copyright &copy; Solana Startups Hub. MVP in active development.
+              Copyright &copy; Solana Startups Hub. Directory for the Solana founder ecosystem.
             </p>
           </RevealAnimation>
           <RevealAnimation delay={0.75} offset={10} start="top 105%">
