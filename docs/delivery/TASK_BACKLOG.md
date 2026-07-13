@@ -27,9 +27,9 @@ Audit date: 2026-06-11.
 
 Current progress:
 
-- Done: 56/68.
-- Partial: 10/68.
-- Pending: 2/68.
+- Done: 57/69.
+- Partial: 10/69.
+- Pending: 2/69.
 
 Build status:
 
@@ -172,13 +172,14 @@ Build status:
 
 ## Phase P: Honest Landing and Responsive Product UI
 
-| Status | Priority | Task                                         | Notes                                                                                         |
-| :----- | :------- | :------------------------------------------- | :-------------------------------------------------------------------------------------------- |
-| [x]    | P0       | TASK-061 - Redesign honest product landing   | Removes fabricated scale and partner claims and documents live platform capabilities.         |
-| [x]    | P1       | TASK-062 - Reorganize contextual navigation  | Landing anchors, a Marketplace action, and the wallet now provide contextual navigation.      |
-| [x]    | P0       | TASK-063 - Improve marketplace mobile UX     | Mobile filters use an accessible drawer; cards no longer overlap at narrow widths.            |
-| [x]    | P0       | TASK-064 - Improve protected mobile surfaces | Dashboard tabs, forms, cards, detail views, states, and dialogs now adapt to narrow screens.  |
-| [~]    | P1       | TASK-065 - Validate responsive product UI    | Checks, build, and route probes pass; browser screenshots remain unavailable in this session. |
-| [x]    | P1       | TASK-066 - Remove landing maturity messaging | Removes the roadmap section and visible MVP or early-stage language from the product landing. |
-| [x]    | P1       | TASK-067 - Restore original card styling     | Restores soft borders and the previous card radii while preserving responsive layouts.        |
-| [x]    | P1       | TASK-068 - Apply project brand mark          | Uses the supplied SolRadar artwork across the app, documentation, and browser favicon.        |
+| Status | Priority | Task                                         | Notes                                                                                          |
+| :----- | :------- | :------------------------------------------- | :--------------------------------------------------------------------------------------------- |
+| [x]    | P0       | TASK-061 - Redesign honest product landing   | Removes fabricated scale and partner claims and documents live platform capabilities.          |
+| [x]    | P1       | TASK-062 - Reorganize contextual navigation  | Landing anchors, a Marketplace action, and the wallet now provide contextual navigation.       |
+| [x]    | P0       | TASK-063 - Improve marketplace mobile UX     | Mobile filters use an accessible drawer; cards no longer overlap at narrow widths.             |
+| [x]    | P0       | TASK-064 - Improve protected mobile surfaces | Dashboard tabs, forms, cards, detail views, states, and dialogs now adapt to narrow screens.   |
+| [~]    | P1       | TASK-065 - Validate responsive product UI    | Checks, build, and route probes pass; browser screenshots remain unavailable in this session.  |
+| [x]    | P1       | TASK-066 - Remove landing maturity messaging | Removes the roadmap section and visible MVP or early-stage language from the product landing.  |
+| [x]    | P1       | TASK-067 - Restore original card styling     | Restores soft borders and the previous card radii while preserving responsive layouts.         |
+| [x]    | P1       | TASK-068 - Apply project brand mark          | Uses the supplied SolRadar artwork across the app, documentation, and browser favicon.         |
+| [x]    | P0       | TASK-069 - Rebrand platform as Orbital       | Aligns product UI, metadata, authentication, and documentation around the Orbital proposition. |

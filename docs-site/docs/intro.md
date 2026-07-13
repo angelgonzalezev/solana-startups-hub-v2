@@ -1,16 +1,16 @@
 ---
 slug: /
-title: Solana Startups Hub
-description: Public documentation for the Solana Startups Hub MVP.
+title: Orbital
+description: Discover startups orbiting the Solana ecosystem.
 ---
 
-<span className="status-pill">MVP documentation</span>
+<span className="status-pill">Product documentation</span>
 
-# Solana Startups Hub
+# Orbital
 
-Solana Startups Hub is a curated marketplace directory for startups building in the Solana ecosystem.
+Discover startups orbiting the Solana ecosystem.
 
-The MVP helps founders sign in with a Solana wallet, complete a professional profile, list a startup, request verification, publish verified projects, and make those projects discoverable to logged-in users.
+Orbital brings structured startup profiles, market signals, and founder context into one focused discovery experience. Founders can sign in with a Solana wallet, maintain their profile, list a startup, request review, and publish approved projects.
 
 In v1, marketplace means structured discovery and founder contact through public social links. It does not mean chat, offers, payments, USDC acquisition flows, or deal rooms.
 

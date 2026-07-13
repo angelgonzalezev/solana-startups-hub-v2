@@ -10,9 +10,10 @@ import { Metadata } from 'next';
 import { Fragment } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Solana Startups Hub - The Directory for Solana Startups',
-  description:
-    'A structured directory where Solana founders can create startup profiles, publish reviewed projects, and make their work easier to discover.',
+  title: {
+    absolute: 'Orbital - Discover startups orbiting the Solana ecosystem.',
+  },
+  description: 'Discover startups orbiting the Solana ecosystem.',
 };
 
 const Homepage = () => {

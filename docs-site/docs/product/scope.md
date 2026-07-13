@@ -1,9 +1,9 @@
 ---
-title: MVP Scope
-description: What is included and excluded in the v1 MVP.
+title: Product Scope
+description: What is included and excluded from Orbital today.
 ---
 
-# MVP Scope
+# Product Scope
 
 ## Included in v1
 

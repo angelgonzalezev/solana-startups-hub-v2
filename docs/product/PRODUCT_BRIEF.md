@@ -1,4 +1,4 @@
-# Product Brief - Solana Startups Hub
+# Product Brief - Orbital
 
 ## Agent Context Guide
 
@@ -12,7 +12,7 @@ Related files:
 
 ## Product Definition
 
-Solana Startups Hub is a curated marketplace directory for startups building in the Solana ecosystem.
+Orbital is a curated marketplace directory for startups building in the Solana ecosystem.
 
 The MVP lets verified founders register with a wallet, complete a professional profile, list their startup, and make it discoverable to logged-in users such as investors, buyers, scouts, builders, funds, accelerators, and ecosystem teams.
 
@@ -20,7 +20,7 @@ In v1, "marketplace" means structured discovery, public market signals, and foun
 
 ## Product Promise
 
-> The verified marketplace directory for Solana startups: discover real projects, track their stage, and find founders open to funding, partnerships, or acquisition conversations.
+> Discover startups orbiting the Solana ecosystem.
 
 ## Primary User
 

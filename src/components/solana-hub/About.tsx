@@ -19,14 +19,14 @@ const About = () => {
             <div className="space-y-5">
               <RevealAnimation delay={0.2}>
                 <h2 className="max-w-[720px] text-heading-3 font-bold leading-tight text-white md:text-heading-2">
-                  Startup information is scattered. The first goal is simply to organize it.
+                  A clearer view of what is being built across Solana.
                 </h2>
               </RevealAnimation>
               <RevealAnimation delay={0.3}>
                 <p className="max-w-[720px] text-lg leading-8 text-white/65">
-                  Solana projects are often introduced across X, Telegram, Discord, demo days, and private groups.
-                  Solana Startups Hub is being built as a structured directory where founders can maintain one clear
-                  profile for their work.
+                  Solana projects often surface across X, Telegram, Discord, demo days, and private groups. Orbital
+                  brings them into a structured discovery layer where founders can maintain one clear profile for their
+                  work.
                 </p>
               </RevealAnimation>
             </div>

@@ -1,9 +1,9 @@
 ---
-title: Messaging v1
-description: Approved wording and language boundaries for the MVP.
+title: Orbital Messaging
+description: Approved wording and language boundaries for Orbital.
 ---
 
-# Messaging v1
+# Orbital Messaging
 
 The product should communicate discovery, verification, and founder access. It should not imply that v1 supports startup trading or acquisition transactions.
 

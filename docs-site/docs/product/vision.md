@@ -1,17 +1,17 @@
 ---
 title: Product Vision
-description: Purpose, users, and product promise for Solana Startups Hub.
+description: Purpose, users, and product promise for Orbital.
 ---
 
 # Product Vision
 
-Solana Startups Hub is the verified marketplace directory for Solana startups.
+Orbital is the structured discovery layer for startups building across the Solana ecosystem.
 
 The product exists because the ecosystem needs a clearer way to discover real projects, understand their stage, and identify founders who are open to funding, partnerships, or acquisition conversations.
 
 ## Product promise
 
-Discover verified Solana startups, understand their market signals, and contact founders through public social channels.
+Discover startups orbiting the Solana ecosystem.
 
 ## Primary user
 

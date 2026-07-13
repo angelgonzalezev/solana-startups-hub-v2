@@ -92,7 +92,7 @@ export const AuthProvider = ({
         options: {
           url: `${window.location.origin}/`,
         },
-        statement: 'Sign in to Solana Startups Hub.',
+        statement: 'Sign in to Orbital.',
         wallet: {
           publicKey: { toBase58: () => address },
           signMessage: (message) => wallet.signMessage?.(message),

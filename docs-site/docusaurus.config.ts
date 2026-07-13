@@ -2,9 +2,9 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'Solana Startups Hub Docs',
-  tagline: 'Public documentation for the Solana Startups Hub MVP.',
-  favicon: 'img/solradar-logo.png',
+  title: 'Orbital Docs',
+  tagline: 'Discover startups orbiting the Solana ecosystem.',
+  favicon: 'img/orbital-logo.png',
   url: 'https://solanastartupshub.com',
   baseUrl: '/docs/',
   organizationName: 'angelgonzalezev',
@@ -39,10 +39,10 @@ const config: Config = {
   themeConfig: {
     image: 'img/social-card.png',
     navbar: {
-      title: 'Solana Startups Hub',
+      title: 'Orbital',
       logo: {
-        alt: 'Solana Startups Hub',
-        src: 'img/solradar-logo.png',
+        alt: 'Orbital',
+        src: 'img/orbital-logo.png',
       },
       items: [
         { to: '/', label: 'Docs', position: 'left' },
@@ -87,7 +87,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Solana Startups Hub.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Orbital.`,
     },
     prism: {
       theme: {

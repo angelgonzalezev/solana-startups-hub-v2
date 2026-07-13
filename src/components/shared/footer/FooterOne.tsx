@@ -27,7 +27,7 @@ const footerSections = [
     ],
   },
   {
-    title: 'Hub',
+    title: 'Orbital',
     links: [
       { label: 'Overview', href: '/#about' },
       { label: 'How it works', href: '/#process' },
@@ -51,24 +51,19 @@ const FooterOne = ({ className }: { className?: string }) => {
                 <Link
                   href="/"
                   className="inline-flex items-center rounded-full focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
-                  <span className="sr-only">Solana Startups Hub home</span>
+                  <span className="sr-only">Orbital home</span>
                   <Image
-                    src="/images/shared/solradar-logo.png"
+                    src="/images/shared/orbital-logo.png"
                     alt=""
                     width={56}
                     height={56}
                     className="mr-2 size-12 shrink-0 rounded-2xl object-cover md:size-14"
                   />
-                  <span className="text-2xl font-bold leading-none tracking-tighter text-white md:text-3xl">
-                    Solana
-                    <span className="ml-1.5 bg-gradient-to-r from-[#9945FF] to-[#14F195] bg-clip-text py-1 pr-1 italic text-transparent">
-                      Hub
-                    </span>
-                  </span>
+                  <span className="text-2xl font-bold leading-none text-white md:text-3xl">Orbital</span>
                 </Link>
                 <p className="mt-5 text-base leading-7 text-white/70">
-                  A structured directory for founders building on Solana. Create and manage a startup profile, then
-                  publish reviewed projects to the protected marketplace.
+                  Discover startups orbiting the Solana ecosystem. Explore structured listings or publish a reviewed
+                  project from the founder dashboard.
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <Link
@@ -112,7 +107,7 @@ const FooterOne = ({ className }: { className?: string }) => {
           <FooterDivider />
           <RevealAnimation delay={0.7} offset={10} start="top 105%">
             <p className="text-tagline-1 font-normal text-white/55">
-              Copyright &copy; Solana Startups Hub. Directory for the Solana founder ecosystem.
+              Copyright &copy; Orbital. Discover startups across the Solana ecosystem.
             </p>
           </RevealAnimation>
           <RevealAnimation delay={0.75} offset={10} start="top 105%">

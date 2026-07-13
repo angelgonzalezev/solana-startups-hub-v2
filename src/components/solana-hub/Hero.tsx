@@ -10,7 +10,7 @@ const Hero = () => {
       id="hero">
       <Image
         src={hero4}
-        alt="Solana Startups Hub concept"
+        alt="Orbital startup discovery"
         fill
         priority
         sizes="100vw"
@@ -22,24 +22,24 @@ const Hero = () => {
           <RevealAnimation delay={0.1}>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-2 text-sm font-medium text-white/80 backdrop-blur-md">
               <span className="size-2 rounded-full bg-[#14F195]" />
-              Built for Solana founders
+              The Solana startup discovery layer
             </div>
           </RevealAnimation>
           <div className="space-y-5">
             <RevealAnimation delay={0.2}>
               <h1 className="max-w-[860px] text-4xl font-bold leading-tight text-white sm:text-5xl md:text-heading-1">
-                Solana Startups Hub
+                Orbital
               </h1>
             </RevealAnimation>
             <RevealAnimation delay={0.3}>
-              <p className="max-w-[720px] text-lg leading-8 text-white/75 md:text-xl">
-                A structured directory for founders building on Solana. Create a startup profile, signal what you are
-                working on, and help make the ecosystem easier to navigate.
+              <p className="max-w-[780px] text-2xl font-medium leading-tight text-white/85 md:text-3xl">
+                Discover startups orbiting the Solana ecosystem.
               </p>
             </RevealAnimation>
             <RevealAnimation delay={0.35}>
-              <p className="text-sm font-medium text-white/50">
-                Wallet sign-in keeps startup listings and founder data protected.
+              <p className="max-w-[680px] text-base leading-7 text-white/55">
+                Structured profiles bring projects, market signals, and founder context into one focused discovery
+                experience protected by wallet sign-in.
               </p>
             </RevealAnimation>
           </div>

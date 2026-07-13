@@ -1,4 +1,4 @@
-# Solana Startups Hub - MVP Specification
+# Orbital - MVP Specification
 
 This file is now the compact source-of-truth index for the MVP. Detailed product, implementation, and delivery documentation lives in `docs/`.
 
@@ -15,7 +15,9 @@ Use this file when you need:
 
 ## Product Summary
 
-Solana Startups Hub is a curated marketplace directory for startups building in the Solana ecosystem.
+Orbital is a curated marketplace directory for startups building in the Solana ecosystem.
+
+> Discover startups orbiting the Solana ecosystem.
 
 The MVP lets founders sign in with a Solana wallet, complete a professional profile, list a startup, request verification, publish verified startups, and make them discoverable to logged-in users.
 

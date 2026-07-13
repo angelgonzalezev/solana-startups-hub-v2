@@ -1,6 +1,8 @@
-# Solana Startups Hub
+# Orbital
 
-Solana Startups Hub is a curated marketplace directory for startups building in the Solana ecosystem.
+Discover startups orbiting the Solana ecosystem.
+
+Orbital is a curated marketplace directory for startups building across Solana.
 
 The MVP lets founders sign in by signing a message with a Solana wallet, complete a professional profile, list a startup, request verification, publish verified startups, and make them discoverable to logged-in users.
 
@@ -61,7 +63,7 @@ Out of scope for v1:
 | `/dashboard/startups/[id]/edit`         | Owner only             | Edit startup.                                   |
 | `/dashboard/startups/[id]/verification` | Owner only             | Verification and publication.                   |
 
-All inherited template routes have been removed. Unknown routes render the Solana Startups Hub 404 page.
+All inherited template routes have been removed. Unknown routes render the Orbital 404 page.
 
 ## Tech Stack
 

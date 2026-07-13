@@ -63,7 +63,7 @@ export default function MyStartupsPage() {
         ) : startups.length === 0 ? (
           <EmptyState
             title="No Startups Yet"
-            description="You haven't listed any startups on the hub. Start by creating your first project."
+            description="You haven't listed any startups on Orbital. Start by creating your first project."
             actionHref="/dashboard/startups/new"
             actionLabel="List New Startup"
           />

@@ -73,7 +73,7 @@ const MobileMenu = () => {
             </button>
           </div>
           <nav aria-label="Mobile navigation" className="flex-1 border-t border-white/10 pt-6">
-            <p className="mb-3 px-4 text-xs font-semibold uppercase tracking-[0.15em] text-white/35">Explore the hub</p>
+            <p className="mb-3 px-4 text-xs font-semibold uppercase tracking-[0.15em] text-white/35">Explore Orbital</p>
             <ul className="space-y-2">
               {navigationItems.map((item) => {
                 const Icon = navigationIcons[item.id as keyof typeof navigationIcons];

@@ -1,13 +1,13 @@
 ---
 title: Current Roadmap
-description: Milestones and release criteria for the Solana Startups Hub MVP.
+description: Milestones and release criteria for Orbital.
 ---
 
 # Current Roadmap
 
-The MVP has moved past early setup. Most core product surfaces exist, but the project is not release-ready yet.
+Orbital continues to evolve through focused product and release milestones.
 
-## Milestone 1: Stabilize the current MVP
+## Milestone 1: Stabilize the current product
 
 Goal: make the existing implementation internally consistent, lint-clean, and aligned with the v1 product promise.
 
@@ -36,7 +36,7 @@ Key work:
 
 ## Milestone 3: Release quality and regression coverage
 
-Goal: reduce regression risk before considering the MVP releasable.
+Goal: reduce regression risk before a wider product release.
 
 Key work:
 
@@ -47,7 +47,7 @@ Key work:
 
 ## Milestone 4: Measurement and learning loop
 
-Goal: instrument the MVP enough to learn whether the marketplace is useful.
+Goal: instrument Orbital enough to learn whether the marketplace is useful.
 
 Key work:
 

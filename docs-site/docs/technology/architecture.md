@@ -5,7 +5,7 @@ description: High-level structure of the app and documentation.
 
 # Architecture Overview
 
-The MVP uses Solana wallets as its identity layer and Supabase as its session and persistence backend. The browser never supplies an owner wallet to authorize a mutation; PostgreSQL derives ownership from the authenticated user through RLS and protected functions.
+Orbital uses Solana wallets as its identity layer and Supabase as its session and persistence backend. The browser never supplies an owner wallet to authorize a mutation; PostgreSQL derives ownership from the authenticated user through RLS and protected functions.
 
 ## Main areas
 

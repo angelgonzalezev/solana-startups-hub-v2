@@ -37,7 +37,7 @@ The canonical internal tracker is `docs/delivery/TASK_BACKLOG.md` in the reposit
 - Verification page.
 - Founder contact block.
 - Dashboard overview.
-- MVP checklist.
+- Product checklist.
 - Project README.
 - Public Docusaurus documentation.
 - Shared footer redesign.
