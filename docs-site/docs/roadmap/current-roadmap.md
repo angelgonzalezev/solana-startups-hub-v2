@@ -17,7 +17,7 @@ Key work:
 - Replace loose `any` usage with proper types.
 - Remove unused imports and resolve relevant hook dependency warnings.
 - Align landing copy with v1 messaging.
-- Update CTAs that still point to template routes.
+- Keep the cleaned product route surface free of inherited template pages.
 - Prevent unavailable startup detail leakage.
 - Add the missing tech stack filter.
 - Show raising badges only when a startup is actually raising.

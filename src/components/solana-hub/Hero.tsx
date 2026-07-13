@@ -8,8 +8,8 @@ import hero7 from '@public/images/solana-hub/hero7.png';
 import Image from 'next/image';
 import RevealAnimation from '../animation/RevealAnimation';
 import LinkButton from '../ui/button/LinkButton';
-import LineExpand from '../homepage-15/LineExpand';
-import ScrollExpand from '../homepage-15/ScrollExpand';
+import LineExpand from './LineExpand';
+import ScrollExpand from './ScrollExpand';
 
 const Hero = () => {
   return (

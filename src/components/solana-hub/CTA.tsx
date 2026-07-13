@@ -27,9 +27,9 @@ const CTA = () => {
                 List Your Startup
               </LinkButton>
               <LinkButton
-                href="/contact-us"
+                href="/#process"
                 className="btn btn-white-dark btn-md md:btn-xl hover:btn-primary w-full sm:w-auto">
-                Investor Access
+                How it works
               </LinkButton>
             </div>
           </RevealAnimation>

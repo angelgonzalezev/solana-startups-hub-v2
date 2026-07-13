@@ -16,6 +16,7 @@ Related files:
 The MVP is no longer in early setup. Most core product surfaces exist:
 
 - Product routes exist for marketplace, detail, dashboard, profile, startup CRUD, and verification.
+- The public route surface is limited to the landing, product routes, and `/docs`; inherited template pages are gone.
 - Solana Wallet Standard SIWS auth and Supabase SSR sessions exist.
 - `AuthGate` protects product routes.
 - Local-only profile/startup fixtures exist.
@@ -27,7 +28,7 @@ The MVP is no longer in early setup. Most core product surfaces exist:
 However, the product is not release-ready:
 
 - `npm run build` now passes.
-- Some core tasks remain partial: final route cleanup, startup validation hardening, generic service visibility helpers, and direct save-and-request verification flow.
+- Some core tasks remain partial: startup validation hardening, generic service visibility helpers, and direct save-and-request verification flow.
 - Analytics and broader service/UI tests remain incomplete.
 
 ## Roadmap Priorities
@@ -40,10 +41,8 @@ Priority: highest.
 
 Tasks to finish:
 
-- Finish final route cleanup across the remaining legacy/template pages.
 - Harden startup validation to match the implementation rules more closely.
 - Keep service-level visibility constrained to accessible lookups.
-- Update CTAs that still point to template routes such as `/login-01`.
 - Keep `/startups/[id]` hidden from non-owners when a startup is unavailable.
 
 Exit criteria:

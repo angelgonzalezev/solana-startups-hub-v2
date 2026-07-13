@@ -52,9 +52,9 @@ const About = () => {
             </div>
             <RevealAnimation delay={0.5}>
               <LinkButton
-                href="/about-01"
+                href="/startups"
                 className="btn btn-primary btn-md hover:btn-white w-[90%] md:w-auto shadow-lg shadow-primary-500/20">
-                Learn our mission
+                Explore startups
               </LinkButton>
             </RevealAnimation>
           </div>

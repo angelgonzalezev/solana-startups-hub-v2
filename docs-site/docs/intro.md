@@ -24,7 +24,7 @@ In v1, marketplace means structured discovery and founder contact through public
 
 Last audited: 2026-07-13.
 
-- Core product routes exist.
+- The route surface is limited to the landing, protected product workflows, and these public docs.
 - SIWS authentication with Wallet Standard-compatible Solana wallets is implemented.
 - Profiles and startups use Supabase/PostgreSQL with RLS and protected RPCs.
 - Profile, dashboard, startup CRUD, verification, marketplace, detail page, and founder contact screens exist.

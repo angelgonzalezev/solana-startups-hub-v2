@@ -51,6 +51,7 @@ Out of scope for v1:
 | Route                                   | Access                 | Purpose                                         |
 | :-------------------------------------- | :--------------------- | :---------------------------------------------- |
 | `/`                                     | Public                 | Landing page.                                   |
+| `/docs`                                 | Public                 | Product and contributor documentation.          |
 | `/startups`                             | Logged-in only         | Marketplace of verified and published startups. |
 | `/startups/[id]`                        | Logged-in only         | Startup detail and founder contact.             |
 | `/dashboard`                            | Logged-in only         | Private overview.                               |
@@ -59,6 +60,8 @@ Out of scope for v1:
 | `/dashboard/startups/new`               | Logged-in with profile | Create startup draft.                           |
 | `/dashboard/startups/[id]/edit`         | Owner only             | Edit startup.                                   |
 | `/dashboard/startups/[id]/verification` | Owner only             | Verification and publication.                   |
+
+All inherited template routes have been removed. Unknown routes render the Solana Startups Hub 404 page.
 
 ## Tech Stack
 

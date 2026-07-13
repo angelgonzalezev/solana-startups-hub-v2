@@ -27,8 +27,8 @@ Audit date: 2026-06-11.
 
 Current progress:
 
-- Done: 44/56.
-- Partial: 10/56.
+- Done: 45/56.
+- Partial: 9/56.
 - Pending: 2/56.
 
 Build status:
@@ -37,14 +37,14 @@ Build status:
 
 ## Phase A: Technical Base and Product Cleanup
 
-| Status | Priority | Task                                            | Notes                                                                               |
-| :----- | :------- | :---------------------------------------------- | :---------------------------------------------------------------------------------- |
-| [~]    | P0       | TASK-001 - Define final product routes          | Routes exist, but some legacy/template routes still exist outside the product flow. |
-| [x]    | P0       | TASK-002 - Align landing copy with v1 messaging | Landing copy now uses v1 messaging and removes `trade` / `Future USDC Marketplace`. |
-| [x]    | P0       | TASK-003 - Create taxonomy constants            | `src/data/startupTaxonomy.ts` exists.                                               |
-| [x]    | P0       | TASK-004 - Update User and Startup models       | Includes verification, listing, acquisition, `showMrr`.                             |
-| [x]    | P0       | TASK-005 - Expand user mock data                | 5 users.                                                                            |
-| [x]    | P0       | TASK-006 - Expand startup mock data             | 8 startups across states.                                                           |
+| Status | Priority | Task                                            | Notes                                                                                |
+| :----- | :------- | :---------------------------------------------- | :----------------------------------------------------------------------------------- |
+| [x]    | P0       | TASK-001 - Define final product routes          | Only the landing, nine product pages, `/docs`, and the product 404 remain available. |
+| [x]    | P0       | TASK-002 - Align landing copy with v1 messaging | Landing copy now uses v1 messaging and removes `trade` / `Future USDC Marketplace`.  |
+| [x]    | P0       | TASK-003 - Create taxonomy constants            | `src/data/startupTaxonomy.ts` exists.                                                |
+| [x]    | P0       | TASK-004 - Update User and Startup models       | Includes verification, listing, acquisition, `showMrr`.                              |
+| [x]    | P0       | TASK-005 - Expand user mock data                | 5 users.                                                                             |
+| [x]    | P0       | TASK-006 - Expand startup mock data             | 8 startups across states.                                                            |
 
 ## Phase B: Services, Validation, Auth
 

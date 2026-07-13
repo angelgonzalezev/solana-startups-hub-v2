@@ -19,6 +19,7 @@ New product screens must keep the current landing visual style: dark background,
 | Route                                   | Access                         | Purpose                                         |
 | :-------------------------------------- | :----------------------------- | :---------------------------------------------- |
 | `/`                                     | Public                         | Landing page.                                   |
+| `/docs`                                 | Public                         | Product and contributor documentation.          |
 | `/startups`                             | Logged-in only                 | Marketplace of verified and published startups. |
 | `/startups/[id]`                        | Logged-in only                 | Startup detail and founder contact.             |
 | `/dashboard`                            | Logged-in only                 | Private user overview.                          |
@@ -28,7 +29,7 @@ New product screens must keep the current landing visual style: dark background,
 | `/dashboard/startups/[id]/edit`         | Owner only                     | Edit owned startup.                             |
 | `/dashboard/startups/[id]/verification` | Owner only                     | Request verification and publish.               |
 
-Template routes like `/case-study` and `/use-case` are not final product routes.
+This is the complete product route surface. Inherited template routes are intentionally unavailable.
 
 ## Screen Specs
 
