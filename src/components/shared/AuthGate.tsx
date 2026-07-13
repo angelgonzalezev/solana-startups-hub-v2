@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useHydrated } from '@/hooks/useHydrated';
 import WalletConnectButton from './WalletConnectButton';
 import RevealAnimation from '../animation/RevealAnimation';
 
@@ -10,9 +11,10 @@ interface AuthGateProps {
 }
 
 const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
-  const { isConnected, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+  const isHydrated = useHydrated();
 
-  if (isLoading) {
+  if (!isHydrated || isLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center bg-black">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
@@ -20,7 +22,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
     );
   }
 
-  if (!isConnected) {
+  if (!isAuthenticated) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center bg-black px-4">
         <div className="max-w-[500px] w-full text-center space-y-8 p-10 bg-[#0A0A0A] border border-white/5 rounded-[30px] shadow-2xl shadow-primary-500/5">
@@ -31,8 +33,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
                 className="h-10 w-10 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+                stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -42,7 +43,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
               </svg>
             </div>
           </RevealAnimation>
-          
+
           <div className="space-y-3">
             <RevealAnimation delay={0.3}>
               <h2 className="text-2xl md:text-3xl font-bold text-white">Access Protected</h2>
@@ -53,7 +54,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
               </p>
             </RevealAnimation>
           </div>
-          
+
           <RevealAnimation delay={0.5}>
             <WalletConnectButton className="btn-xl w-full" />
           </RevealAnimation>

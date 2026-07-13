@@ -12,11 +12,19 @@ import { isProfileMinimumComplete } from '@/utils/validation';
 import Link from 'next/link';
 import RevealAnimation from '@/components/animation/RevealAnimation';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
-  const { user, walletAddress } = useAuth();
+  const router = useRouter();
+  const { isLoading: isAuthLoading, signOut, user, walletAddress } = useAuth();
   const [startups, setStartups] = useState<Startup[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.replace('/');
+    router.refresh();
+  };
 
   useEffect(() => {
     if (!walletAddress) {
@@ -29,7 +37,7 @@ export default function DashboardPage() {
     (async () => {
       setIsLoading(true);
       try {
-        const data = await startupService.listStartupsByOwner(walletAddress);
+        const data = await startupService.listStartupsByOwner();
         if (!cancelled) {
           setStartups(data);
         }
@@ -91,6 +99,13 @@ export default function DashboardPage() {
                 <Link href="/dashboard/profile" className="btn btn-white-dark btn-md w-full border-white/10">
                   Edit Profile
                 </Link>
+                <button
+                  type="button"
+                  disabled={isAuthLoading}
+                  onClick={() => void handleSignOut()}
+                  className="btn btn-md w-full border border-red-400/20 bg-red-500/10 text-red-300 transition hover:border-red-400/40 hover:bg-red-500/20 disabled:cursor-wait disabled:opacity-50">
+                  {isAuthLoading ? 'Disconnecting...' : 'Disconnect Wallet'}
+                </button>
               </div>
             </RevealAnimation>
 

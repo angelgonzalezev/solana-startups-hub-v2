@@ -17,8 +17,8 @@ interface DashboardShellProps {
 
 const navItems = [
   { label: 'Overview', href: '/dashboard' },
-  { label: 'My Startups', href: '/dashboard/startups' },
   { label: 'My Profile', href: '/dashboard/profile' },
+  { label: 'My Startups', href: '/dashboard/startups' },
   { label: 'Marketplace', href: '/startups' },
 ];
 
