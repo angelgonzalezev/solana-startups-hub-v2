@@ -18,17 +18,16 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
 
   return (
     <RevealAnimation delay={0.1 * (index % 4)}>
-      <div className="bg-[#0A0A0A] border border-white/5 rounded-[30px] p-8 flex flex-col h-full hover:border-primary-500/30 transition-all duration-500 group relative overflow-hidden">
-        {/* Market Signals (Top Right) */}
-        <div className="absolute top-6 right-6 flex flex-col items-end gap-2 z-10">
+      <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-[#0A0A0A] p-5 transition-colors duration-300 hover:border-primary-500/30 sm:p-6">
+        <div className="mb-5 flex min-h-6 flex-wrap items-center gap-2">
           {startup.isRaising && <MarketSignalBadge type="raising" />}
           <MarketSignalBadge type="acquisition" status={startup.acquisitionStatus} />
         </div>
 
-        <div className="space-y-6 flex-grow">
+        <div className="flex-grow space-y-5">
           {/* Header: Logo & Name */}
-          <div className="flex items-center gap-5">
-            <div className="w-16 h-16 rounded-2xl bg-black border border-white/10 flex-shrink-0 overflow-hidden relative group-hover:border-primary-500/50 transition-colors">
+          <div className="flex min-w-0 items-start gap-4">
+            <div className="relative size-14 flex-shrink-0 overflow-hidden rounded-md border border-white/10 bg-black transition-colors group-hover:border-primary-500/50 sm:size-16">
               {logoUrl ? (
                 <Image src={logoUrl} alt={startup.name} fill className="object-cover p-2" />
               ) : (
@@ -37,8 +36,8 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
                 </div>
               )}
             </div>
-            <div className="space-y-1">
-              <h3 className="text-2xl font-bold text-white group-hover:text-primary-400 transition-colors">
+            <div className="min-w-0 space-y-2">
+              <h3 className="break-words text-xl font-bold text-white transition-colors group-hover:text-primary-400 sm:text-2xl">
                 {startup.name}
               </h3>
               <div className="flex items-center gap-2">
@@ -48,21 +47,21 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
           </div>
 
           {/* Body: One Liner */}
-          <p className="text-white/70 text-lg leading-relaxed line-clamp-2">{startup.oneLiner}</p>
+          <p className="line-clamp-3 text-base leading-7 text-white/70 sm:text-lg">{startup.oneLiner}</p>
 
           {/* Taxonomy Tags */}
           <div className="flex flex-wrap gap-2 pt-2">
             {startup.category.slice(0, 2).map((cat) => (
               <span
                 key={cat}
-                className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-white/40 uppercase tracking-widest font-medium">
+                className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium uppercase text-white/45">
                 {cat}
               </span>
             ))}
             {startup.techStack.slice(0, 2).map((tech) => (
               <span
                 key={tech}
-                className="px-3 py-1 bg-primary-500/5 border border-primary-500/10 rounded-full text-xs text-primary-400/60 uppercase tracking-widest font-medium">
+                className="rounded-md border border-primary-500/10 bg-primary-500/5 px-2.5 py-1 text-xs font-medium uppercase text-primary-400/70">
                 {tech}
               </span>
             ))}
@@ -73,7 +72,7 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
         </div>
 
         {/* Footer: Metrics & CTA */}
-        <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+        <div className="mt-7 flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
             {startup.showMrr && startup.mrr !== undefined ? (
               <div suppressHydrationWarning>
@@ -92,11 +91,11 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
 
           <Link
             href={`/startups/${startup.id}`}
-            className="btn btn-white-dark btn-sm group-hover:btn-primary transition-all">
+            className="btn btn-white-dark btn-md w-full transition-all group-hover:btn-primary sm:w-auto">
             View Startup
           </Link>
         </div>
-      </div>
+      </article>
     </RevealAnimation>
   );
 };

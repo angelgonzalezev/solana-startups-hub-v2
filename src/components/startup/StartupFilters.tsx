@@ -4,16 +4,18 @@ import React from 'react';
 import { StartupFilters as IStartupFilters } from '@/services/startupService';
 import { STARTUP_STAGES, STARTUP_CATEGORIES, TECH_STACK_OPTIONS } from '@/data/startupTaxonomy';
 import { cn } from '@/utils/cn';
+import { Search } from 'lucide-react';
 
 interface StartupFiltersProps {
   filters: IStartupFilters;
   onChange: (filters: IStartupFilters) => void;
+  className?: string;
 }
 
 type ArrayFilterKey = 'category' | 'stage' | 'techStack';
 type SignalFilterKey = 'isRaising' | 'acquisitionStatus';
 
-const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange }) => {
+const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange, className }) => {
   const handleToggle = <T extends ArrayFilterKey>(key: T, value: string) => {
     const current = (filters[key] as string[]) || [];
     const updated = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
@@ -37,7 +39,7 @@ const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange }) =>
   };
 
   return (
-    <div className="space-y-8 bg-[#0A0A0A] p-8 border border-white/5 rounded-[30px] sticky top-[150px]">
+    <div className={cn('space-y-7 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6', className)}>
       <div className="flex items-center justify-between border-b border-white/5 pb-4">
         <h3 className="text-xl font-bold text-white">Filters</h3>
         <button
@@ -56,21 +58,9 @@ const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange }) =>
             value={filters.search || ''}
             onChange={handleSearch}
             placeholder="Name or keyword..."
-            className="w-full bg-black border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all text-sm"
+            className="w-full rounded-md border border-white/10 bg-black px-4 py-3 pr-11 text-sm text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50"
           />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-white/20 absolute right-6 top-1/2 -translate-y-1/2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <Search aria-hidden="true" className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-white/25" />
         </div>
       </div>
 
@@ -83,7 +73,7 @@ const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange }) =>
               key={cat}
               onClick={() => handleToggle('category', cat)}
               className={cn(
-                'px-3 py-1.5 rounded-xl border text-[11px] font-bold uppercase tracking-wider transition-all duration-300',
+                'rounded-md border px-3 py-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-300',
                 filters.category?.includes(cat)
                   ? 'bg-primary-500/10 border-primary-500 text-primary-500'
                   : 'bg-black border-white/10 text-white/40 hover:border-white/30 hover:text-white',
@@ -103,7 +93,7 @@ const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange }) =>
               key={stage}
               onClick={() => handleToggle('stage', stage)}
               className={cn(
-                'px-3 py-1.5 rounded-xl border text-[11px] font-bold uppercase tracking-wider transition-all duration-300',
+                'rounded-md border px-3 py-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-300',
                 filters.stage?.includes(stage)
                   ? 'bg-white/10 border-white/30 text-white'
                   : 'bg-black border-white/10 text-white/40 hover:border-white/30 hover:text-white',
@@ -123,7 +113,7 @@ const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange }) =>
               key={tech}
               onClick={() => handleToggle('techStack', tech)}
               className={cn(
-                'px-3 py-1.5 rounded-xl border text-[11px] font-bold uppercase tracking-wider transition-all duration-300',
+                'rounded-md border px-3 py-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-300',
                 filters.techStack?.includes(tech)
                   ? 'bg-primary-500/10 border-primary-500 text-primary-500'
                   : 'bg-black border-white/10 text-white/40 hover:border-white/30 hover:text-white',
@@ -139,7 +129,7 @@ const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange }) =>
         <button
           onClick={() => handleSignalToggle('isRaising', true)}
           className={cn(
-            'w-full flex items-center justify-between p-4 rounded-2xl border transition-all duration-300',
+            'flex w-full items-center justify-between rounded-md border p-4 transition-all duration-300',
             filters.isRaising === true
               ? 'bg-[#14F195]/10 border-[#14F195]/40 text-[#14F195]'
               : 'bg-black border-white/5 text-white/40 hover:border-white/10',
@@ -156,7 +146,7 @@ const StartupFilters: React.FC<StartupFiltersProps> = ({ filters, onChange }) =>
         <button
           onClick={() => handleSignalToggle('acquisitionStatus', 'open_to_discuss')}
           className={cn(
-            'w-full flex items-center justify-between p-4 rounded-2xl border transition-all duration-300',
+            'flex w-full items-center justify-between rounded-md border p-4 transition-all duration-300',
             filters.acquisitionStatus === 'open_to_discuss'
               ? 'bg-[#9945FF]/10 border-[#9945FF]/40 text-[#9945FF]'
               : 'bg-black border-white/5 text-white/40 hover:border-white/10',
