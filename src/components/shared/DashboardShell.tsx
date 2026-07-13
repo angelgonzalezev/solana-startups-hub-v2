@@ -77,7 +77,7 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children, title, subtit
                       href={item.href}
                       aria-current={isActive ? 'page' : undefined}
                       className={cn(
-                        'flex items-center gap-3 rounded-lg border px-5 py-3.5 text-base font-medium transition-colors',
+                        'flex items-center gap-3 rounded-2xl border px-5 py-3.5 text-base font-medium transition-colors',
                         isActive
                           ? 'border-primary-500/30 bg-primary-500/10 text-primary-400'
                           : 'bg-transparent border-transparent text-white/50 hover:bg-white/5 hover:text-white',

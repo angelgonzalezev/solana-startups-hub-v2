@@ -16,8 +16,8 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive }) => 
   const logoUrl = resolveMediaUrl(startup.logo);
 
   return (
-    <article className="flex flex-col items-center gap-5 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 transition-colors hover:border-white/20 sm:flex-row sm:items-start sm:p-6 lg:items-center">
-      <div className="relative size-20 flex-shrink-0 overflow-hidden rounded-md border border-white/10 bg-black sm:size-24">
+    <article className="flex flex-col items-center gap-5 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 transition-colors hover:border-white/10 sm:flex-row sm:items-start sm:p-6 lg:items-center">
+      <div className="relative size-20 flex-shrink-0 overflow-hidden rounded-2xl border border-white/5 bg-black sm:size-24">
         {logoUrl ? (
           <Image src={logoUrl} alt={startup.name} fill className="object-cover p-2" />
         ) : (

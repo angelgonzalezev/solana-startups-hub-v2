@@ -18,7 +18,7 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
 
   return (
     <RevealAnimation delay={0.1 * (index % 4)}>
-      <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-[#0A0A0A] p-5 transition-colors duration-300 hover:border-primary-500/30 sm:p-6">
+      <article className="group flex h-full flex-col overflow-hidden rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 transition-colors duration-300 hover:border-primary-500/30 sm:p-6 lg:p-8">
         <div className="mb-5 flex min-h-6 flex-wrap items-center gap-2">
           {startup.isRaising && <MarketSignalBadge type="raising" />}
           <MarketSignalBadge type="acquisition" status={startup.acquisitionStatus} />
@@ -27,7 +27,7 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
         <div className="flex-grow space-y-5">
           {/* Header: Logo & Name */}
           <div className="flex min-w-0 items-start gap-4">
-            <div className="relative size-14 flex-shrink-0 overflow-hidden rounded-md border border-white/10 bg-black transition-colors group-hover:border-primary-500/50 sm:size-16">
+            <div className="relative size-14 flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black transition-colors group-hover:border-primary-500/50 sm:size-16">
               {logoUrl ? (
                 <Image src={logoUrl} alt={startup.name} fill className="object-cover p-2" />
               ) : (
@@ -54,14 +54,14 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
             {startup.category.slice(0, 2).map((cat) => (
               <span
                 key={cat}
-                className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium uppercase text-white/45">
+                className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium uppercase text-white/45">
                 {cat}
               </span>
             ))}
             {startup.techStack.slice(0, 2).map((tech) => (
               <span
                 key={tech}
-                className="rounded-md border border-primary-500/10 bg-primary-500/5 px-2.5 py-1 text-xs font-medium uppercase text-primary-400/70">
+                className="rounded-full border border-primary-500/10 bg-primary-500/5 px-2.5 py-1 text-xs font-medium uppercase text-primary-400/70">
                 {tech}
               </span>
             ))}
@@ -72,7 +72,7 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
         </div>
 
         {/* Footer: Metrics & CTA */}
-        <div className="mt-7 flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-7 flex flex-col gap-4 border-t border-white/5 pt-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
             {startup.showMrr && startup.mrr !== undefined ? (
               <div suppressHydrationWarning>

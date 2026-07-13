@@ -47,9 +47,11 @@ const Features = () => (
       </div>
 
       <RevealAnimation delay={0.35} direction="up">
-        <div className="grid gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 sm:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2">
           {features.map(({ icon: Icon, title, description }) => (
-            <article key={title} className="min-h-64 bg-[#080808] p-6 md:p-8">
+            <article
+              key={title}
+              className="min-h-64 rounded-[20px] border border-white/5 bg-[#0A0A0A] p-6 transition-colors hover:border-primary-500/30 md:p-8">
               <Icon aria-hidden="true" className="size-7 text-primary-400" />
               <h3 className="mt-10 text-xl font-bold text-white">{title}</h3>
               <p className="mt-3 max-w-[480px] leading-7 text-white/60">{description}</p>

@@ -11,7 +11,7 @@ export const ErrorState: React.FC<{ message?: string; onRetry?: () => void }> = 
   message = 'Something went wrong while loading data.',
   onRetry,
 }) => (
-  <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-red-500/10 bg-[#0A0A0A] p-5 text-center sm:min-h-[400px] sm:p-8">
+  <div className="flex min-h-[320px] items-center justify-center rounded-[30px] border border-red-500/10 bg-[#0A0A0A] p-5 text-center sm:min-h-[400px] sm:p-8">
     <div className="space-y-6">
       <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto">
         <svg
@@ -48,7 +48,7 @@ export const EmptyState: React.FC<{
   actionLabel?: string;
   icon?: React.ReactNode;
 }> = ({ title, description, actionHref, actionLabel, icon }) => (
-  <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-white/10 bg-[#0A0A0A] p-5 text-center sm:min-h-[400px] sm:p-8">
+  <div className="flex min-h-[320px] items-center justify-center rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 text-center sm:min-h-[400px] sm:p-8">
     <div className="space-y-8 max-w-[400px]">
       {icon ? (
         <div className="mx-auto">{icon}</div>

@@ -101,7 +101,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                           {startup.techStack.map((tech) => (
                             <span
                               key={tech}
-                              className="rounded-md border border-primary-500/20 bg-primary-500/5 px-3 py-2 font-medium text-primary-400">
+                              className="rounded-xl border border-primary-500/20 bg-primary-500/5 px-3 py-2 font-medium text-primary-400">
                               {tech}
                             </span>
                           ))}
@@ -113,7 +113,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                           {startup.category.map((cat) => (
                             <span
                               key={cat}
-                              className="rounded-md border border-white/10 bg-white/5 px-3 py-2 font-medium text-white/60">
+                              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 font-medium text-white/60">
                               {cat}
                             </span>
                           ))}
@@ -126,7 +126,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                 {/* Sidebar */}
                 <aside className="col-span-12 lg:col-span-4 space-y-8">
                   <RevealAnimation delay={0.4}>
-                    <div className="space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6">
+                    <div className="space-y-6 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 sm:p-6">
                       <h4 className="text-lg font-bold text-white uppercase tracking-widest">Key Metrics</h4>
                       <div className="space-y-4">
                         <MetricItem label="Stage" value={startup.stage} />

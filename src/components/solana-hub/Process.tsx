@@ -16,7 +16,7 @@ const Process = () => {
         </div>
         <RevealAnimation delay={0.4} direction="up">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            <div className="h-full space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-6 text-left transition-colors hover:border-primary-500/30 md:p-8">
+            <div className="h-full space-y-6 rounded-[20px] border border-white/5 bg-[#0A0A0A] p-6 text-left transition-colors hover:border-primary-500/20 md:p-8">
               <div className="flex size-12 items-center justify-center rounded-full border border-primary-500/50 bg-primary-500/10 text-xl font-bold text-white">
                 1
               </div>
@@ -27,7 +27,7 @@ const Process = () => {
                 </p>
               </div>
             </div>
-            <div className="h-full space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-6 text-left transition-colors hover:border-primary-500/30 md:p-8">
+            <div className="h-full space-y-6 rounded-[20px] border border-white/5 bg-[#0A0A0A] p-6 text-left transition-colors hover:border-primary-500/20 md:p-8">
               <div className="flex size-12 items-center justify-center rounded-full border border-primary-500/50 bg-primary-500/10 text-xl font-bold text-white">
                 2
               </div>
@@ -38,7 +38,7 @@ const Process = () => {
                 </p>
               </div>
             </div>
-            <div className="h-full space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-6 text-left transition-colors hover:border-primary-500/30 md:p-8">
+            <div className="h-full space-y-6 rounded-[20px] border border-white/5 bg-[#0A0A0A] p-6 text-left transition-colors hover:border-primary-500/20 md:p-8">
               <div className="flex size-12 items-center justify-center rounded-full border border-primary-500/50 bg-primary-500/10 text-xl font-bold text-white">
                 3
               </div>

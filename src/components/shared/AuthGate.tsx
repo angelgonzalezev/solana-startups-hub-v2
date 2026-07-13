@@ -25,7 +25,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
   if (!isAuthenticated) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center bg-black px-4">
-        <div className="w-full max-w-[500px] space-y-7 rounded-lg border border-white/10 bg-[#0A0A0A] p-6 text-center shadow-2xl shadow-primary-500/5 sm:p-8">
+        <div className="w-full max-w-[500px] space-y-7 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-6 text-center shadow-2xl shadow-primary-500/5 sm:p-8">
           <RevealAnimation delay={0.2}>
             <div className="w-20 h-20 bg-gradient-to-br from-[#9945FF] to-[#14F195] rounded-full flex items-center justify-center mx-auto mb-6">
               <svg

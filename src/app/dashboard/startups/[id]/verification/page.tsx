@@ -132,7 +132,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
         ) : (
           <div className="max-w-4xl space-y-8">
             {/* Status Overview */}
-            <div className="space-y-6 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
+            <div className="space-y-6 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
               <div className="flex flex-wrap items-center gap-6">
                 <div className="space-y-1">
                   <p className="text-sm text-white/40 uppercase tracking-widest font-medium">Verification</p>
@@ -147,7 +147,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
             </div>
 
             {/* Verification Checklist */}
-            <div className="space-y-7 rounded-lg border border-white/10 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
+            <div className="space-y-7 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
               <h3 className="text-2xl font-bold text-white">Verification Checklist</h3>
               <div className="space-y-4">
                 <CheckItem label="Profile Minimum Complete" isDone={!!user?.displayName && !!user?.jobTitle} />
@@ -184,7 +184,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
                 )}
 
                 {startup.listingStatus === 'published' && (
-                  <div className="rounded-md border border-green-500/20 bg-green-500/10 px-5 py-4 text-center font-bold text-green-500">
+                  <div className="rounded-2xl border border-green-500/20 bg-green-500/10 px-5 py-4 text-center font-bold text-green-500">
                     ALREADY PUBLISHED
                   </div>
                 )}
@@ -193,7 +193,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
 
             {/* Dev Mock Actions */}
             {process.env.NEXT_PUBLIC_ENABLE_DEV_VERIFICATION === 'true' && (
-              <div className="space-y-6 rounded-lg border border-dashed border-white/10 bg-white/5 p-5 sm:p-6 md:p-8">
+              <div className="space-y-6 rounded-[30px] border border-dashed border-white/10 bg-white/5 p-5 sm:p-6 md:p-8">
                 <h3 className="text-lg font-bold text-white/60 uppercase tracking-widest">Dev Mock Actions</h3>
                 <div className="flex flex-wrap gap-4">
                   <button
@@ -219,7 +219,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
             {message && (
               <div
                 className={cn(
-                  'rounded-md border p-4 text-center font-medium',
+                  'rounded-2xl border p-4 text-center font-medium',
                   message.type === 'success'
                     ? 'bg-green-500/10 border-green-500/20 text-green-500'
                     : 'bg-red-500/10 border-red-500/20 text-red-500',
