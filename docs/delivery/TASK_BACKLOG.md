@@ -27,9 +27,9 @@ Audit date: 2026-06-11.
 
 Current progress:
 
-- Done: 55/67.
-- Partial: 10/67.
-- Pending: 2/67.
+- Done: 56/68.
+- Partial: 10/68.
+- Pending: 2/68.
 
 Build status:
 
@@ -181,3 +181,4 @@ Build status:
 | [~]    | P1       | TASK-065 - Validate responsive product UI    | Checks, build, and route probes pass; browser screenshots remain unavailable in this session. |
 | [x]    | P1       | TASK-066 - Remove landing maturity messaging | Removes the roadmap section and visible MVP or early-stage language from the product landing. |
 | [x]    | P1       | TASK-067 - Restore original card styling     | Restores soft borders and the previous card radii while preserving responsive layouts.        |
+| [x]    | P1       | TASK-068 - Apply project brand mark          | Uses the supplied SolRadar artwork across the app, documentation, and browser favicon.        |

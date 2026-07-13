@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Solana Startups Hub Docs',
   tagline: 'Public documentation for the Solana Startups Hub MVP.',
-  favicon: 'img/logo.svg',
+  favicon: 'img/solradar-logo.png',
   url: 'https://solanastartupshub.com',
   baseUrl: '/docs/',
   organizationName: 'angelgonzalezev',
@@ -42,7 +42,7 @@ const config: Config = {
       title: 'Solana Startups Hub',
       logo: {
         alt: 'Solana Startups Hub',
-        src: 'img/logo.svg',
+        src: 'img/solradar-logo.png',
       },
       items: [
         { to: '/', label: 'Docs', position: 'left' },

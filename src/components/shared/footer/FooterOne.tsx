@@ -1,5 +1,6 @@
 import RevealAnimation from '@/components/animation/RevealAnimation';
 import { cn } from '@/utils/cn';
+import Image from 'next/image';
 import Link from 'next/link';
 import ThemeToggle from '../ThemeToggle';
 import FooterDivider from './FooterDivider';
@@ -51,6 +52,13 @@ const FooterOne = ({ className }: { className?: string }) => {
                   href="/"
                   className="inline-flex items-center rounded-full focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
                   <span className="sr-only">Solana Startups Hub home</span>
+                  <Image
+                    src="/images/shared/solradar-logo.png"
+                    alt=""
+                    width={56}
+                    height={56}
+                    className="mr-2 size-12 shrink-0 rounded-2xl object-cover md:size-14"
+                  />
                   <span className="text-2xl font-bold leading-none tracking-tighter text-white md:text-3xl">
                     Solana
                     <span className="ml-1.5 bg-gradient-to-r from-[#9945FF] to-[#14F195] bg-clip-text py-1 pr-1 italic text-transparent">

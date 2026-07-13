@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const Logo = () => {
@@ -5,9 +6,17 @@ const Logo = () => {
     <div className="flex-shrink-0">
       <Link href="/" className="flex items-center gap-2 py-1">
         <span className="sr-only">Solana Startups Hub</span>
-        <span className="text-xl md:text-2xl font-bold tracking-tighter text-white whitespace-nowrap leading-none flex items-center">
+        <Image
+          src="/images/shared/solradar-logo.png"
+          alt=""
+          width={48}
+          height={48}
+          priority
+          className="size-10 shrink-0 rounded-xl object-cover md:size-11"
+        />
+        <span className="flex items-center whitespace-nowrap text-xl font-bold leading-none tracking-tighter text-white md:text-2xl">
           Solana
-          <span className="bg-gradient-to-r from-[#9945FF] to-[#14F195] bg-clip-text text-transparent italic ml-1.5 py-1 pr-1">
+          <span className="ml-1.5 bg-gradient-to-r from-[#9945FF] to-[#14F195] bg-clip-text py-1 pr-1 italic text-transparent">
             Hub
           </span>
         </span>
