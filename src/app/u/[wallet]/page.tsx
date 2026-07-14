@@ -67,13 +67,12 @@ export default function PublicProfilePage({ params }: { params: Promise<{ wallet
   // as the only way back into the product.
   return (
     <div className="min-h-screen bg-black text-white">
-      <main className="mx-auto w-full max-w-[1200px] px-5 py-12 sm:px-8 md:py-16 lg:py-24">
+      <main className="mx-auto w-full max-w-[1200px] px-5 pb-24 pt-12 sm:px-8 md:pb-28 md:pt-16 lg:pt-24">
         {isLoading ? (
           <ProfileSkeleton />
         ) : !profile ? (
-          <div className="flex min-h-[70vh] flex-col items-center justify-center gap-8">
+          <div className="flex min-h-[70vh] flex-col items-center justify-center">
             <ErrorState message="This profile doesn't exist or isn't available." />
-            <OrbitalBadge />
           </div>
         ) : (
           <div className="flex w-full min-w-0 flex-col gap-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-16">
@@ -143,10 +142,6 @@ export default function PublicProfilePage({ params }: { params: Promise<{ wallet
                       {new Date(profile.joinedAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
                     </span>
                   </p>
-
-                  <div className="pt-2">
-                    <OrbitalBadge />
-                  </div>
                 </section>
               </aside>
             </RevealAnimation>
@@ -190,18 +185,21 @@ export default function PublicProfilePage({ params }: { params: Promise<{ wallet
           </div>
         )}
       </main>
+
+      <OrbitalBadge />
     </div>
   );
 }
 
-// The only piece of Orbital chrome on the page: a discreet badge that links
-// back into the product, like indiepage's "built with" pill.
+// The only piece of Orbital chrome on the page: a floating pill inviting
+// visitors to create their own page, like indiepage's "built with" badge.
+// Bottom-right on mobile, bottom-left on desktop.
 const OrbitalBadge = () => (
   <Link
     href="/"
-    className="group inline-flex min-h-11 items-center gap-2.5 rounded-full border border-white/10 bg-[#0A0A0A] px-5 text-xs font-bold uppercase tracking-widest text-white/40 transition-all hover:border-primary-500/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50">
+    className="group fixed bottom-5 right-5 z-50 inline-flex min-h-11 items-center gap-2.5 rounded-full border border-white/10 bg-black/80 px-5 text-xs font-bold uppercase tracking-widest text-white/60 shadow-2xl shadow-black/50 backdrop-blur-md transition-all hover:border-primary-500/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 lg:bottom-8 lg:left-8 lg:right-auto">
     <span aria-hidden="true" className="size-2 rounded-full bg-gradient-to-r from-[#9945FF] to-[#14F195]" />
-    Powered by Orbital
+    Build your Orbit
   </Link>
 );
 
