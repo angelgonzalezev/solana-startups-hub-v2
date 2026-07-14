@@ -19,7 +19,7 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive }) => 
     <article className="flex flex-col items-center gap-5 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 transition-colors hover:border-white/10 sm:flex-row sm:items-start sm:p-6 lg:items-center">
       <div className="relative size-20 flex-shrink-0 overflow-hidden rounded-2xl border border-white/5 bg-black sm:size-24">
         {logoUrl ? (
-          <Image src={logoUrl} alt={startup.name} fill sizes="96px" className="object-cover p-2" />
+          <Image src={logoUrl} alt={startup.name} fill sizes="96px" className="object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white/20 font-bold text-2xl">
             {startup.name.slice(0, 2).toUpperCase()}

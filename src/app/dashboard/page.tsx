@@ -215,7 +215,7 @@ export default function DashboardPage() {
                                   alt={startup.name}
                                   fill
                                   sizes="48px"
-                                  className="object-cover p-1.5"
+                                  className="object-cover"
                                 />
                               ) : (
                                 <div className="flex h-full w-full items-center justify-center font-bold text-white/20">

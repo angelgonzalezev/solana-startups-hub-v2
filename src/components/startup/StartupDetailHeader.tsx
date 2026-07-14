@@ -24,7 +24,7 @@ const StartupDetailHeader: React.FC<StartupDetailHeaderProps> = ({ startup }) =>
         <div className="flex w-full min-w-0 flex-col items-center gap-5 text-center sm:flex-row sm:items-start sm:gap-7 sm:text-left">
           <div className="relative size-20 flex-shrink-0 overflow-hidden rounded-[30px] border border-white/10 bg-[#0A0A0A] shadow-2xl shadow-primary-500/10 sm:size-28 lg:size-32">
             {logoUrl ? (
-              <Image src={logoUrl} alt={startup.name} fill sizes="128px" className="object-cover p-4" />
+              <Image src={logoUrl} alt={startup.name} fill sizes="128px" className="object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white/10 font-bold text-4xl">
                 {startup.name.slice(0, 2).toUpperCase()}

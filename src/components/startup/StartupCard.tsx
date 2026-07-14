@@ -29,7 +29,7 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
           <div className="flex min-w-0 items-start gap-4">
             <div className="relative size-14 flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black transition-colors group-hover:border-primary-500/50 sm:size-16">
               {logoUrl ? (
-                <Image src={logoUrl} alt={startup.name} fill sizes="64px" className="object-cover p-2" />
+                <Image src={logoUrl} alt={startup.name} fill sizes="64px" className="object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-white/20 font-bold text-xl">
                   {startup.name.slice(0, 2).toUpperCase()}
