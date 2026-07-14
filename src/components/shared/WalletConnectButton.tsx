@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { useHydrated } from '@/hooks/useHydrated';
 
@@ -11,6 +12,18 @@ interface WalletConnectButtonProps {
 }
 
 const truncateAddress = (address: string) => `${address.slice(0, 4)}...${address.slice(-4)}`;
+
+const walletLogoByName: Record<string, string> = {
+  metamask: '/images/wallets/metamask.png',
+  phantom: '/images/wallets/phantom.png',
+};
+
+const getWalletIcon = (walletName: string) => {
+  const normalizedName = walletName.toLowerCase().replace(/\s+/g, '');
+  const knownWallet = Object.entries(walletLogoByName).find(([name]) => normalizedName.includes(name));
+
+  return knownWallet?.[1];
+};
 
 const WalletConnectButton: React.FC<WalletConnectButtonProps> = ({ className = '' }) => {
   const { availableWallets, error, isAuthenticated, isSigningIn, signIn, walletAddress } = useAuth();
@@ -99,8 +112,20 @@ const WalletConnectButton: React.FC<WalletConnectButtonProps> = ({ className = '
                     disabled={!wallet.ready || isSigningIn}
                     onClick={() => void signIn(wallet.id)}
                     className="flex w-full items-center gap-4 rounded-2xl border border-white/10 bg-black px-4 py-3.5 text-left text-white transition hover:border-primary-500/50 hover:bg-primary-500/5 disabled:cursor-not-allowed disabled:opacity-45 sm:px-5 sm:py-4">
-                    <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#9945FF]/25 to-[#14F195]/20 font-semibold">
-                      {wallet.name.slice(0, 1).toUpperCase()}
+                    <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white">
+                      {getWalletIcon(wallet.name) ? (
+                        <Image
+                          alt={`${wallet.name} logo`}
+                          className="h-full w-full object-cover"
+                          height={44}
+                          src={getWalletIcon(wallet.name) || ''}
+                          width={44}
+                        />
+                      ) : (
+                        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#9945FF]/25 to-[#14F195]/20 font-semibold text-white">
+                          {wallet.name.slice(0, 1).toUpperCase()}
+                        </span>
+                      )}
                     </span>
                     <span className="font-medium">{wallet.name}</span>
                     {!wallet.ready && <span className="ml-auto text-xs text-white/40">Unavailable</span>}
