@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Crop, ImagePlus, Trash2, X } from 'lucide-react';
 import React, { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Cropper, { type Area, type Point } from 'react-easy-crop';
 import type { MediaMutation } from '@/interface/media';
 import { resolveMediaUrl, validateMediaFile } from '@/services/mediaService';
@@ -142,69 +143,72 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ label, mutation, onMutati
       <p className="ml-1 text-xs text-white/35">JPG, PNG or WebP. Maximum 2 MB. Saved as a square image.</p>
       {error && <p className="ml-1 text-xs text-red-500">{error}</p>}
 
-      {cropSource && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Crop ${label.toLowerCase()}`}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-2xl rounded-[30px] border border-white/5 bg-[#0A0A0A] p-4 shadow-2xl sm:p-6">
-            <div className="mb-5 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white">Crop image</h3>
-              <button
-                type="button"
-                onClick={closeCropper}
-                className="flex size-10 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white"
-                aria-label="Close cropper">
-                <X aria-hidden="true" className="size-5" />
-              </button>
-            </div>
+      {cropSource &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Crop ${label.toLowerCase()}`}
+            className="fixed inset-0 z-[10000] flex min-h-[100dvh] items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm">
+            <div className="w-full max-w-2xl rounded-[30px] border border-white/5 bg-[#0A0A0A] p-4 shadow-2xl sm:p-6">
+              <div className="mb-5 flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Crop image</h3>
+                <button
+                  type="button"
+                  onClick={closeCropper}
+                  className="flex size-10 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white"
+                  aria-label="Close cropper">
+                  <X aria-hidden="true" className="size-5" />
+                </button>
+              </div>
 
-            <div className="relative aspect-square max-h-[55vh] w-full overflow-hidden rounded-2xl bg-black">
-              <Cropper
-                image={cropSource}
-                crop={crop}
-                zoom={zoom}
-                aspect={1}
-                cropShape="rect"
-                showGrid
-                onCropChange={setCrop}
-                onCropComplete={(_, pixels) => setCroppedArea(pixels)}
-                onZoomChange={setZoom}
-              />
-            </div>
+              <div className="relative aspect-square max-h-[55vh] w-full overflow-hidden rounded-2xl bg-black">
+                <Cropper
+                  image={cropSource}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={1}
+                  cropShape="rect"
+                  showGrid
+                  onCropChange={setCrop}
+                  onCropComplete={(_, pixels) => setCroppedArea(pixels)}
+                  onZoomChange={setZoom}
+                />
+              </div>
 
-            <div className="mt-5 space-y-2">
-              <label htmlFor={`${inputId}-zoom`} className="text-sm font-medium text-white/60">
-                Zoom
-              </label>
-              <input
-                id={`${inputId}-zoom`}
-                type="range"
-                min={1}
-                max={3}
-                step={0.01}
-                value={zoom}
-                onChange={(event) => setZoom(Number(event.target.value))}
-                className="w-full accent-primary-500"
-              />
-            </div>
+              <div className="mt-5 space-y-2">
+                <label htmlFor={`${inputId}-zoom`} className="text-sm font-medium text-white/60">
+                  Zoom
+                </label>
+                <input
+                  id={`${inputId}-zoom`}
+                  type="range"
+                  min={1}
+                  max={3}
+                  step={0.01}
+                  value={zoom}
+                  onChange={(event) => setZoom(Number(event.target.value))}
+                  className="w-full accent-primary-500"
+                />
+              </div>
 
-            <div className="mt-6 flex justify-end gap-3">
-              <button type="button" onClick={closeCropper} className="btn btn-white-dark btn-sm">
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={confirmCrop}
-                disabled={isProcessing || !croppedArea}
-                className="btn btn-primary btn-sm disabled:cursor-not-allowed disabled:opacity-50">
-                {isProcessing ? 'Processing...' : 'Use image'}
-              </button>
+              <div className="mt-6 flex justify-end gap-3">
+                <button type="button" onClick={closeCropper} className="btn btn-white-dark btn-sm">
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmCrop}
+                  disabled={isProcessing || !croppedArea}
+                  className="btn btn-primary btn-sm disabled:cursor-not-allowed disabled:opacity-50">
+                  {isProcessing ? 'Processing...' : 'Use image'}
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 };

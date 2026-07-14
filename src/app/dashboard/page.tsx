@@ -14,6 +14,7 @@ import RevealAnimation from '@/components/animation/RevealAnimation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
+import { resolveMediaUrl } from '@/services/mediaService';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -57,6 +58,7 @@ export default function DashboardPage() {
   }, [walletAddress]);
 
   const isProfileComplete = user ? isProfileMinimumComplete(user) : false;
+  const avatarUrl = resolveMediaUrl(user?.avatar);
 
   return (
     <AuthGate>
@@ -68,8 +70,13 @@ export default function DashboardPage() {
               <div className="space-y-6 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 sm:p-6">
                 <div className="flex items-center gap-4">
                   <div className="relative size-14 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black sm:size-16">
-                    {user?.avatar ? (
-                      <Image src={user.avatar} alt={user.displayName} fill className="object-cover" />
+                    {avatarUrl ? (
+                      <Image
+                        src={avatarUrl}
+                        alt={user?.displayName || 'Profile avatar'}
+                        fill
+                        className="object-cover"
+                      />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-white/10 font-bold text-xl">
                         {user?.displayName?.slice(0, 1).toUpperCase() || '?'}
