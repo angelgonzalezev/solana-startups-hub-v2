@@ -13,7 +13,7 @@ import Link from 'next/link';
 import RevealAnimation from '@/components/animation/RevealAnimation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ExternalLink } from 'lucide-react';
 import { resolveMediaUrl } from '@/services/mediaService';
 
 export default function DashboardPage() {
@@ -113,6 +113,14 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
+                {walletAddress && (
+                  <Link
+                    href={`/u/${walletAddress}`}
+                    className="btn btn-md inline-flex w-full items-center justify-center gap-2 border border-primary-500/30 bg-primary-500/10 text-primary-400 transition hover:border-primary-500/50 hover:bg-primary-500/20">
+                    <ExternalLink aria-hidden="true" className="size-4" />
+                    View Public Page
+                  </Link>
+                )}
                 <Link href="/dashboard/profile" className="btn btn-white-dark btn-md w-full border-white/10">
                   Edit Profile
                 </Link>
