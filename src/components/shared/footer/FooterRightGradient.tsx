@@ -12,7 +12,7 @@ const FooterRightGradient = ({ className }: FooterRightGradientProps) => {
     <RevealAnimation delay={0.4} duration={0.8} direction="right" offset={400}>
       <figure
         className={cn(
-          'pointer-events-none absolute top-[-17%] right-[-64%] size-[550px] rotate-[-30deg] bg-top-right select-none max-[376px]:right-[-83%] md:top-[-25%] md:right-[-30%] lg:right-[-19%] xl:top-[-32%] xl:right-[-9%]',
+          'pointer-events-none absolute top-[-17%] right-[-64%] hidden size-[550px] rotate-[-30deg] bg-top-right select-none md:block max-[376px]:right-[-83%] md:top-[-25%] md:right-[-30%] lg:right-[-19%] xl:top-[-32%] xl:right-[-9%]',
           className,
         )}>
         <Image className="size-full object-cover object-top" src={gradient1} alt="Decorative gradient background" />

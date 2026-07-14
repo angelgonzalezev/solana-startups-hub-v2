@@ -45,13 +45,13 @@ const FounderContact: React.FC<FounderContactProps> = ({ founder }) => {
             <p className="text-white/30 italic">No public founder contact available yet.</p>
           </div>
         ) : (
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
             {founder.twitterHandle && (
               <a
                 href={`https://x.com/${founder.twitterHandle}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex w-fit max-w-full flex-col items-start gap-2 rounded-2xl border border-white/10 bg-black p-4 transition-all hover:border-primary-500/50 hover:bg-primary-500/5">
+                className="group flex w-full max-w-full flex-col items-start gap-2 rounded-2xl border border-white/10 bg-black p-4 transition-all hover:border-primary-500/50 hover:bg-primary-500/5 sm:w-fit">
                 <div className="flex w-full min-w-0 items-center gap-3">
                   <svg
                     className="h-4 w-4 shrink-0 fill-white/40 transition-colors group-hover:fill-white"
@@ -72,7 +72,7 @@ const FounderContact: React.FC<FounderContactProps> = ({ founder }) => {
                 href={`https://t.me/${founder.telegramHandle}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex w-fit max-w-full flex-col items-start gap-2 rounded-2xl border border-white/10 bg-black p-4 transition-all hover:border-primary-500/50 hover:bg-primary-500/5">
+                className="group flex w-full max-w-full flex-col items-start gap-2 rounded-2xl border border-white/10 bg-black p-4 transition-all hover:border-primary-500/50 hover:bg-primary-500/5 sm:w-fit">
                 <div className="flex w-full min-w-0 items-center gap-3">
                   <svg
                     className="h-4 w-4 shrink-0 fill-white/40 transition-colors group-hover:fill-white"

@@ -92,19 +92,19 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
             ) : !startup ? (
               <ErrorState message="Startup not found or not available." />
             ) : (
-              <div className="grid grid-cols-12 gap-10 lg:gap-12">
+              <div className="flex w-full min-w-0 flex-col gap-10 lg:grid lg:grid-cols-12 lg:gap-12">
                 {/* Main Content */}
-                <div className="col-span-12 space-y-12 lg:col-span-8 lg:space-y-16">
+                <div className="w-full min-w-0 space-y-12 lg:col-span-8 lg:space-y-16">
                   <RevealAnimation delay={0.1}>
                     <StartupDetailHeader startup={startup} />
                   </RevealAnimation>
 
                   <RevealAnimation delay={0.2}>
-                    <div className="space-y-8">
+                    <div className="w-full min-w-0 space-y-8">
                       <h3 className="text-2xl font-bold tracking-tight text-white underline decoration-primary-500/30 decoration-4 underline-offset-8 sm:text-3xl">
                         About the Project
                       </h3>
-                      <div className="prose prose-invert prose-lg max-w-none text-white/70 leading-relaxed whitespace-pre-wrap">
+                      <div className="w-full max-w-full whitespace-pre-wrap break-words text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
                         {startup.description}
                       </div>
                     </div>
@@ -112,8 +112,8 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
 
                   {/* Team & Stack Section */}
                   <RevealAnimation delay={0.3}>
-                    <div className="grid grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-12 md:pt-10">
-                      <div className="space-y-6">
+                    <div className="grid w-full min-w-0 grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-12 md:pt-10">
+                      <div className="min-w-0 space-y-6">
                         <h4 className="text-xl font-bold text-white uppercase tracking-widest">Tech Stack</h4>
                         <div className="flex flex-wrap gap-3">
                           {startup.techStack.map((tech) => (
@@ -125,7 +125,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                           ))}
                         </div>
                       </div>
-                      <div className="space-y-6">
+                      <div className="min-w-0 space-y-6">
                         <h4 className="text-xl font-bold text-white uppercase tracking-widest">Categories</h4>
                         <div className="flex flex-wrap gap-3">
                           {startup.category.map((cat) => (
@@ -142,7 +142,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                 </div>
 
                 {/* Sidebar */}
-                <aside className="col-span-12 lg:col-span-4 space-y-8">
+                <aside className="w-full min-w-0 space-y-8 lg:col-span-4">
                   <RevealAnimation delay={0.4}>
                     <div className="space-y-6 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 sm:p-6">
                       <h4 className="text-lg font-bold text-white uppercase tracking-widest">Key Metrics</h4>
@@ -151,15 +151,17 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                         <MetricItem label="Team Size" value={`${startup.teamSize} members`} />
                         {startup.showMrr && startup.mrr !== undefined && (
                           <div
-                            className="flex items-center justify-between py-3 border-b border-white/5 last:border-0"
+                            className="flex min-w-0 flex-col gap-1 py-3 border-b border-white/5 last:border-0 sm:flex-row sm:items-center sm:justify-between"
                             suppressHydrationWarning>
                             <span className="text-white/40 text-sm font-medium uppercase tracking-wider">MRR</span>
-                            <span className="text-white font-bold tracking-tight">${startup.mrr.toLocaleString()}</span>
+                            <span className="break-words text-white font-bold tracking-tight">
+                              ${startup.mrr.toLocaleString()}
+                            </span>
                           </div>
                         )}
-                        <div className="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
+                        <div className="flex min-w-0 flex-col gap-1 py-3 border-b border-white/5 last:border-0 sm:flex-row sm:items-center sm:justify-between">
                           <span className="text-white/40 text-sm font-medium uppercase tracking-wider">Launched</span>
-                          <span className="text-white font-bold tracking-tight" suppressHydrationWarning>
+                          <span className="break-words text-white font-bold tracking-tight" suppressHydrationWarning>
                             {new Date(startup.createdAt).toLocaleDateString()}
                           </span>
                         </div>
@@ -187,8 +189,8 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
 }
 
 const MetricItem = ({ label, value }: { label: string; value: string }) => (
-  <div className="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
+  <div className="flex min-w-0 flex-col gap-1 py-3 border-b border-white/5 last:border-0 sm:flex-row sm:items-center sm:justify-between">
     <span className="text-white/40 text-sm font-medium uppercase tracking-wider">{label}</span>
-    <span className="text-white font-bold tracking-tight">{value}</span>
+    <span className="break-words text-white font-bold tracking-tight">{value}</span>
   </div>
 );
