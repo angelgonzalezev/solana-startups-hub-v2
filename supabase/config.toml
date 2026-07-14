@@ -32,3 +32,8 @@ enabled = true
 [studio]
 enabled = true
 port = 54323
+
+# Authenticated by the x-webhook-secret header set by the database trigger,
+# not by a Supabase JWT.
+[functions.tweet-new-startup]
+verify_jwt = false
