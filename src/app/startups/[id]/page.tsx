@@ -11,8 +11,10 @@ import NavbarOne from '@/components/shared/header/NavbarOne';
 import FooterOne from '@/components/shared/footer/FooterOne';
 import StartupDetailHeader from '@/components/startup/StartupDetailHeader';
 import FounderContact from '@/components/startup/FounderContact';
+import StartupTeam from '@/components/startup/StartupTeam';
 import { LoadingState, ErrorState } from '@/components/shared/States';
 import RevealAnimation from '@/components/animation/RevealAnimation';
+import type { TeamMember } from '@/interface/startup';
 
 export default function StartupDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -35,13 +37,29 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
       try {
         const s = await startupService.getAccessibleStartupById(id);
         if (!cancelled) {
-          setStartup(s);
           if (s) {
-            const u = await userService.getUserByWallet(s.ownerWallet);
+            const [u, teamProfiles] = await Promise.all([
+              userService.getUserByWallet(s.ownerWallet),
+              userService.listUsersByWallets(s.team.map((member) => member.walletAddress)),
+            ]);
+            const profilesByWallet = new Map(teamProfiles.map((profile) => [profile.walletAddress, profile]));
+            const enrichedTeam: TeamMember[] = s.team.map((member) => {
+              const profile = profilesByWallet.get(member.walletAddress);
+              return profile
+                ? {
+                    ...member,
+                    avatar: profile.avatar,
+                    displayName: profile.displayName,
+                    jobTitle: profile.jobTitle,
+                  }
+                : member;
+            });
             if (!cancelled) {
+              setStartup({ ...s, team: enrichedTeam });
               setFounder(u);
             }
           } else {
+            setStartup(null);
             setFounder(null);
           }
         }
@@ -150,6 +168,10 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
                   </RevealAnimation>
 
                   <RevealAnimation delay={0.5}>
+                    <StartupTeam members={startup.team} />
+                  </RevealAnimation>
+
+                  <RevealAnimation delay={0.6}>
                     <FounderContact founder={founder} />
                   </RevealAnimation>
                 </aside>

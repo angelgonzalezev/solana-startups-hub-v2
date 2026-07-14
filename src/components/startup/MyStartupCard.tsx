@@ -40,6 +40,9 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive }) => 
       </div>
 
       <div className="flex w-full flex-col gap-2 border-t border-white/10 pt-5 sm:w-auto sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+        <Link href={`/startups/${startup.id}`} className="btn btn-white-dark btn-sm w-full hover:btn-primary">
+          View
+        </Link>
         <Link
           href={`/dashboard/startups/${startup.id}/edit`}
           className="btn btn-white-dark btn-sm w-full hover:btn-primary">

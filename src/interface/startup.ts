@@ -9,6 +9,9 @@ export type ListingStatus = 'draft' | 'published' | 'archived';
 export type VerificationCheckStatus = 'not_started' | 'pending' | 'verified' | 'failed';
 
 export interface TeamMember {
+  avatar?: string;
+  displayName?: string;
+  jobTitle?: string;
   walletAddress: string;
   role: string;
 }

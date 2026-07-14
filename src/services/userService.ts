@@ -39,6 +39,47 @@ export const userService = {
     return data ? mapProfileRow(data) : null;
   },
 
+  listUsersByWallets: async (walletAddresses: string[]): Promise<User[]> => {
+    const uniqueWallets = Array.from(new Set(walletAddresses)).filter(Boolean);
+    if (uniqueWallets.length === 0) return [];
+
+    const { data, error } = await getSupabaseBrowserClient()
+      .from('profiles')
+      .select('*')
+      .in('wallet_address', uniqueWallets);
+
+    if (error) throw error;
+    return (data || []).map(mapProfileRow);
+  },
+
+  searchUsers: async (query: string): Promise<User[]> => {
+    const search = query.trim();
+    if (search.length < 2) return [];
+
+    const [nameResult, walletResult] = await Promise.all([
+      getSupabaseBrowserClient()
+        .from('profiles')
+        .select('*')
+        .ilike('display_name', `%${search}%`)
+        .order('display_name', { ascending: true })
+        .limit(8),
+      getSupabaseBrowserClient()
+        .from('profiles')
+        .select('*')
+        .ilike('wallet_address', `%${search}%`)
+        .order('display_name', { ascending: true })
+        .limit(8),
+    ]);
+
+    if (nameResult.error) throw nameResult.error;
+    if (walletResult.error) throw walletResult.error;
+
+    const profiles = [...(nameResult.data || []), ...(walletResult.data || [])];
+    const uniqueProfiles = Array.from(new Map(profiles.map((profile) => [profile.wallet_address, profile])).values());
+
+    return uniqueProfiles.slice(0, 8).map(mapProfileRow);
+  },
+
   upsertProfile: async (input: Partial<User>, avatarMutation: MediaMutation = KEEP_MEDIA): Promise<User> => {
     const errors = validateProfile(input);
     if (errors.length > 0) throw new Error(errors[0].message);

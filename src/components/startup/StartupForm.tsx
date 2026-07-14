@@ -1,9 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Startup } from '@/interface/startup';
+import Image from 'next/image';
+import { Search, Trash2, UserPlus, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Startup, TeamMember } from '@/interface/startup';
+import { User } from '@/interface/user';
 import { validateStartup, ValidationError } from '@/utils/validation';
 import { startupService } from '@/services/startupService';
+import { userService } from '@/services/userService';
+import { resolveMediaUrl } from '@/services/mediaService';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/utils/cn';
 import { STARTUP_STAGES, STARTUP_CATEGORIES, TECH_STACK_OPTIONS } from '@/data/startupTaxonomy';
@@ -40,6 +45,11 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
   );
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [logoMutation, setLogoMutation] = useState<MediaMutation>(KEEP_MEDIA);
+  const [isTeamSearchOpen, setIsTeamSearchOpen] = useState(false);
+  const [teamQuery, setTeamQuery] = useState('');
+  const [teamResults, setTeamResults] = useState<User[]>([]);
+  const [isSearchingTeam, setIsSearchingTeam] = useState(false);
+  const [teamSearchError, setTeamSearchError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
     type: 'success' | 'error';
@@ -71,6 +81,72 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
       return { ...prev, [name]: updated };
     });
     setErrors((prev) => prev.filter((err) => err.field !== name));
+  };
+
+  useEffect(() => {
+    if (!isTeamSearchOpen || teamQuery.trim().length < 2) {
+      setTeamResults([]);
+      setTeamSearchError(null);
+      return;
+    }
+
+    let cancelled = false;
+    const timeout = window.setTimeout(async () => {
+      setIsSearchingTeam(true);
+      setTeamSearchError(null);
+      try {
+        const results = await userService.searchUsers(teamQuery);
+        if (!cancelled) {
+          const selectedWallets = new Set((formData.team || []).map((member) => member.walletAddress));
+          setTeamResults(results.filter((profile) => !selectedWallets.has(profile.walletAddress)));
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setTeamSearchError(error instanceof Error ? error.message : 'Unable to search users.');
+        }
+      } finally {
+        if (!cancelled) setIsSearchingTeam(false);
+      }
+    }, 250);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeout);
+    };
+  }, [formData.team, isTeamSearchOpen, teamQuery]);
+
+  const addTeamMember = (user: User) => {
+    const nextMember: TeamMember = {
+      avatar: user.avatar,
+      displayName: user.displayName,
+      jobTitle: user.jobTitle,
+      role: 'Collaborator',
+      walletAddress: user.walletAddress,
+    };
+
+    setFormData((prev) => {
+      const currentTeam = prev.team || [];
+      if (currentTeam.some((member) => member.walletAddress === user.walletAddress)) return prev;
+      const nextTeam = [...currentTeam, nextMember];
+      return { ...prev, team: nextTeam, teamSize: Math.max(Number(prev.teamSize) || 1, nextTeam.length) };
+    });
+    setTeamQuery('');
+    setTeamResults([]);
+    setIsTeamSearchOpen(false);
+  };
+
+  const removeTeamMember = (wallet: string) => {
+    setFormData((prev) => {
+      const nextTeam = (prev.team || []).filter((member) => member.walletAddress !== wallet);
+      return { ...prev, team: nextTeam, teamSize: Math.max(1, nextTeam.length) };
+    });
+  };
+
+  const updateTeamMemberRole = (wallet: string, role: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      team: (prev.team || []).map((member) => (member.walletAddress === wallet ? { ...member, role } : member)),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -111,6 +187,7 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
   };
 
   const getError = (field: string) => errors.find((e) => e.field === field)?.message;
+  const teamMembers = formData.team || [];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-12">
@@ -384,6 +461,140 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="space-y-8 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 sm:p-6 md:p-8">
+        <div className="flex flex-col gap-4 border-b border-white/5 pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-white">Team & Collaborators</h2>
+            <p className="mt-2 text-sm text-white/40">
+              Tag registered users so they appear on the startup detail page.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsTeamSearchOpen((value) => !value)}
+            className="btn btn-white-dark btn-sm !inline-flex items-center justify-center gap-2 self-start sm:self-auto">
+            {isTeamSearchOpen ? (
+              <X aria-hidden="true" className="size-4" />
+            ) : (
+              <UserPlus aria-hidden="true" className="size-4" />
+            )}
+            {isTeamSearchOpen ? 'Close' : 'Add collaborator'}
+          </button>
+        </div>
+
+        {isTeamSearchOpen && (
+          <div className="space-y-4 rounded-2xl border border-white/10 bg-black p-4 sm:p-5">
+            <label className="text-sm font-medium text-white/60">Search by user name or wallet</label>
+            <div className="relative">
+              <Search
+                aria-hidden="true"
+                className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-white/30"
+              />
+              <input
+                type="search"
+                value={teamQuery}
+                onChange={(event) => setTeamQuery(event.target.value)}
+                placeholder="Type a name or wallet address"
+                className="w-full rounded-2xl border border-white/10 bg-[#0A0A0A] py-3.5 pl-11 pr-4 text-white transition-all placeholder:text-white/25 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+              />
+            </div>
+
+            {teamSearchError && <p className="text-sm text-red-400">{teamSearchError}</p>}
+            {isSearchingTeam && <p className="text-sm text-white/40">Searching users...</p>}
+            {!isSearchingTeam && teamQuery.trim().length >= 2 && teamResults.length === 0 && (
+              <p className="text-sm text-white/40">No registered users found.</p>
+            )}
+
+            {teamResults.length > 0 && (
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                {teamResults.map((user) => {
+                  const avatarUrl = resolveMediaUrl(user.avatar);
+
+                  return (
+                    <button
+                      type="button"
+                      key={user.walletAddress}
+                      onClick={() => addTeamMember(user)}
+                      className="flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-left transition hover:border-primary-500/50 hover:bg-primary-500/5">
+                      <span className="relative size-10 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black">
+                        {avatarUrl ? (
+                          <Image src={avatarUrl} alt={user.displayName} fill className="object-cover" />
+                        ) : (
+                          <span className="flex h-full w-full items-center justify-center text-sm font-bold text-white/20">
+                            {user.displayName.slice(0, 1).toUpperCase() || '?'}
+                          </span>
+                        )}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate font-semibold text-white">{user.displayName}</span>
+                        <span className="block truncate text-xs text-white/35">{user.walletAddress}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="space-y-3">
+          {teamMembers.length === 0 ? (
+            <div className="rounded-2xl border border-white/10 bg-black p-5 text-sm text-white/40">
+              No collaborators added yet. The startup owner is kept as the founder when the startup is created.
+            </div>
+          ) : (
+            teamMembers.map((member) => {
+              const avatarUrl = resolveMediaUrl(member.avatar);
+              const isOwner = member.walletAddress === walletAddress;
+
+              return (
+                <div
+                  key={member.walletAddress}
+                  className="grid grid-cols-1 gap-4 rounded-2xl border border-white/10 bg-black p-4 md:grid-cols-[minmax(0,1fr)_220px_auto] md:items-center">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="relative size-11 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#0A0A0A]">
+                      {avatarUrl ? (
+                        <Image
+                          src={avatarUrl}
+                          alt={member.displayName || member.walletAddress}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-sm font-bold text-white/20">
+                          {(member.displayName || member.walletAddress).slice(0, 1).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-white">{member.displayName || 'Registered user'}</p>
+                      <p className="truncate text-xs text-white/35">{member.walletAddress}</p>
+                    </div>
+                  </div>
+
+                  <input
+                    type="text"
+                    value={member.role}
+                    onChange={(event) => updateTeamMemberRole(member.walletAddress, event.target.value)}
+                    placeholder="Role"
+                    className="w-full rounded-xl border border-white/10 bg-[#0A0A0A] px-3 py-2.5 text-sm text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+                  />
+
+                  <button
+                    type="button"
+                    disabled={isOwner}
+                    onClick={() => removeTeamMember(member.walletAddress)}
+                    className="btn btn-white-dark btn-sm !inline-flex items-center justify-center gap-2 border-red-500/20 text-red-400 disabled:cursor-not-allowed disabled:opacity-40">
+                    <Trash2 aria-hidden="true" className="size-4" />
+                    Remove
+                  </button>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 

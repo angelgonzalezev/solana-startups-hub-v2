@@ -26,9 +26,18 @@ const mapTeam = (team: Json): TeamMember[] => {
 
   return team.flatMap((member) => {
     if (!member || Array.isArray(member) || typeof member !== 'object') return [];
+    const avatar = member.avatar;
+    const displayName = member.displayName;
+    const jobTitle = member.jobTitle;
     const walletAddress = member.walletAddress;
     const role = member.role;
-    return typeof walletAddress === 'string' && typeof role === 'string' ? [{ walletAddress, role }] : [];
+    if (typeof walletAddress !== 'string' || typeof role !== 'string') return [];
+
+    const mappedMember: TeamMember = { role, walletAddress };
+    if (typeof avatar === 'string') mappedMember.avatar = avatar;
+    if (typeof displayName === 'string') mappedMember.displayName = displayName;
+    if (typeof jobTitle === 'string') mappedMember.jobTitle = jobTitle;
+    return [mappedMember];
   });
 };
 

@@ -1,7 +1,7 @@
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { isStartupRow, mapStartupRow } from '@/lib/supabase/mappers';
 import { validateStartup } from '@/utils/validation';
-import type { AcquisitionStatus, Startup, StartupStage } from '@/interface/startup';
+import type { AcquisitionStatus, Startup, StartupStage, TeamMember } from '@/interface/startup';
 import type { Json, StartupRow } from '@/types/database';
 import { KEEP_MEDIA, type MediaMutation } from '@/interface/media';
 import { mediaService } from '@/services/mediaService';
@@ -45,6 +45,33 @@ const toEditableRow = (input: Partial<Startup>) => ({
   twitter: input.twitter,
   website: input.website,
 });
+
+const normalizeTeam = (
+  team: TeamMember[] | undefined,
+  owner: { avatar: string | null; display_name: string; job_title: string; wallet_address: string },
+): TeamMember[] => {
+  const ownerMember: TeamMember = {
+    role: 'Founder',
+    walletAddress: owner.wallet_address,
+  };
+  if (owner.avatar) ownerMember.avatar = owner.avatar;
+  if (owner.display_name) ownerMember.displayName = owner.display_name;
+  if (owner.job_title) ownerMember.jobTitle = owner.job_title;
+
+  const membersByWallet = new Map<string, TeamMember>([[owner.wallet_address, ownerMember]]);
+
+  for (const member of team || []) {
+    if (!member.walletAddress) continue;
+    const existing = membersByWallet.get(member.walletAddress);
+    membersByWallet.set(member.walletAddress, {
+      ...existing,
+      ...member,
+      role: member.role.trim() || existing?.role || 'Collaborator',
+    });
+  }
+
+  return Array.from(membersByWallet.values());
+};
 
 const cleanupReplacedMedia = async (path?: string | null) => {
   try {
@@ -124,7 +151,7 @@ export const startupService = {
         name: input.name || '',
         one_liner: input.oneLiner || '',
         owner_profile_id: profile.id,
-        team: (input.team || [{ role: 'Founder', walletAddress: profile.wallet_address }]) as unknown as Json,
+        team: normalizeTeam(input.team, profile) as unknown as Json,
       })
       .select('*')
       .single();
@@ -163,7 +190,7 @@ export const startupService = {
 
     const { data, error } = await supabase
       .from('startups')
-      .update({ ...toEditableRow(input), logo: nextLogo })
+      .update({ ...toEditableRow(input), logo: nextLogo, team: normalizeTeam(input.team, profile) as unknown as Json })
       .eq('id', id)
       .select('*')
       .single();
