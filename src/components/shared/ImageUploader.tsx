@@ -113,7 +113,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ label, mutation, onMutati
             onChange={handleFile}
             className="sr-only"
           />
-          <button type="button" onClick={() => inputRef.current?.click()} className="btn btn-white-dark btn-sm gap-2">
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            className="btn btn-white-dark btn-sm !inline-flex items-center justify-center gap-2">
             {preview ? (
               <Crop aria-hidden="true" className="size-4" />
             ) : (
@@ -128,7 +131,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ label, mutation, onMutati
                 setError(null);
                 onMutation({ type: 'remove' });
               }}
-              className="btn btn-white-dark btn-sm gap-2 border-red-500/20 text-red-400">
+              className="btn btn-white-dark btn-sm !inline-flex items-center justify-center gap-2 border-red-500/20 text-red-400">
               <Trash2 aria-hidden="true" className="size-4" />
               Remove
             </button>
