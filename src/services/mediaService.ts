@@ -7,6 +7,16 @@ export const MEDIA_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as con
 
 type MediaFile = Pick<File, 'size' | 'type'>;
 
+export const toMediaStorageError = (error: unknown): Error => {
+  const message = error instanceof Error ? error.message : String((error as { message?: unknown })?.message ?? error);
+
+  if (message.toLowerCase().includes('bucket not found')) {
+    return new Error('Image storage is temporarily unavailable. Please try again later.');
+  }
+
+  return error instanceof Error ? error : new Error(message);
+};
+
 export const validateMediaFile = (file: MediaFile): string | null => {
   if (!MEDIA_MIME_TYPES.includes(file.type as (typeof MEDIA_MIME_TYPES)[number])) {
     return 'Choose a JPG, PNG, or WebP image.';
@@ -47,7 +57,7 @@ const uploadWebp = async (path: string, blob: Blob): Promise<string> => {
     upsert: false,
   });
 
-  if (error) throw error;
+  if (error) throw toMediaStorageError(error);
   return path;
 };
 
@@ -58,7 +68,7 @@ export const mediaService = {
     if (!isManagedMediaPath(path)) return;
 
     const { error } = await getSupabaseBrowserClient().storage.from(MEDIA_BUCKET).remove([path]);
-    if (error) throw error;
+    if (error) throw toMediaStorageError(error);
   },
 
   uploadProfileAvatar: async (blob: Blob): Promise<string> => {

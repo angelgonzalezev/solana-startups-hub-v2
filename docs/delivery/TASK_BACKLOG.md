@@ -27,9 +27,9 @@ Audit date: 2026-06-11.
 
 Current progress:
 
-- Done: 57/69.
-- Partial: 10/69.
-- Pending: 2/69.
+- Done: 59/70.
+- Partial: 9/70.
+- Pending: 2/70.
 
 Build status:
 
@@ -152,13 +152,13 @@ Build status:
 
 ## Phase N: Managed Profile and Startup Media
 
-| Status | Priority | Task                                           | Notes                                                                                        |
-| :----- | :------- | :--------------------------------------------- | :------------------------------------------------------------------------------------------- |
-| [~]    | P0       | TASK-051 - Configure Supabase media storage    | Migration and pgTAP coverage exist; local execution awaits an available Docker stack.        |
-| [x]    | P0       | TASK-052 - Build image crop and upload tooling | Reusable square cropper, WebP conversion, previews, replacement, removal, and media service. |
-| [x]    | P0       | TASK-053 - Add managed profile image           | Profile saves coordinate Storage upload, database path update, rollback, and cleanup.        |
-| [x]    | P0       | TASK-054 - Add managed startup logos           | New and existing startups support deferred logo upload with owner-scoped paths.              |
-| [~]    | P1       | TASK-055 - Media compatibility, docs, and QA   | Unit/build/route checks pass; interactive browser QA remains unevidenced.                    |
+| Status | Priority | Task                                           | Notes                                                                                          |
+| :----- | :------- | :--------------------------------------------- | :--------------------------------------------------------------------------------------------- |
+| [x]    | P0       | TASK-051 - Configure Supabase media storage    | The managed media bucket, limits, MIME types, and owner-scoped policies are deployed remotely. |
+| [x]    | P0       | TASK-052 - Build image crop and upload tooling | Reusable square cropper, WebP conversion, previews, replacement, removal, and media service.   |
+| [x]    | P0       | TASK-053 - Add managed profile image           | Profile saves coordinate Storage upload, database path update, rollback, and cleanup.          |
+| [x]    | P0       | TASK-054 - Add managed startup logos           | New and existing startups support deferred logo upload with owner-scoped paths.                |
+| [~]    | P1       | TASK-055 - Media compatibility, docs, and QA   | Unit/build/route checks pass; interactive browser QA remains unevidenced.                      |
 
 ## Phase O: Product Surface Cleanup
 
@@ -183,3 +183,9 @@ Build status:
 | [x]    | P1       | TASK-067 - Restore original card styling     | Restores soft borders and the previous card radii while preserving responsive layouts.         |
 | [x]    | P1       | TASK-068 - Apply project brand mark          | Uses the supplied SolRadar artwork across the app, documentation, and browser favicon.         |
 | [x]    | P0       | TASK-069 - Rebrand platform as Orbital       | Aligns product UI, metadata, authentication, and documentation around the Orbital proposition. |
+
+## Phase Q: Media Reliability and Product Preview
+
+| Status | Priority | Task                                   | Notes                                                                                   |
+| :----- | :------- | :------------------------------------- | :-------------------------------------------------------------------------------------- |
+| [x]    | P0       | TASK-070 - Repair hosted media storage | Deploys the pending Storage migration and replaces raw missing-bucket errors in the UI. |
