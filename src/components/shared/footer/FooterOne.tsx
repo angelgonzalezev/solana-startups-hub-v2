@@ -106,7 +106,7 @@ const FooterOne = ({ className }: { className?: string }) => {
           <FooterDivider />
           <RevealAnimation delay={0.7} offset={10} start="top 105%">
             <p className="text-tagline-1 font-normal text-white/55">
-              Copyright &copy; Orbital. Discover startups across the Solana ecosystem.
+              Orbital HUB - Discover startups across the Solana ecosystem. By @angelgonzaleh
             </p>
           </RevealAnimation>
           <RevealAnimation delay={0.75} offset={10} start="top 105%">

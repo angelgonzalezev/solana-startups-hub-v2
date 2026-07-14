@@ -5,7 +5,7 @@ const config: Config = {
   title: 'Orbital Docs',
   tagline: 'Discover startups orbiting the Solana ecosystem.',
   favicon: 'img/orbital-logo.png',
-  url: 'https://solanastartupshub.com',
+  url: 'https://orbitalhub.dev',
   baseUrl: '/docs/',
   organizationName: 'angelgonzalezev',
   projectName: 'solana-startups-hub-v2',
@@ -50,7 +50,7 @@ const config: Config = {
         { to: '/roadmap/current-roadmap', label: 'Roadmap', position: 'left' },
         { to: '/tasks/progress', label: 'Tasks', position: 'left' },
         { to: '/technology/stack', label: 'Technology', position: 'left' },
-        { href: 'https://solanastartupshub.com', label: 'App', position: 'right' },
+        { href: 'https://orbitalhub.dev', label: 'App', position: 'right' },
         {
           href: 'https://github.com/angelgonzalezev/solana-startups-hub-v2',
           label: 'GitHub',
@@ -81,13 +81,13 @@ const config: Config = {
         {
           title: 'Project',
           items: [
-            { label: 'App', href: 'https://solanastartupshub.com' },
-            { label: 'Marketplace', href: 'https://solanastartupshub.com/startups' },
+            { label: 'App', href: 'https://orbitalhub.dev' },
+            { label: 'Marketplace', href: 'https://orbitalhub.dev/startups' },
             { label: 'GitHub', href: 'https://github.com/angelgonzalezev/solana-startups-hub-v2' },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Orbital.`,
+      copyright: `Orbital HUB - By @angelgonzaleh`,
     },
     prism: {
       theme: {
