@@ -8,9 +8,9 @@ import type {
   VerificationCheckStatus,
   VerificationStatus,
 } from '@/interface/startup';
-import type { Json, ProfileRow, StartupRow } from '@/types/database';
+import type { Json, ProfileRow, PublicProfileRow, StartupRow } from '@/types/database';
 
-export const mapProfileRow = (row: ProfileRow): User => ({
+export const mapProfileRow = (row: ProfileRow | PublicProfileRow): User => ({
   avatar: row.avatar || undefined,
   bio: row.bio || undefined,
   displayName: row.display_name,
@@ -72,3 +72,6 @@ export const mapStartupRow = (row: StartupRow, ownerWallet?: string): Startup =>
 
 export const isStartupRow = (value: unknown): value is StartupRow =>
   Boolean(value && typeof value === 'object' && 'id' in value && 'owner_profile_id' in value);
+
+export const isPublicProfileRow = (value: unknown): value is PublicProfileRow =>
+  Boolean(value && typeof value === 'object' && 'wallet_address' in value && 'display_name' in value);

@@ -10,13 +10,11 @@ import StartupCard from '@/components/startup/StartupCard';
 import StartupFilters from '@/components/startup/StartupFilters';
 import { StartupGridSkeleton, EmptyState, ErrorState } from '@/components/shared/States';
 import RevealAnimation from '@/components/animation/RevealAnimation';
-import { useAuth } from '@/context/AuthContext';
 import { SlidersHorizontal, X } from 'lucide-react';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
 export default function StartupsPage() {
-  const { isAuthenticated } = useAuth();
   const [startups, setStartups] = useState<Startup[]>([]);
   const [filters, setFilters] = useState<IStartupFilters>({});
   const [debouncedSearch, setDebouncedSearch] = useState<string | undefined>(undefined);
@@ -68,13 +66,9 @@ export default function StartupsPage() {
     };
   }, [isFiltersOpen]);
 
+  // The listing RPC is public, so the fetch also runs for anonymous visitors:
+  // they see the real grid blurred behind the Access Protected overlay.
   useEffect(() => {
-    if (!isAuthenticated) {
-      setStartups([]);
-      setIsLoading(false);
-      return;
-    }
-
     let cancelled = false;
 
     (async () => {
@@ -100,7 +94,7 @@ export default function StartupsPage() {
     return () => {
       cancelled = true;
     };
-  }, [queryFilters, isAuthenticated, reloadKey]);
+  }, [queryFilters, reloadKey]);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
@@ -110,7 +104,7 @@ export default function StartupsPage() {
       />
 
       <main className="flex-grow pb-16 pt-[120px] md:pb-20 md:pt-[150px]">
-        <AuthGate>
+        <AuthGate mode="overlay">
           <div className="main-container">
             <div className="space-y-8 md:space-y-12">
               <RevealAnimation delay={0.1}>
@@ -133,7 +127,7 @@ export default function StartupsPage() {
                   <p className="text-sm font-semibold text-white">
                     {isLoading ? 'Loading startups' : `${startups.length} results`}
                   </p>
-                  <p className="mt-1 text-xs text-white/40">Filter the protected directory</p>
+                  <p className="mt-1 text-xs text-white/40">Filter the directory</p>
                 </div>
                 <button
                   type="button"

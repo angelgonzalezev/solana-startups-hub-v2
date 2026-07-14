@@ -1,5 +1,5 @@
 begin;
-select plan(8);
+select plan(14);
 
 insert into auth.users (
   instance_id, id, aud, role, email, encrypted_password,
@@ -70,11 +70,55 @@ select is(
 
 reset role;
 set local role anon;
-select throws_ok(
-  $$select * from public.list_published_startups()$$,
-  '42501',
-  'permission denied for function list_published_startups',
-  'anonymous users cannot execute marketplace RPCs'
+select set_config('request.jwt.claim.sub', '', true);
+
+select is(
+  (select count(*)::integer from public.list_published_startups()),
+  4,
+  'anonymous visitors can list the published marketplace'
+);
+
+select is(
+  (
+    select item->'mrr'
+    from public.list_published_startups() item
+    where item->>'name' = 'Neon Garden'
+  ),
+  'null'::jsonb,
+  'hidden MRR stays redacted for anonymous visitors'
+);
+
+select is(
+  (select public.get_accessible_startup('20000000-0000-4000-8000-000000000001')->>'name'),
+  'Solana Pay Pro',
+  'anonymous visitors can read a published startup detail'
+);
+
+select is(
+  (select public.get_accessible_startup('20000000-0000-4000-8000-000000000003')),
+  null,
+  'anonymous visitors cannot read a non-published startup'
+);
+
+-- Solana Pay Pro: the owner also appears in the team jsonb, so the two entries
+-- (owner/CEO wallet + Lead Dev wallet) must come back as exactly 2 profiles.
+select is(
+  (select count(*)::integer from public.get_startup_team_profiles('20000000-0000-4000-8000-000000000001')),
+  2,
+  'anonymous visitors get the deduplicated owner and team profiles of a published startup'
+);
+
+select is(
+  (select bool_and(not (item ? 'auth_user_id') and not (item ? 'id'))
+   from public.get_startup_team_profiles('20000000-0000-4000-8000-000000000001') item),
+  true,
+  'team profiles never expose auth_user_id or profile ids'
+);
+
+select is(
+  (select count(*)::integer from public.get_startup_team_profiles('20000000-0000-4000-8000-000000000003')),
+  0,
+  'team profiles of a non-published startup stay hidden from anonymous visitors'
 );
 
 select * from finish();
