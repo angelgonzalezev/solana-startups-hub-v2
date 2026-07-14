@@ -104,6 +104,20 @@ export const startupService = {
     });
   },
 
+  // Works without a session: published startups the wallet owns or collaborates
+  // on, for the public /u/<wallet> profile page.
+  listPublicStartupsByWallet: async (walletAddress: string): Promise<Startup[]> => {
+    const { data, error } = await getSupabaseBrowserClient().rpc('list_public_startups_by_wallet', {
+      wallet: walletAddress,
+    });
+
+    if (error) throw error;
+    return (data || []).flatMap((row) => {
+      const startup = mapRpcStartup(row);
+      return startup ? [startup] : [];
+    });
+  },
+
   getAccessibleStartupById: async (id: string): Promise<Startup | null> => {
     const { data, error } = await getSupabaseBrowserClient().rpc('get_accessible_startup', { startup_id: id });
     if (error) throw error;

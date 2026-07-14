@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import type { TeamMember } from '@/interface/startup';
 import { resolveMediaUrl } from '@/services/mediaService';
@@ -28,11 +29,11 @@ const StartupTeam: React.FC<StartupTeamProps> = ({ members }) => {
 
           return (
             <div key={member.walletAddress} className="group relative">
-              <button
-                type="button"
+              <Link
+                href={`/u/${member.walletAddress}`}
                 title={`${displayName} • ${member.role}`}
                 aria-label={`${displayName} - ${member.role}`}
-                className="relative size-14 shrink-0 overflow-hidden rounded-full border border-white/10 bg-[#0A0A0A] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50">
+                className="relative block size-14 shrink-0 overflow-hidden rounded-full border border-white/10 bg-[#0A0A0A] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50">
                 {avatarUrl ? (
                   <Image src={avatarUrl} alt={displayName} fill sizes="56px" className="object-cover" />
                 ) : (
@@ -40,7 +41,7 @@ const StartupTeam: React.FC<StartupTeamProps> = ({ members }) => {
                     {displayName.slice(0, 1).toUpperCase()}
                   </div>
                 )}
-              </button>
+              </Link>
               <span className="pointer-events-none absolute left-1/2 bottom-full z-20 mb-2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-black px-3 py-1 text-xs font-medium text-white opacity-0 shadow-2xl transition-opacity duration-150 group-hover:opacity-100">
                 {displayName}
               </span>

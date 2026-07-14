@@ -3,6 +3,7 @@
 import React from 'react';
 import { User } from '@/interface/user';
 import Image from 'next/image';
+import Link from 'next/link';
 import { resolveMediaUrl } from '@/services/mediaService';
 
 interface FounderContactProps {
@@ -22,8 +23,10 @@ const FounderContact: React.FC<FounderContactProps> = ({ founder }) => {
         <p className="text-white/40 text-sm uppercase tracking-widest font-bold">Reach out directly to the team</p>
       </div>
 
-      <div className="flex flex-col items-center gap-5 border-b border-white/10 pb-7 sm:flex-row sm:items-start">
-        <div className="relative size-20 flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black">
+      <Link
+        href={`/u/${founder.walletAddress}`}
+        className="group flex flex-col items-center gap-5 border-b border-white/10 pb-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 sm:flex-row sm:items-start">
+        <div className="relative size-20 flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black transition-colors group-hover:border-primary-500/50">
           {avatarUrl ? (
             <Image src={avatarUrl} alt={founder.displayName} fill sizes="80px" className="object-cover" />
           ) : (
@@ -33,11 +36,13 @@ const FounderContact: React.FC<FounderContactProps> = ({ founder }) => {
           )}
         </div>
         <div className="text-center sm:text-left space-y-1">
-          <h4 className="text-xl font-bold text-white">{founder.displayName}</h4>
+          <h4 className="text-xl font-bold text-white transition-colors group-hover:text-primary-400">
+            {founder.displayName}
+          </h4>
           <p className="text-primary-500 font-medium">{founder.jobTitle}</p>
           {founder.bio && <p className="text-white/60 text-sm max-w-[300px] pt-1">{founder.bio}</p>}
         </div>
-      </div>
+      </Link>
 
       <div className="space-y-4">
         {!hasSocials ? (

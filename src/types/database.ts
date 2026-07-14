@@ -63,7 +63,9 @@ export interface Database {
     Functions: {
       archive_startup: { Args: { startup_id: string }; Returns: Json };
       get_accessible_startup: { Args: { startup_id: string }; Returns: Json };
+      get_public_profile: { Args: { wallet: string }; Returns: Json };
       get_startup_team_profiles: { Args: { startup_id: string }; Returns: Json[] };
+      list_public_startups_by_wallet: { Args: { wallet: string }; Returns: Json[] };
       list_published_startups: {
         Args: {
           acquisition?: string | null;

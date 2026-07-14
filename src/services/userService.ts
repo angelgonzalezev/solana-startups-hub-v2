@@ -39,6 +39,16 @@ export const userService = {
     return data ? mapProfileRow(data) : null;
   },
 
+  // Works without a session: backs the public /u/<wallet> profile page.
+  getPublicProfile: async (walletAddress: string): Promise<User | null> => {
+    const { data, error } = await getSupabaseBrowserClient().rpc('get_public_profile', {
+      wallet: walletAddress,
+    });
+
+    if (error) throw error;
+    return isPublicProfileRow(data) ? mapProfileRow(data) : null;
+  },
+
   // Works without a session: the detail page is public, so the owner and team
   // profiles come from an RPC scoped to one startup instead of the profiles table.
   listStartupTeamProfiles: async (startupId: string): Promise<User[]> => {
