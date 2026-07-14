@@ -1,5 +1,17 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
+// Shape returned by get_startup_team_profiles: the public subset of a profile.
+export type PublicProfileRow = {
+  avatar: string | null;
+  bio: string | null;
+  display_name: string;
+  job_title: string;
+  joined_at: string;
+  telegram_handle: string | null;
+  twitter_handle: string | null;
+  wallet_address: string;
+};
+
 export type ProfileRow = {
   auth_user_id: string | null;
   avatar: string | null;
@@ -51,6 +63,7 @@ export interface Database {
     Functions: {
       archive_startup: { Args: { startup_id: string }; Returns: Json };
       get_accessible_startup: { Args: { startup_id: string }; Returns: Json };
+      get_startup_team_profiles: { Args: { startup_id: string }; Returns: Json[] };
       list_published_startups: {
         Args: {
           acquisition?: string | null;

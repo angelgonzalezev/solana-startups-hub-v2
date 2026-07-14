@@ -1,5 +1,5 @@
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
-import { mapProfileRow } from '@/lib/supabase/mappers';
+import { isPublicProfileRow, mapProfileRow } from '@/lib/supabase/mappers';
 import { validateProfile } from '@/utils/validation';
 import type { User } from '@/interface/user';
 import { KEEP_MEDIA, type MediaMutation } from '@/interface/media';
@@ -37,6 +37,17 @@ export const userService = {
 
     if (error) throw error;
     return data ? mapProfileRow(data) : null;
+  },
+
+  // Works without a session: the detail page is public, so the owner and team
+  // profiles come from an RPC scoped to one startup instead of the profiles table.
+  listStartupTeamProfiles: async (startupId: string): Promise<User[]> => {
+    const { data, error } = await getSupabaseBrowserClient().rpc('get_startup_team_profiles', {
+      startup_id: startupId,
+    });
+
+    if (error) throw error;
+    return (data || []).flatMap((row) => (isPublicProfileRow(row) ? [mapProfileRow(row)] : []));
   },
 
   listUsersByWallets: async (walletAddresses: string[]): Promise<User[]> => {

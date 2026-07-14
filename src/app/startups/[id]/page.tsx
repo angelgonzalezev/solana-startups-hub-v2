@@ -6,7 +6,6 @@ import { startupService } from '@/services/startupService';
 import { userService } from '@/services/userService';
 import { Startup } from '@/interface/startup';
 import { User } from '@/interface/user';
-import AuthGate from '@/components/shared/AuthGate';
 import NavbarOne from '@/components/shared/header/NavbarOne';
 import FooterOne from '@/components/shared/footer/FooterOne';
 import StartupDetailHeader from '@/components/startup/StartupDetailHeader';
@@ -21,10 +20,12 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
   const [startup, setStartup] = useState<Startup | null>(null);
   const [founder, setFounder] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { isAuthenticated, walletAddress } = useAuth();
+  const { walletAddress } = useAuth();
 
+  // Public page: the fetch runs with or without a session. It re-runs when the
+  // wallet changes because owners see fields (hidden MRR) that visitors don't.
   useEffect(() => {
-    if (!id || !isAuthenticated) {
+    if (!id) {
       setStartup(null);
       setFounder(null);
       setIsLoading(false);
@@ -38,11 +39,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
         const s = await startupService.getAccessibleStartupById(id);
         if (!cancelled) {
           if (s) {
-            // The owner wallet is fetched together with the team, in a single profiles query.
-            const wallets = Array.from(
-              new Set([s.ownerWallet, ...s.team.map((member) => member.walletAddress)].filter(Boolean)),
-            );
-            const profiles = await userService.listUsersByWallets(wallets);
+            const profiles = await userService.listStartupTeamProfiles(id);
             const profilesByWallet = new Map(profiles.map((profile) => [profile.walletAddress, profile]));
             const u = s.ownerWallet ? (profilesByWallet.get(s.ownerWallet) ?? null) : null;
             const enrichedTeam: TeamMember[] = s.team.map((member) => {
@@ -77,7 +74,7 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
     return () => {
       cancelled = true;
     };
-  }, [id, isAuthenticated, walletAddress]);
+  }, [id, walletAddress]);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
@@ -87,102 +84,100 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
       />
 
       <main className="flex-grow pb-16 pt-[120px] md:pb-20 md:pt-[150px]">
-        <AuthGate>
-          <div className="main-container">
-            {isLoading ? (
-              <StartupDetailSkeleton />
-            ) : !startup ? (
-              <ErrorState message="Startup not found or not available." />
-            ) : (
-              <div className="flex w-full min-w-0 flex-col gap-10 lg:grid lg:grid-cols-12 lg:gap-12">
-                {/* Main Content */}
-                <div className="w-full min-w-0 space-y-12 lg:col-span-8 lg:space-y-16">
-                  <RevealAnimation delay={0.1}>
-                    <StartupDetailHeader startup={startup} />
-                  </RevealAnimation>
+        <div className="main-container">
+          {isLoading ? (
+            <StartupDetailSkeleton />
+          ) : !startup ? (
+            <ErrorState message="Startup not found or not available." />
+          ) : (
+            <div className="flex w-full min-w-0 flex-col gap-10 lg:grid lg:grid-cols-12 lg:gap-12">
+              {/* Main Content */}
+              <div className="w-full min-w-0 space-y-12 lg:col-span-8 lg:space-y-16">
+                <RevealAnimation delay={0.1}>
+                  <StartupDetailHeader startup={startup} />
+                </RevealAnimation>
 
-                  <RevealAnimation delay={0.2}>
-                    <div className="w-full min-w-0 space-y-8">
-                      <h3 className="text-2xl font-bold tracking-tight text-white underline decoration-primary-500/30 decoration-4 underline-offset-8 sm:text-3xl">
-                        About the Project
-                      </h3>
-                      <div className="w-full max-w-full whitespace-pre-wrap break-words text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
-                        {startup.description}
+                <RevealAnimation delay={0.2}>
+                  <div className="w-full min-w-0 space-y-8">
+                    <h3 className="text-2xl font-bold tracking-tight text-white underline decoration-primary-500/30 decoration-4 underline-offset-8 sm:text-3xl">
+                      About the Project
+                    </h3>
+                    <div className="w-full max-w-full whitespace-pre-wrap break-words text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
+                      {startup.description}
+                    </div>
+                  </div>
+                </RevealAnimation>
+
+                {/* Team & Stack Section */}
+                <RevealAnimation delay={0.3}>
+                  <div className="grid w-full min-w-0 grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-12 md:pt-10">
+                    <div className="min-w-0 space-y-6">
+                      <h4 className="text-xl font-bold text-white uppercase tracking-widest">Tech Stack</h4>
+                      <div className="flex flex-wrap gap-3">
+                        {startup.techStack.map((tech) => (
+                          <span
+                            key={tech}
+                            className="rounded-xl border border-primary-500/20 bg-primary-500/5 px-3 py-2 font-medium text-primary-400">
+                            {tech}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                  </RevealAnimation>
-
-                  {/* Team & Stack Section */}
-                  <RevealAnimation delay={0.3}>
-                    <div className="grid w-full min-w-0 grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-12 md:pt-10">
-                      <div className="min-w-0 space-y-6">
-                        <h4 className="text-xl font-bold text-white uppercase tracking-widest">Tech Stack</h4>
-                        <div className="flex flex-wrap gap-3">
-                          {startup.techStack.map((tech) => (
-                            <span
-                              key={tech}
-                              className="rounded-xl border border-primary-500/20 bg-primary-500/5 px-3 py-2 font-medium text-primary-400">
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="min-w-0 space-y-6">
-                        <h4 className="text-xl font-bold text-white uppercase tracking-widest">Categories</h4>
-                        <div className="flex flex-wrap gap-3">
-                          {startup.category.map((cat) => (
-                            <span
-                              key={cat}
-                              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 font-medium text-white/60">
-                              {cat}
-                            </span>
-                          ))}
-                        </div>
+                    <div className="min-w-0 space-y-6">
+                      <h4 className="text-xl font-bold text-white uppercase tracking-widest">Categories</h4>
+                      <div className="flex flex-wrap gap-3">
+                        {startup.category.map((cat) => (
+                          <span
+                            key={cat}
+                            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 font-medium text-white/60">
+                            {cat}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                  </RevealAnimation>
-                </div>
+                  </div>
+                </RevealAnimation>
+              </div>
 
-                {/* Sidebar */}
-                <aside className="w-full min-w-0 space-y-8 lg:col-span-4">
-                  <RevealAnimation delay={0.4}>
-                    <div className="space-y-6 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 sm:p-6">
-                      <h4 className="text-lg font-bold text-white uppercase tracking-widest">Key Metrics</h4>
-                      <div className="space-y-4">
-                        <MetricItem label="Stage" value={startup.stage} />
-                        <MetricItem label="Team Size" value={`${startup.teamSize} members`} />
-                        {startup.showMrr && startup.mrr !== undefined && (
-                          <div
-                            className="flex min-w-0 flex-col gap-1 py-3 border-b border-white/5 last:border-0 sm:flex-row sm:items-center sm:justify-between"
-                            suppressHydrationWarning>
-                            <span className="text-white/40 text-sm font-medium uppercase tracking-wider">MRR</span>
-                            <span className="break-words text-white font-bold tracking-tight">
-                              ${startup.mrr.toLocaleString()}
-                            </span>
-                          </div>
-                        )}
-                        <div className="flex min-w-0 flex-col gap-1 py-3 border-b border-white/5 last:border-0 sm:flex-row sm:items-center sm:justify-between">
-                          <span className="text-white/40 text-sm font-medium uppercase tracking-wider">Launched</span>
-                          <span className="break-words text-white font-bold tracking-tight" suppressHydrationWarning>
-                            {new Date(startup.createdAt).toLocaleDateString()}
+              {/* Sidebar */}
+              <aside className="w-full min-w-0 space-y-8 lg:col-span-4">
+                <RevealAnimation delay={0.4}>
+                  <div className="space-y-6 rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 sm:p-6">
+                    <h4 className="text-lg font-bold text-white uppercase tracking-widest">Key Metrics</h4>
+                    <div className="space-y-4">
+                      <MetricItem label="Stage" value={startup.stage} />
+                      <MetricItem label="Team Size" value={`${startup.teamSize} members`} />
+                      {startup.showMrr && startup.mrr !== undefined && (
+                        <div
+                          className="flex min-w-0 flex-col gap-1 py-3 border-b border-white/5 last:border-0 sm:flex-row sm:items-center sm:justify-between"
+                          suppressHydrationWarning>
+                          <span className="text-white/40 text-sm font-medium uppercase tracking-wider">MRR</span>
+                          <span className="break-words text-white font-bold tracking-tight">
+                            ${startup.mrr.toLocaleString()}
                           </span>
                         </div>
+                      )}
+                      <div className="flex min-w-0 flex-col gap-1 py-3 border-b border-white/5 last:border-0 sm:flex-row sm:items-center sm:justify-between">
+                        <span className="text-white/40 text-sm font-medium uppercase tracking-wider">Launched</span>
+                        <span className="break-words text-white font-bold tracking-tight" suppressHydrationWarning>
+                          {new Date(startup.createdAt).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
-                  </RevealAnimation>
+                  </div>
+                </RevealAnimation>
 
-                  <RevealAnimation delay={0.5}>
-                    <StartupTeam members={startup.team} />
-                  </RevealAnimation>
+                <RevealAnimation delay={0.5}>
+                  <StartupTeam members={startup.team} />
+                </RevealAnimation>
 
-                  <RevealAnimation delay={0.6}>
-                    <FounderContact founder={founder} />
-                  </RevealAnimation>
-                </aside>
-              </div>
-            )}
-          </div>
-        </AuthGate>
+                <RevealAnimation delay={0.6}>
+                  <FounderContact founder={founder} />
+                </RevealAnimation>
+              </aside>
+            </div>
+          )}
+        </div>
       </main>
 
       <FooterOne className="bg-black border-t border-white/10" />
