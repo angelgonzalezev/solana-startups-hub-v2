@@ -5,6 +5,7 @@ import { useSplToken } from '@solana/react-hooks';
 import { useAuth } from '@/context/AuthContext';
 import { Startup } from '@/interface/startup';
 import { isCurrentlyFeatured } from '@/utils/featured';
+import FeaturedSuccessModal from './FeaturedSuccessModal';
 import {
   FEATURED_LISTING_BASE_UNITS,
   FEATURED_LISTING_DAYS,
@@ -32,6 +33,7 @@ const FeatureStartupButton: React.FC<FeatureStartupButtonProps> = ({ startup, on
   const { send } = useSplToken(USDC_MINT);
   const [phase, setPhase] = useState<Phase>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<{ txSignature: string; featuredUntil?: string } | null>(null);
   const resumeAttempted = useRef(false);
 
   const featured = isCurrentlyFeatured(startup);
@@ -41,9 +43,14 @@ const FeatureStartupButton: React.FC<FeatureStartupButtonProps> = ({ startup, on
       setPhase('verifying');
       setError(null);
       try {
-        await paymentService.verifyPayment({ sku: FEATURED_LISTING_SKU, targetId: startup.id, txSignature });
+        const result = await paymentService.verifyPayment({
+          sku: FEATURED_LISTING_SKU,
+          targetId: startup.id,
+          txSignature,
+        });
         paymentService.clearPendingSignature(FEATURED_LISTING_SKU, startup.id);
         setPhase('done');
+        setSuccess({ txSignature, featuredUntil: result.featuredUntil ?? undefined });
         await onFeatured?.();
       } catch (verifyError) {
         if (verifyError instanceof PaymentVerificationError && !verifyError.retriable) {
@@ -127,6 +134,15 @@ const FeatureStartupButton: React.FC<FeatureStartupButtonProps> = ({ startup, on
         <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-center font-medium text-red-500">
           {error}
         </div>
+      )}
+
+      {success && (
+        <FeaturedSuccessModal
+          startupName={startup.name}
+          txSignature={success.txSignature}
+          featuredUntil={success.featuredUntil ?? startup.featuredUntil}
+          onClose={() => setSuccess(null)}
+        />
       )}
     </div>
   );

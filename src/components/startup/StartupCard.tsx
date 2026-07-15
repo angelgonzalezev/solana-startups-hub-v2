@@ -16,12 +16,18 @@ interface StartupCardProps {
 
 const StartupCard: React.FC<StartupCardProps> = ({ startup, index = 0 }) => {
   const logoUrl = resolveMediaUrl(startup.logo);
+  const featured = isCurrentlyFeatured(startup);
 
   return (
     <RevealAnimation delay={0.1 * (index % 4)}>
-      <article className="group flex h-full flex-col overflow-hidden rounded-[30px] border border-white/5 bg-[#0A0A0A] p-5 transition-colors duration-300 hover:border-primary-500/30 sm:p-6 lg:p-8">
+      <article
+        className={`group flex h-full flex-col overflow-hidden rounded-[30px] border p-5 transition-colors duration-300 sm:p-6 lg:p-8 ${
+          featured
+            ? 'border-amber-400/40 bg-gradient-to-b from-amber-400/[0.08] via-[#0A0A0A] to-[#0A0A0A] shadow-[0_0_35px_-12px_rgba(251,191,36,0.45)] hover:border-amber-400/70'
+            : 'border-white/5 bg-[#0A0A0A] hover:border-primary-500/30'
+        }`}>
         <div className="mb-5 flex min-h-6 flex-wrap items-center gap-2">
-          {isCurrentlyFeatured(startup) && <FeaturedBadge />}
+          {featured && <FeaturedBadge />}
           {startup.isRaising && <MarketSignalBadge type="raising" />}
           <MarketSignalBadge type="acquisition" status={startup.acquisitionStatus} />
         </div>
