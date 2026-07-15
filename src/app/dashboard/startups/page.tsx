@@ -57,6 +57,12 @@ export default function MyStartupsPage() {
     }
   };
 
+  // Errors propagate to MyStartupCard, which surfaces them inline.
+  const handleDelete = async (id: string) => {
+    await startupService.deleteStartup(id);
+    await refreshStartups({ silent: true });
+  };
+
   const publishedStartups = useMemo(() => startups.filter((s) => s.listingStatus !== 'archived'), [startups]);
   const archivedStartups = useMemo(() => startups.filter((s) => s.listingStatus === 'archived'), [startups]);
   const visibleStartups = activeTab === 'published' ? publishedStartups : archivedStartups;
@@ -123,6 +129,7 @@ export default function MyStartupsPage() {
                     key={startup.id}
                     startup={startup}
                     onArchive={handleArchive}
+                    onDelete={handleDelete}
                     onFeatured={() => refreshStartups({ silent: true })}
                   />
                 ))}

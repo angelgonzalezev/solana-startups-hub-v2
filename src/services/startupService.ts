@@ -224,6 +224,16 @@ export const startupService = {
     return startup;
   },
 
+  // Permanent deletion; the RPC only accepts archived startups owned by the
+  // caller, so archiving stays the mandatory first step.
+  deleteStartup: async (id: string): Promise<void> => {
+    const { data, error } = await getSupabaseBrowserClient().rpc('delete_startup', { startup_id: id });
+    if (error) throw error;
+    // The row is gone; remove its managed logo from storage afterwards. Team
+    // avatars are profile media and stay with their owners.
+    if (isStartupRow(data)) await cleanupReplacedMedia(data.logo);
+  },
+
   publishStartup: async (id: string): Promise<Startup> => {
     const profile = await getCurrentProfile();
     const { data, error } = await getSupabaseBrowserClient().rpc('publish_startup', { startup_id: id });

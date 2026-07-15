@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Startup } from '@/interface/startup';
 import { VerificationStatusBadge, ListingStatusBadge, StartupStageBadge, FeaturedBadge } from '../shared/Badges';
+import ConfirmModal from '../shared/ConfirmModal';
 import { isCurrentlyFeatured } from '@/utils/featured';
 import { useAuth } from '@/context/AuthContext';
 import { useFeaturedPurchase } from '@/hooks/useFeaturedPurchase';
@@ -16,17 +17,35 @@ import { resolveMediaUrl } from '@/services/mediaService';
 interface MyStartupCardProps {
   startup: Startup;
   onArchive?: (id: string) => void;
+  onDelete?: (id: string) => Promise<void> | void;
   onFeatured?: () => Promise<void> | void;
 }
 
-const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onFeatured }) => {
+const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onDelete, onFeatured }) => {
   const logoUrl = resolveMediaUrl(startup.logo);
   const router = useRouter();
   const { isWalletConnected } = useAuth();
   const { phase, error, success, buy, dismissSuccess, busy, available } = useFeaturedPurchase(startup, onFeatured);
   const featured = isCurrentlyFeatured(startup);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const goToStartup = () => router.push(`/startups/${startup.id}`);
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await onDelete?.(startup.id);
+      setConfirmingDelete(false);
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : 'Unable to delete the startup.');
+      setConfirmingDelete(false);
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-stretch">
@@ -64,6 +83,7 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onFea
             {featured && <FeaturedBadge />}
           </div>
           {error && <p className="text-sm font-medium text-red-500">{error}</p>}
+          {deleteError && <p className="text-sm font-medium text-red-500">{deleteError}</p>}
         </div>
 
         <div
@@ -80,11 +100,17 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onFea
             className="btn btn-white-dark btn-sm w-full hover:btn-primary">
             Verification
           </Link>
-          {startup.listingStatus !== 'archived' && (
+          {startup.listingStatus !== 'archived' ? (
             <button
               onClick={() => onArchive && onArchive(startup.id)}
               className="btn btn-white-dark btn-sm w-full border-red-500/10 text-red-500/60 hover:btn-red hover:text-red-500">
               Archive
+            </button>
+          ) : (
+            <button
+              onClick={() => setConfirmingDelete(true)}
+              className="btn btn-sm w-full border-red-500/30 bg-red-500/10 text-red-500 hover:bg-red-500/20">
+              Delete
             </button>
           )}
         </div>
@@ -111,6 +137,17 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onFea
             </span>
           )}
         </button>
+      )}
+
+      {confirmingDelete && (
+        <ConfirmModal
+          title={`Delete ${startup.name}?`}
+          message="This will permanently delete the startup and everything attached to it. This action cannot be undone."
+          confirmLabel={deleting ? 'Deleting…' : 'Delete forever'}
+          busy={deleting}
+          onConfirm={handleDelete}
+          onCancel={() => setConfirmingDelete(false)}
+        />
       )}
 
       {success && (

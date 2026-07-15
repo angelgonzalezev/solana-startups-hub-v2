@@ -65,6 +65,7 @@ export interface Database {
     Enums: Record<string, never>;
     Functions: {
       archive_startup: { Args: { startup_id: string }; Returns: Json };
+      delete_startup: { Args: { startup_id: string }; Returns: Json };
       get_accessible_startup: { Args: { startup_id: string }; Returns: Json };
       get_public_profile: { Args: { wallet: string }; Returns: Json };
       get_public_profile_by_username: { Args: { name: string }; Returns: Json };
