@@ -10,6 +10,7 @@ import FeaturedSuccessModal from './FeaturedSuccessModal';
 import { FEATURED_LISTING_DAYS, FEATURED_LISTING_PRICE_USDC } from '@/services/paymentService';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { resolveMediaUrl } from '@/services/mediaService';
 
 interface MyStartupCardProps {
@@ -20,14 +21,25 @@ interface MyStartupCardProps {
 
 const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onFeatured }) => {
   const logoUrl = resolveMediaUrl(startup.logo);
+  const router = useRouter();
   const { isWalletConnected } = useAuth();
   const { phase, error, success, buy, dismissSuccess, busy, available } = useFeaturedPurchase(startup, onFeatured);
   const featured = isCurrentlyFeatured(startup);
 
+  const goToStartup = () => router.push(`/startups/${startup.id}`);
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-stretch">
+      {/* The whole card is the "view" action; inner actions stop propagation
+          so they do not navigate as well. */}
       <article
-        className={`flex min-w-0 flex-grow flex-col items-center gap-5 border border-white/5 bg-[#0A0A0A] p-5 transition-colors hover:border-white/10 sm:flex-row sm:items-start sm:p-6 lg:items-center ${
+        role="link"
+        tabIndex={0}
+        onClick={goToStartup}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') goToStartup();
+        }}
+        className={`flex min-w-0 flex-grow cursor-pointer flex-col items-center gap-5 border border-white/5 bg-[#0A0A0A] p-5 transition-colors hover:border-primary-500/30 sm:flex-row sm:items-start sm:p-6 lg:items-center ${
           available ? 'rounded-tl-[30px] rounded-tr-[30px] sm:rounded-bl-[30px] sm:rounded-tr-none' : 'rounded-[30px]'
         }`}>
         <div className="relative size-20 flex-shrink-0 overflow-hidden rounded-2xl border border-white/5 bg-black sm:size-24">
@@ -54,10 +66,10 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onFea
           {error && <p className="text-sm font-medium text-red-500">{error}</p>}
         </div>
 
-        <div className="flex w-full flex-col gap-2 border-t border-white/10 pt-5 sm:w-auto sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
-          <Link href={`/startups/${startup.id}`} className="btn btn-white-dark btn-sm w-full hover:btn-primary">
-            View
-          </Link>
+        <div
+          onClick={(event) => event.stopPropagation()}
+          onKeyDown={(event) => event.stopPropagation()}
+          className="flex w-full flex-col gap-2 border-t border-white/10 pt-5 sm:w-auto sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
           <Link
             href={`/dashboard/startups/${startup.id}/edit`}
             className="btn btn-white-dark btn-sm w-full hover:btn-primary">
