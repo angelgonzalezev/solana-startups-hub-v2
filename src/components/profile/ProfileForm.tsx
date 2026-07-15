@@ -103,9 +103,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSave }) => {
         </div>
         {getError('username') ? (
           <p className="text-red-500 text-xs mt-1 ml-1">{getError('username')}</p>
+        ) : formData.username ? (
+          <p className="text-white/30 text-xs mt-1 ml-1">Your public page: orbitalhub.dev/{formData.username}</p>
         ) : (
           <p className="text-white/30 text-xs mt-1 ml-1">
-            Your public page: orbitalhub.dev/{formData.username || 'username'}
+            Claim a username to unlock your public page at orbitalhub.dev/username
           </p>
         )}
       </div>

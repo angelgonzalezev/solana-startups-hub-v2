@@ -13,9 +13,8 @@ import Link from 'next/link';
 import RevealAnimation from '@/components/animation/RevealAnimation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, ExternalLink } from 'lucide-react';
+import { AtSign, ChevronRight, ExternalLink } from 'lucide-react';
 import { resolveMediaUrl } from '@/services/mediaService';
-import { profilePath } from '@/utils/profilePath';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -114,12 +113,19 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                {walletAddress && (
+                {user?.username ? (
                   <Link
-                    href={profilePath({ username: user?.username, walletAddress })}
+                    href={`/${user.username}`}
                     className="btn btn-md inline-flex w-full items-center justify-center gap-2 border border-primary-500/30 bg-primary-500/10 text-primary-400 transition hover:border-primary-500/50 hover:bg-primary-500/20">
                     <ExternalLink aria-hidden="true" className="size-4" />
                     View Public Page
+                  </Link>
+                ) : (
+                  <Link
+                    href="/dashboard/profile"
+                    className="btn btn-md inline-flex w-full items-center justify-center gap-2 border border-dashed border-primary-500/40 bg-transparent text-primary-400 transition hover:border-primary-500/70 hover:bg-primary-500/10">
+                    <AtSign aria-hidden="true" className="size-4" />
+                    Claim your username
                   </Link>
                 )}
                 <Link href="/dashboard/profile" className="btn btn-white-dark btn-md w-full border-white/10">
