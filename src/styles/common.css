@@ -395,3 +395,12 @@ Common Styles all over the sites
   width: 100%;
   height: auto; 
 } */
+
+/* ==========ORBITAL GLOBE TOOLTIP========== */
+/* float-tooltip (globe.gl) injects its own dark background and padding;
+   the tooltip card provides its own styling, so the wrapper stays bare. */
+.float-tooltip-kap {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}

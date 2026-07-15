@@ -90,8 +90,21 @@ const MobileMenu = () => {
                         'flex min-h-14 items-center gap-3 rounded-md px-4 text-base font-medium transition-colors',
                         isActive ? 'bg-white/5 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white',
                       )}>
-                      <Icon aria-hidden="true" className={cn('size-5', isActive ? 'text-white' : 'text-white/35')} />
-                      {item.label}
+                      <Icon
+                        aria-hidden="true"
+                        className={cn(
+                          'size-5',
+                          isActive ? 'text-white' : 'text-white/35',
+                          item.highlight && 'text-[#9945FF]',
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          item.highlight &&
+                            'bg-gradient-to-r from-[#9945FF] to-[#14F195] bg-clip-text font-semibold text-transparent',
+                        )}>
+                        {item.label}
+                      </span>
                     </Link>
                   </li>
                 );

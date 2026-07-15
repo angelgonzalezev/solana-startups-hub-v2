@@ -35,7 +35,12 @@ const NavItemLink = ({ item, variant = 'default', isActive = false }: NavItemLin
         isActive &&
           'border-stroke-2 dark:border-stroke-7 bg-accent/20 dark:bg-transparent text-secondary dark:text-accent',
       )}>
-      <span>{item.label}</span>
+      <span
+        className={cn(
+          item.highlight && 'bg-gradient-to-r from-[#9945FF] to-[#14F195] bg-clip-text font-semibold text-transparent',
+        )}>
+        {item.label}
+      </span>
     </Link>
   );
 };

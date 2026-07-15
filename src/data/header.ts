@@ -1,11 +1,12 @@
 import type { LucideIcon } from 'lucide-react';
-import { CircleHelp, Info, LayoutDashboard, LayoutGrid, Rocket, Store, UserRound } from 'lucide-react';
+import { CircleHelp, Globe, Info, LayoutDashboard, LayoutGrid, Rocket, Store, UserRound } from 'lucide-react';
 
 export interface NavigationItem {
   id: string;
   label: string;
   href: string;
   icon?: LucideIcon;
+  highlight?: boolean;
 }
 
 export const navigationItems: NavigationItem[] = [
@@ -27,6 +28,13 @@ export const navigationItems: NavigationItem[] = [
     href: '/#features',
     icon: LayoutGrid,
   },
+  {
+    id: 'orbital',
+    label: 'The Orbital',
+    href: '/orbital',
+    icon: Globe,
+    highlight: true,
+  },
 ];
 
 export const platformNavigationItems: NavigationItem[] = [
@@ -35,6 +43,13 @@ export const platformNavigationItems: NavigationItem[] = [
     label: 'Marketplace',
     href: '/startups',
     icon: Store,
+  },
+  {
+    id: 'orbital',
+    label: 'The Orbital',
+    href: '/orbital',
+    icon: Globe,
+    highlight: true,
   },
   {
     id: 'dashboard',
