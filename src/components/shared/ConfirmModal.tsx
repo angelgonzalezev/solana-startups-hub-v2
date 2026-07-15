@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 interface ConfirmModalProps {
   title: string;
@@ -21,7 +22,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ title, message, confirmLabe
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [busy, onCancel]);
 
-  return (
+  // Portal to <body> so ancestors with transforms cannot trap the fixed
+  // overlay inside their own box.
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
@@ -46,7 +49,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ title, message, confirmLabe
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

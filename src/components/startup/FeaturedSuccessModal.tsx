@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { FEATURED_LISTING_DAYS, USDC_MINT } from '@/services/paymentService';
 
 const DEVNET_USDC_MINT = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
@@ -33,7 +34,9 @@ const FeaturedSuccessModal: React.FC<FeaturedSuccessModalProps> = ({
     ? new Date(featuredUntil).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
     : null;
 
-  return (
+  // Portal to <body> so ancestors with transforms cannot trap the fixed
+  // overlay inside their own box.
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
       <div className="relative w-full max-w-md space-y-6 rounded-[30px] border border-amber-400/25 bg-[#0A0A0A] p-8 text-center shadow-[0_0_60px_-15px_rgba(251,191,36,0.45)]">
@@ -70,7 +73,8 @@ const FeaturedSuccessModal: React.FC<FeaturedSuccessModalProps> = ({
           Close
         </button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 
