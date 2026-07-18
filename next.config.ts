@@ -38,7 +38,7 @@ const contentSecurityPolicy = [
   'frame-src https://auth.privy.io https://verify.walletconnect.com https://verify.walletconnect.org https://challenges.cloudflare.com https://crypto-js.stripe.com https://buy.moonpay.com',
   // apple.com/google.com are the funding modal's Apple Pay / Google Pay
   // availability probes; moonpay/stripe are the onramp quote APIs.
-  `connect-src 'self' https://auth.privy.io https://api.privy.io https://*.rpc.privy.systems wss://*.rpc.privy.systems ${rpcOrigin} ${rpcWssOrigin} ${supabaseOrigin} wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://explorer-api.walletconnect.com https://api.relay.link https://photon.komoot.io https://apple.com https://www.apple.com https://google.com https://www.google.com https://api.moonpay.com https://api.stripe.com`,
+  `connect-src 'self' https://auth.privy.io https://api.privy.io https://*.rpc.privy.systems wss://*.rpc.privy.systems ${rpcOrigin} ${rpcWssOrigin} ${supabaseOrigin} wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://explorer-api.walletconnect.com https://api.relay.link https://photon.komoot.io https://apple.com https://www.apple.com https://google.com https://www.google.com https://pay.google.com https://api.moonpay.com https://api.stripe.com`,
   "worker-src 'self' blob:",
   "manifest-src 'self'",
 ]
