@@ -159,10 +159,7 @@ export default function VerificationPage({ params }: { params: Promise<{ id: str
                 />
                 <CheckItem label="Valid Website URL" isDone={!!startup.website} />
                 <CheckItem label="Valid X (Twitter) URL" isDone={!!startup.twitter} />
-                <CheckItem
-                  label="Categories & Tech Stack"
-                  isDone={startup.category.length > 0 && startup.techStack.length > 0}
-                />
+                <CheckItem label="At Least One Category" isDone={startup.category.length > 0} />
               </div>
 
               <div className="flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:flex-wrap">
