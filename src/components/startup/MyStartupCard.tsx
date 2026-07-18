@@ -26,10 +26,8 @@ interface MyStartupCardProps {
 const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onDelete, onFeatured }) => {
   const logoUrl = resolveMediaUrl(startup.logo);
   const router = useRouter();
-  const { phase, error, success, buy, dismissError, dismissSuccess, busy, available, canPay } = useFeaturedPurchase(
-    startup,
-    onFeatured,
-  );
+  const { phase, error, success, buy, dismissError, dismissSuccess, busy, available, canPay, fundPayerWallet } =
+    useFeaturedPurchase(startup, onFeatured);
   const featured = isCurrentlyFeatured(startup);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
   const [actionBusy, setActionBusy] = useState(false);
@@ -165,7 +163,13 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onDel
         />
       )}
 
-      <PaymentProgressModal phase={phase} error={error} startupName={startup.name} onDismissError={dismissError} />
+      <PaymentProgressModal
+        phase={phase}
+        error={error}
+        startupName={startup.name}
+        onDismissError={dismissError}
+        onFundWallet={fundPayerWallet}
+      />
 
       {success && (
         <FeaturedSuccessModal

@@ -3,6 +3,7 @@
 import DashboardShell from '@/components/shared/DashboardShell';
 import AuthGate from '@/components/shared/AuthGate';
 import ProfileForm from '@/components/profile/ProfileForm';
+import WalletPanel from '@/components/profile/WalletPanel';
 import { useAuth } from '@/context/AuthContext';
 import { useOnboarding } from '@/context/OnboardingContext';
 import { isProfileMinimumComplete } from '@/utils/validation';
@@ -44,7 +45,8 @@ export default function ProfilePage() {
             </p>
           )
         }>
-        <div className="max-w-4xl">
+        <div className="max-w-4xl space-y-6">
+          <WalletPanel />
           <ProfileForm initialData={user} onSave={handleSave} />
         </div>
       </DashboardShell>

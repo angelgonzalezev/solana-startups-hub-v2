@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSignAndSendTransaction, useWallets } from '@privy-io/react-auth/solana';
+import { useFundWallet, useSignAndSendTransaction, useWallets } from '@privy-io/react-auth/solana';
 import { useAuth } from '@/context/AuthContext';
+import { isPrivyStandardWallet } from '@/lib/privy/config';
 import {
   buildUsdcTransferTransaction,
   getUsdcBalanceBaseUnits,
@@ -11,6 +12,7 @@ import {
 import { Startup } from '@/interface/startup';
 import {
   FEATURED_LISTING_BASE_UNITS,
+  FEATURED_LISTING_PRICE_USDC,
   FEATURED_LISTING_SKU,
   PaymentVerificationError,
   paymentService,
@@ -35,6 +37,7 @@ export const useFeaturedPurchase = (startup: Startup, onFeatured?: () => Promise
   const { walletAddress } = useAuth();
   const { wallets } = useWallets();
   const { signAndSendTransaction } = useSignAndSendTransaction();
+  const { fundWallet } = useFundWallet();
   const [phase, setPhase] = useState<FeaturedPurchasePhase>('idle');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<FeaturedPurchaseSuccess | null>(null);
@@ -43,6 +46,10 @@ export const useFeaturedPurchase = (startup: Startup, onFeatured?: () => Promise
   // Pay with the profile's identity wallet when Privy has it, else whatever
   // wallet the session offers - the server accepts any linked wallet as payer.
   const payerWallet = wallets.find((wallet) => wallet.address === walletAddress) ?? wallets[0] ?? null;
+  const payerIsEmbedded = payerWallet ? isPrivyStandardWallet(payerWallet.standardWallet) : false;
+  // Gas sponsorship (Privy pays the network fee for embedded wallets). Off
+  // until the Privy team activates it for the app; flip the env flag then.
+  const sponsorFees = payerIsEmbedded && process.env.NEXT_PUBLIC_ENABLE_GAS_SPONSORSHIP === 'true';
 
   const verify = useCallback(
     async (txSignature: string) => {
@@ -106,6 +113,7 @@ export const useFeaturedPurchase = (startup: Startup, onFeatured?: () => Promise
       });
       const { signature } = await signAndSendTransaction({
         chain: 'solana:mainnet',
+        options: sponsorFees ? { sponsor: true } : undefined,
         transaction,
         wallet: payerWallet,
       });
@@ -125,6 +133,23 @@ export const useFeaturedPurchase = (startup: Startup, onFeatured?: () => Promise
     buy,
     dismissError: () => setError(null),
     dismissSuccess: () => setSuccess(null),
+    // Opens Privy's funding flow (card onramp, exchange or wallet transfer)
+    // for the paying wallet - the way out of the underfunded error.
+    fundPayerWallet: payerWallet
+      ? () =>
+          void fundWallet({
+            address: payerWallet.address,
+            options: { amount: String(FEATURED_LISTING_PRICE_USDC), asset: 'USDC' },
+          }).catch((fundFailure) => {
+            setError(
+              /not enabled/i.test(String(fundFailure?.message))
+                ? 'Funding is not available yet. Please send USDC to your wallet from an exchange or another wallet.'
+                : fundFailure instanceof Error
+                  ? fundFailure.message
+                  : 'Unable to open the funding flow.',
+            );
+          })
+      : null,
     busy: phase === 'paying' || phase === 'verifying',
     // Paying only needs a Privy session wallet - no Wallet Standard
     // connection state involved.

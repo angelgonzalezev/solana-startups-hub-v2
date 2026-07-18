@@ -77,6 +77,22 @@ function treasuryReceived(tx: RpcTransaction, treasuryWallet: string, usdcMint: 
   return sum(tx.meta.postTokenBalances) - sum(tx.meta.preTokenBalances);
 }
 
+// The wallets whose USDC balance decreased in this transaction - whoever
+// actually funded the payment. Checked instead of the fee payer so gas
+// sponsorship (Privy pays the network fee) does not break attribution.
+function usdcSenders(tx: RpcTransaction, usdcMint: string): string[] {
+  const byOwner = new Map<string, bigint>();
+  const add = (balances: TokenBalance[] | undefined, sign: bigint) => {
+    for (const b of balances ?? []) {
+      if (b.mint !== usdcMint || !b.owner) continue;
+      byOwner.set(b.owner, (byOwner.get(b.owner) ?? 0n) + sign * BigInt(b.uiTokenAmount.amount));
+    }
+  };
+  add(tx.meta.preTokenBalances, -1n);
+  add(tx.meta.postTokenBalances, 1n);
+  return [...byOwner.entries()].filter(([, delta]) => delta < 0n).map(([owner]) => owner);
+}
+
 // Unlike the telegram-* functions this one is called from the browser, so it
 // must answer the CORS preflight. The wildcard origin is fine: the JWT in the
 // Authorization header is what gates access, not the origin.
@@ -174,14 +190,15 @@ Deno.serve(async (req) => {
     return json(400, { error: 'tx_failed' });
   }
 
-  // The fee payer (first static account key) must be one of the wallets
-  // linked to the paying profile — paying from someone else's session is
-  // rejected. wallet_address is the fallback for profiles adopted before
-  // their first wallet sync.
-  const feePayer = tx.transaction.message.accountKeys[0];
+  // Whoever sent the USDC must be one of the wallets linked to the paying
+  // profile — paying from someone else's session is rejected. Derived from
+  // the token balance deltas, not the fee payer, so sponsored transactions
+  // (Privy as fee payer) attribute correctly. wallet_address is the fallback
+  // for profiles adopted before their first wallet sync.
   const allowedPayers = new Set([profile.wallet_address, ...(profile.wallets ?? [])]);
-  if (!allowedPayers.has(feePayer)) {
-    console.warn('Payer mismatch', { signature: txSignature, feePayer, profile: profile.profile_id });
+  const payerWallet = usdcSenders(tx, usdcMint).find((owner) => allowedPayers.has(owner));
+  if (!payerWallet) {
+    console.warn('Payer mismatch', { signature: txSignature, profile: profile.profile_id });
     return json(403, { error: 'payer_mismatch' });
   }
 
@@ -193,7 +210,7 @@ Deno.serve(async (req) => {
 
   const { data, error } = await admin.rpc('apply_verified_payment', {
     in_tx_signature: txSignature,
-    in_payer_wallet: feePayer,
+    in_payer_wallet: payerWallet,
     in_profile_id: profile.profile_id,
     in_sku: sku,
     in_target_id: targetId,

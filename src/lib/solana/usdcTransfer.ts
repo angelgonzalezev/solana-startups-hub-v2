@@ -61,6 +61,11 @@ export const buildUsdcTransferTransaction = async ({
 
 export const signatureBytesToBase58 = (signature: Uint8Array): string => getBase58Decoder().decode(signature);
 
+export const getSolBalanceLamports = async (owner: string): Promise<bigint> => {
+  const { value } = await createSolanaRpc(getBrowserRpcEndpoint()).getBalance(address(owner)).send();
+  return BigInt(value);
+};
+
 // Balance of the owner's USDC associated token account, in base units. A
 // missing account simply means zero.
 export const getUsdcBalanceBaseUnits = async (owner: string, mint: string): Promise<bigint> => {

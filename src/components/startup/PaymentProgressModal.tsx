@@ -9,6 +9,9 @@ interface PaymentProgressModalProps {
   error: string | null;
   startupName: string;
   onDismissError: () => void;
+  // Opens Privy's funding flow for the paying wallet; shown on payment
+  // errors so an underfunded wallet has a way out.
+  onFundWallet?: (() => void) | null;
 }
 
 // Overlay for the featured-listing payment: a spinner while the wallet
@@ -16,7 +19,13 @@ interface PaymentProgressModalProps {
 // something fails. Success is handled by FeaturedSuccessModal; while the
 // payment is in flight the modal cannot be dismissed (closing mid-payment
 // would only hide, not cancel, an on-chain transfer).
-const PaymentProgressModal: React.FC<PaymentProgressModalProps> = ({ phase, error, startupName, onDismissError }) => {
+const PaymentProgressModal: React.FC<PaymentProgressModalProps> = ({
+  phase,
+  error,
+  startupName,
+  onDismissError,
+  onFundWallet,
+}) => {
   const busy = phase === 'paying' || phase === 'verifying';
   const open = busy || Boolean(error);
 
@@ -62,9 +71,21 @@ const PaymentProgressModal: React.FC<PaymentProgressModalProps> = ({ phase, erro
               <h3 className="text-2xl font-bold text-white">Payment not completed</h3>
               <p className="text-white/70">{error}</p>
             </div>
-            <button onClick={onDismissError} className="btn btn-white-dark btn-md w-full">
-              Close
-            </button>
+            <div className="space-y-2">
+              {onFundWallet && (
+                <button
+                  onClick={() => {
+                    onDismissError();
+                    onFundWallet();
+                  }}
+                  className="btn btn-primary btn-md w-full shadow-lg shadow-primary-500/20">
+                  Add funds to your wallet
+                </button>
+              )}
+              <button onClick={onDismissError} className="btn btn-white-dark btn-md w-full">
+                Close
+              </button>
+            </div>
           </>
         )}
       </div>

@@ -17,10 +17,8 @@ interface FeatureStartupButtonProps {
 // purchase flow itself lives in useFeaturedPurchase (paid through Privy, so
 // no wallet-connection state is involved).
 const FeatureStartupButton: React.FC<FeatureStartupButtonProps> = ({ startup, onFeatured }) => {
-  const { phase, error, success, buy, dismissError, dismissSuccess, busy, available, canPay } = useFeaturedPurchase(
-    startup,
-    onFeatured,
-  );
+  const { phase, error, success, buy, dismissError, dismissSuccess, busy, available, canPay, fundPayerWallet } =
+    useFeaturedPurchase(startup, onFeatured);
 
   const featured = isCurrentlyFeatured(startup);
 
@@ -63,7 +61,13 @@ const FeatureStartupButton: React.FC<FeatureStartupButtonProps> = ({ startup, on
         </div>
       )}
 
-      <PaymentProgressModal phase={phase} error={error} startupName={startup.name} onDismissError={dismissError} />
+      <PaymentProgressModal
+        phase={phase}
+        error={error}
+        startupName={startup.name}
+        onDismissError={dismissError}
+        onFundWallet={fundPayerWallet}
+      />
 
       {success && (
         <FeaturedSuccessModal
