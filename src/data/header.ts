@@ -13,7 +13,7 @@ export const navigationItems: NavigationItem[] = [
   {
     id: 'overview',
     label: 'Overview',
-    href: '/#about',
+    href: '/#product-preview',
     icon: Info,
   },
   {

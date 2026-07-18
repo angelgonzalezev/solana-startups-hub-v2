@@ -3,7 +3,10 @@ import Image from 'next/image';
 import RevealAnimation from '../animation/RevealAnimation';
 
 const ProductPreview = () => (
-  <section className="border-b border-white/10 bg-black py-16 md:py-24" aria-labelledby="product-preview-title">
+  <section
+    id="product-preview"
+    className="border-b border-white/10 bg-black py-16 md:py-24"
+    aria-labelledby="product-preview-title">
     <div className="main-container">
       <div className="mb-10 grid gap-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.6fr)] lg:items-end lg:gap-20">
         <div className="space-y-4">
