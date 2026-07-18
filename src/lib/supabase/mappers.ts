@@ -84,3 +84,6 @@ export const isStartupRow = (value: unknown): value is StartupRow =>
 
 export const isPublicProfileRow = (value: unknown): value is PublicProfileRow =>
   Boolean(value && typeof value === 'object' && 'wallet_address' in value && 'display_name' in value);
+
+export const isProfileRow = (value: unknown): value is ProfileRow =>
+  Boolean(value && typeof value === 'object' && 'id' in value && 'wallet_address' in value && 'privy_did' in value);

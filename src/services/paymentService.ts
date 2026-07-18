@@ -1,5 +1,5 @@
+import { getSupabaseAccessToken } from '@/lib/auth/tokenBridge';
 import { getSupabaseConfig } from '@/lib/supabase/config';
-import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 // The single source of truth for prices lives server-side in the verify-payment
 // edge function; these mirror it for building the transfer and rendering copy.
@@ -55,16 +55,14 @@ const pendingKey = (sku: string, targetId: string) => `orbital:pending-payment:$
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const callVerifyPayment = async (input: VerifyPaymentInput) => {
-  const {
-    data: { session },
-  } = await getSupabaseBrowserClient().auth.getSession();
-  if (!session) throw new Error('Authentication required.');
+  const accessToken = await getSupabaseAccessToken();
+  if (!accessToken) throw new Error('Authentication required.');
 
   const { url, publishableKey } = getSupabaseConfig();
   return fetch(`${url}/functions/v1/verify-payment`, {
     body: JSON.stringify(input),
     headers: {
-      Authorization: `Bearer ${session.access_token}`,
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
       apikey: publishableKey,
     },

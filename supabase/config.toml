@@ -16,18 +16,15 @@ major_version = 15
 enabled = true
 sql_paths = ["./seed.sql"]
 
+# Supabase Auth is retired: identity lives in Privy and sessions are JWTs
+# minted by /api/auth/session with the project secret. auth stays enabled only
+# because the platform requires the service; nothing signs in through it.
 [auth]
 enabled = true
 site_url = "http://localhost:3000"
 additional_redirect_urls = ["http://localhost:3000/**", "http://127.0.0.1:3000/**"]
 jwt_expiry = 3600
-enable_signup = true
-
-[auth.rate_limit]
-web3 = 30
-
-[auth.web3.solana]
-enabled = true
+enable_signup = false
 
 [studio]
 enabled = true
@@ -46,7 +43,8 @@ verify_jwt = false
 [functions.telegram-review-callback]
 verify_jwt = false
 
-# Called by the browser with the user's JWT — that is what binds the payment to
-# a wallet, so the platform JWT check stays on.
+# Called by the browser with the app-minted JWT (Privy exchange). The platform
+# check only understands Supabase Auth sessions, so the function verifies the
+# token itself with jose + AUTH_JWT_SECRET.
 [functions.verify-payment]
-verify_jwt = true
+verify_jwt = false

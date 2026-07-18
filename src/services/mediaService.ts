@@ -1,3 +1,4 @@
+import { getAuthenticatedProfileId } from '@/lib/auth/tokenBridge';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { getSupabaseConfig } from '@/lib/supabase/config';
 
@@ -40,14 +41,12 @@ export const resolveMediaUrl = (value?: string | null): string | undefined => {
   return `${getSupabaseConfig().url}/storage/v1/object/public/${MEDIA_BUCKET}/${encodedPath}`;
 };
 
-const requireAuthUserId = async (): Promise<string> => {
-  const {
-    data: { user },
-    error,
-  } = await getSupabaseBrowserClient().auth.getUser();
-
-  if (error || !user) throw new Error('Authentication required.');
-  return user.id;
+// Upload paths are namespaced by the profile id (the minted JWT's subject),
+// which is what the storage RLS policies check ownership against.
+const requireProfileId = async (): Promise<string> => {
+  const profileId = await getAuthenticatedProfileId();
+  if (!profileId) throw new Error('Authentication required.');
+  return profileId;
 };
 
 const uploadWebp = async (path: string, blob: Blob): Promise<string> => {
@@ -72,12 +71,12 @@ export const mediaService = {
   },
 
   uploadProfileAvatar: async (blob: Blob): Promise<string> => {
-    const authUserId = await requireAuthUserId();
-    return uploadWebp(`${authUserId}/profiles/avatar/${createAssetId()}.webp`, blob);
+    const profileId = await requireProfileId();
+    return uploadWebp(`${profileId}/profiles/avatar/${createAssetId()}.webp`, blob);
   },
 
   uploadStartupLogo: async (startupId: string, blob: Blob): Promise<string> => {
-    const authUserId = await requireAuthUserId();
-    return uploadWebp(`${authUserId}/startups/${startupId}/logo/${createAssetId()}.webp`, blob);
+    const profileId = await requireProfileId();
+    return uploadWebp(`${profileId}/startups/${startupId}/logo/${createAssetId()}.webp`, blob);
   },
 };

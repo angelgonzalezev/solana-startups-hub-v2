@@ -1,9 +1,13 @@
+import { getSupabaseAccessToken } from '@/lib/auth/tokenBridge';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 const runDevVerification = async (startupId: string, action: 'approve' | 'reject', reason?: string) => {
+  const accessToken = await getSupabaseAccessToken();
+  if (!accessToken) throw new Error('Authentication required.');
+
   const response = await fetch('/api/dev/verification', {
     body: JSON.stringify({ action, reason, startupId }),
-    headers: { 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
     method: 'POST',
   });
 

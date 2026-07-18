@@ -2,13 +2,18 @@
 
 import type { ReactNode } from 'react';
 import { ThemeProvider } from '@/components/shared/ThemeProvider';
+import { PrivyProviderWrapper } from '@/components/shared/PrivyProviderWrapper';
+import { PrivyWalletBridge } from '@/components/shared/PrivyWalletBridge';
 import { SolanaProvider } from '@/components/shared/SolanaProvider';
 import { AuthProvider, type InitialAuthState } from '@/context/AuthContext';
 
 export const AppProviders = ({ children, initialAuth }: { children: ReactNode; initialAuth: InitialAuthState }) => (
   <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-    <SolanaProvider>
-      <AuthProvider initialAuth={initialAuth}>{children}</AuthProvider>
-    </SolanaProvider>
+    <PrivyProviderWrapper>
+      <SolanaProvider>
+        <PrivyWalletBridge />
+        <AuthProvider initialAuth={initialAuth}>{children}</AuthProvider>
+      </SolanaProvider>
+    </PrivyProviderWrapper>
   </ThemeProvider>
 );

@@ -1,3 +1,4 @@
+import { getAuthenticatedProfileId } from '@/lib/auth/tokenBridge';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { isPublicProfileRow, mapProfileRow } from '@/lib/supabase/mappers';
 import { validateProfile } from '@/utils/validation';
@@ -15,15 +16,14 @@ const cleanupReplacedMedia = async (path?: string | null) => {
 
 export const userService = {
   getCurrentUser: async (): Promise<User | null> => {
-    const supabase = getSupabaseBrowserClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const profileId = await getAuthenticatedProfileId();
+    if (!profileId) return null;
 
-    if (authError || !user) return null;
-
-    const { data, error } = await supabase.from('profiles').select('*').eq('auth_user_id', user.id).maybeSingle();
+    const { data, error } = await getSupabaseBrowserClient()
+      .from('profiles')
+      .select('*')
+      .eq('id', profileId)
+      .maybeSingle();
     if (error) throw error;
     return data ? mapProfileRow(data) : null;
   },
@@ -116,16 +116,13 @@ export const userService = {
     if (errors.length > 0) throw new Error(errors[0].message);
 
     const supabase = getSupabaseBrowserClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-    if (authError || !user) throw new Error('Authentication required.');
+    const profileId = await getAuthenticatedProfileId();
+    if (!profileId) throw new Error('Authentication required.');
 
     const { data: currentProfile, error: profileError } = await supabase
       .from('profiles')
       .select('*')
-      .eq('auth_user_id', user.id)
+      .eq('id', profileId)
       .single();
     if (profileError) throw profileError;
 
@@ -152,7 +149,7 @@ export const userService = {
         twitter_handle: input.twitterHandle || null,
         username: input.username?.trim().toLowerCase() || null,
       })
-      .eq('auth_user_id', user.id)
+      .eq('id', profileId)
       .select('*')
       .single();
 

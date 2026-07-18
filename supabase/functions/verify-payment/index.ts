@@ -8,10 +8,14 @@
 // stopped by the unique tx_signature in the payments ledger.
 //
 // Unlike the telegram-* functions this one IS called by the browser with the
-// user's JWT (verify_jwt = true in config.toml): the JWT is what proves which
-// wallet must have paid.
+// user's JWT — a token minted by the app's Privy exchange (sub = profile id),
+// verified here with jose against AUTH_JWT_SECRET (verify_jwt = false in
+// config.toml because the platform check is tied to Supabase Auth sessions).
+// The JWT is what proves which profile is paying; the fee payer must then be
+// one of that profile's linked wallets.
 
 import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { jwtVerify } from 'npm:jose@6';
 
 // Prices live here, not in the client and not (yet) in a table. Amounts are in
 // USDC base units (6 decimals).
@@ -99,21 +103,24 @@ Deno.serve(async (req) => {
   const rpcUrl = Deno.env.get('SOLANA_RPC_URL');
   const treasuryWallet = Deno.env.get('TREASURY_WALLET');
   const usdcMint = Deno.env.get('USDC_MINT');
-  if (!rpcUrl || !treasuryWallet || !usdcMint) {
-    console.error('SOLANA_RPC_URL, TREASURY_WALLET or USDC_MINT secret is not set');
+  const jwtSecret = Deno.env.get('AUTH_JWT_SECRET');
+  if (!rpcUrl || !treasuryWallet || !usdcMint || !jwtSecret) {
+    console.error('SOLANA_RPC_URL, TREASURY_WALLET, USDC_MINT or AUTH_JWT_SECRET secret is not set');
     return json(500, { error: 'missing_config' });
   }
 
-  // The platform already checked the JWT signature (verify_jwt), but the
-  // profile lookup below is what binds the request to a wallet.
-  const authHeader = req.headers.get('Authorization') ?? '';
-  const userClient = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!, {
-    global: { headers: { Authorization: authHeader } },
-  });
-  const {
-    data: { user },
-  } = await userClient.auth.getUser();
-  if (!user) {
+  // The minted JWT's subject is the paying profile id.
+  const bearer = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
+  let profileId: string;
+  try {
+    const { payload } = await jwtVerify(bearer, new TextEncoder().encode(jwtSecret), {
+      algorithms: ['HS256'],
+      audience: 'authenticated',
+      issuer: 'orbital-privy-exchange',
+    });
+    if (!payload.sub) throw new Error('missing sub');
+    profileId = payload.sub;
+  } catch {
     return json(401, { error: 'unauthorized' });
   }
 
@@ -135,18 +142,21 @@ Deno.serve(async (req) => {
     return json(400, { error: 'unknown_sku' });
   }
 
-  // service_role deliberately has no direct table reads in this schema, so the
-  // profile comes through the user's own client. That is safe as the payer
-  // anchor: wallet_address is excluded from the authenticated update grant, so
-  // it can only ever be the wallet that signed in.
-  const { data: profile, error: profileError } = await userClient
-    .from('profiles')
-    .select('id, wallet_address')
-    .eq('auth_user_id', user.id)
-    .single();
-  if (profileError || !profile) {
+  // service_role has no direct table access in this schema, so the payer
+  // allowlist (identity wallet + Privy-linked wallets, synced by the session
+  // exchange) comes through a definer function keyed by the JWT subject.
+  const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+  const { data: payerContext, error: payerError } = await admin.rpc('get_payment_payer_context', {
+    in_profile_id: profileId,
+  });
+  if (payerError) {
+    console.error('get_payment_payer_context failed', payerError);
+    return json(500, { error: 'grant_failed' });
+  }
+  if (!payerContext) {
     return json(404, { error: 'profile_not_found' });
   }
+  const profile = payerContext as { profile_id: string; wallet_address: string; wallets: string[] };
 
   let tx: RpcTransaction | null;
   try {
@@ -164,11 +174,14 @@ Deno.serve(async (req) => {
     return json(400, { error: 'tx_failed' });
   }
 
-  // The fee payer (first static account key) must be the wallet bound to the
-  // authenticated profile — paying from someone else's session is rejected.
+  // The fee payer (first static account key) must be one of the wallets
+  // linked to the paying profile — paying from someone else's session is
+  // rejected. wallet_address is the fallback for profiles adopted before
+  // their first wallet sync.
   const feePayer = tx.transaction.message.accountKeys[0];
-  if (feePayer !== profile.wallet_address) {
-    console.warn('Payer mismatch', { signature: txSignature, feePayer, profile: profile.id });
+  const allowedPayers = new Set([profile.wallet_address, ...(profile.wallets ?? [])]);
+  if (!allowedPayers.has(feePayer)) {
+    console.warn('Payer mismatch', { signature: txSignature, feePayer, profile: profile.profile_id });
     return json(403, { error: 'payer_mismatch' });
   }
 
@@ -178,11 +191,10 @@ Deno.serve(async (req) => {
     return json(400, { error: 'insufficient_amount' });
   }
 
-  const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
   const { data, error } = await admin.rpc('apply_verified_payment', {
     in_tx_signature: txSignature,
-    in_payer_wallet: profile.wallet_address,
-    in_profile_id: profile.id,
+    in_payer_wallet: feePayer,
+    in_profile_id: profile.profile_id,
     in_sku: sku,
     in_target_id: targetId,
     in_amount_base_units: Number(received),

@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { reconnectPaymentWallet } from '@/components/shared/PrivyWalletBridge';
 import { Startup } from '@/interface/startup';
 import { isCurrentlyFeatured } from '@/utils/featured';
 import { useFeaturedPurchase } from '@/hooks/useFeaturedPurchase';
@@ -18,8 +19,20 @@ interface FeatureStartupButtonProps {
 const FeatureStartupButton: React.FC<FeatureStartupButtonProps> = ({ startup, onFeatured }) => {
   const { isWalletConnected } = useAuth();
   const { phase, error, success, buy, dismissSuccess, busy, available } = useFeaturedPurchase(startup, onFeatured);
+  const [isReconnecting, setIsReconnecting] = useState(false);
 
   const featured = isCurrentlyFeatured(startup);
+
+  const reconnect = async () => {
+    setIsReconnecting(true);
+    try {
+      await reconnectPaymentWallet();
+    } catch {
+      // Silent: the button stays available for another attempt.
+    } finally {
+      setIsReconnecting(false);
+    }
+  };
 
   if (!available) return null;
 
@@ -52,7 +65,15 @@ const FeatureStartupButton: React.FC<FeatureStartupButtonProps> = ({ startup, on
           className="btn btn-xl w-full border-amber-400/30 bg-amber-400/10 text-amber-400 hover:bg-amber-400/20 disabled:opacity-50 sm:w-auto">
           {buttonLabel}
         </button>
-        {!isWalletConnected && <p className="text-sm text-white/40">Reconnect your wallet to pay.</p>}
+        {!isWalletConnected && (
+          <button
+            type="button"
+            onClick={() => void reconnect()}
+            disabled={isReconnecting}
+            className="btn w-full border-white/15 text-white/70 hover:border-white/30 disabled:opacity-50 sm:w-auto">
+            {isReconnecting ? 'Connecting wallet…' : 'Reconnect wallet to pay'}
+          </button>
+        )}
       </div>
 
       {phase === 'done' && (

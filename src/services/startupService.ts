@@ -1,3 +1,4 @@
+import { getAuthenticatedProfileId } from '@/lib/auth/tokenBridge';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { isStartupRow, mapStartupRow } from '@/lib/supabase/mappers';
 import { validateStartup } from '@/utils/validation';
@@ -16,13 +17,10 @@ export type StartupFilters = {
 };
 
 const getCurrentProfile = async () => {
-  const supabase = getSupabaseBrowserClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error('Authentication required.');
+  const profileId = await getAuthenticatedProfileId();
+  if (!profileId) throw new Error('Authentication required.');
 
-  const { data, error } = await supabase.from('profiles').select('*').eq('auth_user_id', user.id).single();
+  const { data, error } = await getSupabaseBrowserClient().from('profiles').select('*').eq('id', profileId).single();
   if (error) throw error;
   return data;
 };

@@ -50,7 +50,15 @@ const SmoothScrollProvider = ({ children }: Readonly<SmoothScrollingProps>) => {
   }, [lenis, pathname]);
 
   return (
-    <ReactLenis root options={{ duration: 1.1 }}>
+    <ReactLenis
+      root
+      options={{
+        duration: 1.1,
+        // Privy's modal renders in its own portal with privy-prefixed ids;
+        // without this, Lenis hijacks the wheel and scrolls the page behind
+        // the modal instead of the wallet list inside it.
+        prevent: (node) => Boolean(node?.closest?.('[id^="privy"]')),
+      }}>
       {children}
     </ReactLenis>
   );

@@ -50,7 +50,8 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
             </RevealAnimation>
             <RevealAnimation delay={0.4}>
               <p className="text-white/60 text-lg">
-                Please connect your Solana wallet to explore startups, view details, and manage your projects.
+                Sign in with your email, Google account, or Solana wallet to explore startups, view details, and manage
+                your projects.
               </p>
             </RevealAnimation>
           </div>

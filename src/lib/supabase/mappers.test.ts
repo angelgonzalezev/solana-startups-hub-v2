@@ -10,6 +10,7 @@ const profileRow: ProfileRow = {
   id: 'profile-id',
   job_title: 'Founder',
   joined_at: '2026-01-01T00:00:00Z',
+  privy_did: 'did:privy:test-user',
   telegram_handle: null,
   twitter_handle: 'adasol',
   updated_at: '2026-01-01T00:00:00Z',

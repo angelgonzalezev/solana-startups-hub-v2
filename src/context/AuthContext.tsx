@@ -1,10 +1,19 @@
 'use client';
 
+import { useLogin, usePrivy, type User as PrivyUser } from '@privy-io/react-auth';
+import { useCreateWallet } from '@privy-io/react-auth/solana';
 import { useWalletConnection } from '@solana/react-hooks';
 import { useRouter } from 'next/navigation';
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { getSupabaseBrowserClient } from '@/lib/supabase/client';
-import { isSupabaseConfigured } from '@/lib/supabase/config';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import {
+  clearBridgeSession,
+  registerSessionRefresher,
+  setBridgeSession,
+  unregisterSessionRefresher,
+  type BridgeSession,
+} from '@/lib/auth/tokenBridge';
+import { isPrivyConfigured } from '@/lib/privy/config';
+import { mapProfileRow } from '@/lib/supabase/mappers';
 import { userService } from '@/services/userService';
 import type { User } from '@/interface/user';
 
@@ -37,187 +46,261 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const errorMessage = (error: unknown) => {
-  const message = error instanceof Error ? error.message : 'Wallet authentication failed.';
+class SessionExchangeError extends Error {
+  status: number;
 
-  if (/web3 provider is disabled/i.test(message)) {
-    return 'Wallet sign-in is disabled in Supabase. Enable Authentication → Providers → Web3 in the Supabase dashboard, then try again.';
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
   }
+}
 
-  return message;
+// Trades the caller's Privy access token for a minted Supabase JWT plus the
+// resolved profile. This is the only server round-trip in the login flow: it
+// verifies the Privy session, adopts/creates the profile, and syncs the
+// linked-wallet set used by payment verification.
+const exchangePrivySession = async (accessToken: string): Promise<BridgeSession> => {
+  const response = await fetch('/api/auth/session', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    method: 'POST',
+  });
+  const result = (await response.json().catch(() => null)) as
+    | (BridgeSession & { error?: string })
+    | { error?: string }
+    | null;
+  if (!response.ok || !result || !('token' in result)) {
+    throw new SessionExchangeError(result?.error || 'Unable to start the session.', response.status);
+  }
+  return result;
 };
 
-export const AuthProvider = ({
-  children,
-  initialAuth,
-}: {
-  children: React.ReactNode;
-  initialAuth: InitialAuthState;
-}) => {
+const userCancelledLogin = (error: unknown) => /exited|cancel|closed|abandoned/i.test(String(error));
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const hasSolanaWallet = (privyUser: PrivyUser | null) =>
+  Boolean(
+    privyUser?.linkedAccounts?.some(
+      (account) => account.type === 'wallet' && 'chainType' in account && account.chainType === 'solana',
+    ),
+  );
+
+// Right after signup the embedded Solana wallet may still be mid-creation, so
+// the exchange can briefly answer 422 ("no wallet yet"). Retrying is the fix;
+// logging out here would abort Privy's own wallet creation mid-flight.
+const WALLET_WAIT_ATTEMPTS = 8;
+const WALLET_WAIT_DELAY_MS = 1500;
+
+const PrivyAuthProvider = ({ children, initialAuth }: { children: React.ReactNode; initialAuth: InitialAuthState }) => {
   const router = useRouter();
+  const { authenticated, getAccessToken, logout, ready, user: privyUser } = usePrivy();
+  const { createWallet } = useCreateWallet();
   const walletConnection = useWalletConnection();
   const [walletAddress, setWalletAddress] = useState<string | null>(initialAuth.walletAddress);
   const [user, setUser] = useState<User | null>(initialAuth.profile);
   const [isLoading, setIsLoading] = useState(!initialAuth.resolved);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const pendingSignIn = useRef(false);
+  const restoreAttempted = useRef(false);
+  // Login completion and session restore can both try to run the exchange
+  // (OAuth redirects re-enter through both paths); only one may act at a time.
   const authenticationInFlight = useRef(false);
 
-  const refreshProfile = useCallback(async () => {
-    const profile = await userService.getCurrentUser();
-    setUser(profile);
-    setWalletAddress(profile?.walletAddress || null);
-    return profile;
+  const applySession = useCallback((session: BridgeSession) => {
+    setBridgeSession(session);
+    setUser(mapProfileRow(session.profile));
+    setWalletAddress(session.profile.wallet_address);
   }, []);
 
-  const completeSignIn = useCallback(async () => {
-    const wallet = walletConnection.wallet;
-    if (!pendingSignIn.current || authenticationInFlight.current || !wallet) return;
-    if (!wallet.signMessage) {
-      pendingSignIn.current = false;
-      setIsSigningIn(false);
-      setError('This wallet does not support message signing required by SIWS.');
-      return;
-    }
-
-    authenticationInFlight.current = true;
-    setError(null);
-
-    try {
-      const address = wallet.account.address.toString();
-      const supabase = getSupabaseBrowserClient();
-      const { error: signInError } = await supabase.auth.signInWithWeb3({
-        chain: 'solana',
-        options: {
-          url: `${window.location.origin}/`,
-        },
-        statement: 'Sign in to Orbital.',
-        wallet: {
-          publicKey: { toBase58: () => address },
-          signMessage: (message) => wallet.signMessage?.(message),
-        },
-      });
-      if (signInError) throw signInError;
-
-      const profileResponse = await fetch('/api/auth/profile', {
-        body: JSON.stringify({ walletAddress: address }),
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
-      });
-      const profileResult = (await profileResponse.json().catch(() => null)) as { error?: string } | null;
-      if (!profileResponse.ok) throw new Error(profileResult?.error || 'Unable to create wallet profile.');
-
-      await refreshProfile();
-      router.replace('/startups');
-    } catch (signInFailure) {
-      await getSupabaseBrowserClient()
-        .auth.signOut()
-        .catch(() => undefined);
-      setError(errorMessage(signInFailure));
-    } finally {
-      authenticationInFlight.current = false;
-      pendingSignIn.current = false;
-      setIsSigningIn(false);
-      setIsLoading(false);
-    }
-  }, [refreshProfile, router, walletConnection.wallet]);
-
-  useEffect(() => {
-    void completeSignIn();
-  }, [completeSignIn]);
-
-  useEffect(() => {
-    if (!isSupabaseConfigured()) {
-      setIsLoading(false);
-      return;
-    }
-
-    const supabase = getSupabaseBrowserClient();
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_OUT') {
-        setUser(null);
-        setWalletAddress(null);
-        setIsLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
+  const resetAuthState = useCallback(() => {
+    clearBridgeSession();
+    setUser(null);
+    setWalletAddress(null);
   }, []);
 
-  useEffect(() => {
-    const connectedAddress = walletConnection.wallet?.account.address.toString();
-    if (connectedAddress && walletAddress && connectedAddress !== walletAddress && !isSigningIn) {
-      void getSupabaseBrowserClient().auth.signOut();
-      setError('The connected wallet changed. Sign the message again to continue.');
-    }
-  }, [isSigningIn, walletAddress, walletConnection.wallet]);
+  const runExchange = useCallback(async () => {
+    const accessToken = await getAccessToken();
+    if (!accessToken) throw new SessionExchangeError('The Privy session has expired.', 401);
+    return exchangePrivySession(accessToken);
+  }, [getAccessToken]);
 
-  const signIn = useCallback(
-    async (connectorId?: string) => {
-      if (!isSupabaseConfigured()) {
-        setError('Supabase is not configured. Add the required environment variables.');
-        return;
-      }
-
-      setError(null);
-      setIsSigningIn(true);
-      pendingSignIn.current = true;
-
-      try {
-        if (!walletConnection.wallet) {
-          if (!connectorId) throw new Error('Select a Solana wallet.');
-          await walletConnection.connect(connectorId);
-        } else {
-          await completeSignIn();
+  const runExchangeWaitingForWallet = useCallback(
+    async (ensureWallet?: () => Promise<unknown>) => {
+      for (let attempt = 1; ; attempt += 1) {
+        try {
+          return await runExchange();
+        } catch (exchangeFailure) {
+          const waitingForWallet = exchangeFailure instanceof SessionExchangeError && exchangeFailure.status === 422;
+          if (!waitingForWallet || attempt >= WALLET_WAIT_ATTEMPTS) throw exchangeFailure;
+          // No Solana wallet on the account yet: nudge creation again (throws
+          // harmlessly if one is already being created) and give it time.
+          await ensureWallet?.().catch((createError) => {
+            console.error('[auth] embedded wallet creation failed:', createError);
+          });
+          await wait(WALLET_WAIT_DELAY_MS);
         }
-      } catch (connectionError) {
-        pendingSignIn.current = false;
-        setIsSigningIn(false);
-        setError(errorMessage(connectionError));
       }
     },
-    [completeSignIn, walletConnection],
+    [runExchange],
   );
+
+  // The token bridge calls this whenever supabase-js needs a fresh JWT (first
+  // authed query after load, expiry mid-session). It must never throw.
+  useEffect(() => {
+    const refresher = async () => {
+      try {
+        return await runExchange();
+      } catch {
+        return null;
+      }
+    };
+    registerSessionRefresher(refresher);
+    return () => unregisterSessionRefresher(refresher);
+  }, [runExchange]);
+
+  const completeLogin = useCallback(
+    async (loggedInUser: PrivyUser | null, wasAlreadyAuthenticated: boolean) => {
+      if (authenticationInFlight.current) return;
+      authenticationInFlight.current = true;
+      setError(null);
+      try {
+        // Belt and braces over createOnLogin: if the account still has no
+        // Solana wallet, create the embedded one explicitly before the
+        // exchange (silent - wallet UIs are disabled).
+        const ensureWallet = hasSolanaWallet(loggedInUser) ? undefined : () => createWallet();
+        if (ensureWallet) {
+          await ensureWallet().catch((createError) => {
+            console.error('[auth] embedded wallet creation failed:', createError);
+          });
+        }
+        const session = await runExchangeWaitingForWallet(ensureWallet);
+        applySession(session);
+        if (!wasAlreadyAuthenticated) router.replace('/startups');
+      } catch (exchangeFailure) {
+        console.error('[auth] session exchange failed:', exchangeFailure);
+        // A failed exchange leaves a Privy session with no app profile; log it
+        // out so the retry starts clean (and a 409 wallet conflict is not
+        // retried against a half-open session).
+        resetAuthState();
+        await logout().catch(() => undefined);
+        setError(
+          exchangeFailure instanceof SessionExchangeError ? exchangeFailure.message : 'Unable to start the session.',
+        );
+      } finally {
+        authenticationInFlight.current = false;
+        setIsSigningIn(false);
+        setIsLoading(false);
+      }
+    },
+    [applySession, createWallet, logout, resetAuthState, router, runExchangeWaitingForWallet],
+  );
+
+  const { login } = useLogin({
+    onComplete: ({ user: loggedInUser, wasAlreadyAuthenticated }) => {
+      void completeLogin(loggedInUser, wasAlreadyAuthenticated);
+    },
+    onError: (loginError) => {
+      setIsSigningIn(false);
+      if (!userCancelledLogin(loginError)) {
+        setError('Sign-in was interrupted. Please try again.');
+      }
+    },
+  });
+
+  // Session restore on reload: the server already hydrated the profile from
+  // the privy-token cookie when it could; once the Privy client is ready we
+  // reconcile - a live Privy session refreshes the bridge lazily, a dead one
+  // clears any stale server-hydrated state.
+  //
+  // During an OAuth redirect (?privy_oauth_* in the URL) this must stand
+  // aside: useLogin's onComplete owns that flow, and racing it here once
+  // logged users out mid wallet-creation.
+  useEffect(() => {
+    if (!ready || isSigningIn || restoreAttempted.current || authenticationInFlight.current) return;
+    if (typeof window !== 'undefined' && window.location.search.includes('privy_oauth_')) return;
+    restoreAttempted.current = true;
+
+    if (!authenticated) {
+      if (initialAuth.walletAddress) resetAuthState();
+      setIsLoading(false);
+      return;
+    }
+
+    if (user) {
+      setIsLoading(false);
+      return;
+    }
+
+    void (async () => {
+      if (authenticationInFlight.current) return;
+      authenticationInFlight.current = true;
+      try {
+        const ensureWallet = hasSolanaWallet(privyUser) ? undefined : () => createWallet();
+        const session = await runExchangeWaitingForWallet(ensureWallet);
+        applySession(session);
+      } catch (restoreFailure) {
+        console.error('[auth] session restore failed:', restoreFailure);
+        resetAuthState();
+        await logout().catch(() => undefined);
+      } finally {
+        authenticationInFlight.current = false;
+        setIsLoading(false);
+      }
+    })();
+  }, [
+    applySession,
+    authenticated,
+    createWallet,
+    initialAuth.walletAddress,
+    isSigningIn,
+    logout,
+    privyUser,
+    ready,
+    resetAuthState,
+    runExchangeWaitingForWallet,
+    user,
+  ]);
+
+  const signIn = useCallback(async () => {
+    if (!ready || authenticated) return;
+    setError(null);
+    setIsSigningIn(true);
+    login();
+  }, [authenticated, login, ready]);
 
   const signOut = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      await getSupabaseBrowserClient().auth.signOut();
+      clearBridgeSession();
       await walletConnection.disconnect().catch(() => undefined);
+      await logout().catch(() => undefined);
       setUser(null);
       setWalletAddress(null);
     } finally {
+      restoreAttempted.current = true;
       setIsLoading(false);
     }
-  }, [walletConnection]);
+  }, [logout, walletConnection]);
 
-  const availableWallets = useMemo<WalletOption[]>(
-    () =>
-      walletConnection.connectors.map((connector) => ({
-        icon: connector.icon,
-        id: connector.id,
-        name: connector.name,
-        ready: connector.ready !== false,
-      })),
-    [walletConnection.connectors],
-  );
+  const refreshUser = useCallback(async () => {
+    const profile = await userService.getCurrentUser();
+    if (profile) {
+      setUser(profile);
+      setWalletAddress(profile.walletAddress);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        availableWallets,
+        availableWallets: [],
         error,
         isAuthenticated: Boolean(walletAddress),
         isLoading,
         isSigningIn,
         isWalletConnected: Boolean(walletConnection.wallet),
-        refreshUser: async () => {
-          await refreshProfile();
-        },
+        refreshUser,
         signIn,
         signOut,
         user,
@@ -227,6 +310,47 @@ export const AuthProvider = ({
     </AuthContext.Provider>
   );
 };
+
+// Without Privy env vars the app still renders (public pages, local tooling);
+// sign-in just explains what is missing, mirroring the Supabase guard the app
+// had before.
+const DisabledAuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [error, setError] = useState<string | null>(null);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        availableWallets: [],
+        error,
+        isAuthenticated: false,
+        isLoading: false,
+        isSigningIn: false,
+        isWalletConnected: false,
+        refreshUser: async () => undefined,
+        signIn: async () => {
+          setError('Sign-in is not configured. Add NEXT_PUBLIC_PRIVY_APP_ID to the environment.');
+        },
+        signOut: async () => undefined,
+        user: null,
+        walletAddress: null,
+      }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const AuthProvider = ({
+  children,
+  initialAuth,
+}: {
+  children: React.ReactNode;
+  initialAuth: InitialAuthState;
+}) =>
+  isPrivyConfigured() ? (
+    <PrivyAuthProvider initialAuth={initialAuth}>{children}</PrivyAuthProvider>
+  ) : (
+    <DisabledAuthProvider>{children}</DisabledAuthProvider>
+  );
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
