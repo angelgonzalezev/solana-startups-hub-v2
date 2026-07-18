@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/context/AuthContext';
+import { useOnboarding } from '@/context/OnboardingContext';
 import { isProfileMinimumComplete } from '@/utils/validation';
 import DashboardShell from '@/components/shared/DashboardShell';
 import AuthGate from '@/components/shared/AuthGate';
@@ -10,12 +11,14 @@ import { useRouter } from 'next/navigation';
 
 export default function NewStartupPage() {
   const { user } = useAuth();
+  const { refreshOnboarding } = useOnboarding();
   const router = useRouter();
 
   const isComplete = user ? isProfileMinimumComplete(user) : false;
 
   const handleSave = () => {
-    // Redirect to my startups after successful creation
+    // First startup created: the onboarding nudge can retire itself.
+    void refreshOnboarding();
     router.push('/dashboard/startups');
   };
 

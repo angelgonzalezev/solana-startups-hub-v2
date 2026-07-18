@@ -4,11 +4,25 @@ import DashboardShell from '@/components/shared/DashboardShell';
 import AuthGate from '@/components/shared/AuthGate';
 import ProfileForm from '@/components/profile/ProfileForm';
 import { useAuth } from '@/context/AuthContext';
+import { useOnboarding } from '@/context/OnboardingContext';
+import { isProfileMinimumComplete } from '@/utils/validation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { AtSign, ExternalLink } from 'lucide-react';
+import type { User } from '@/interface/user';
 
 export default function ProfilePage() {
+  const router = useRouter();
   const { user } = useAuth();
+  const { hasStartups } = useOnboarding();
+
+  // Onboarding chaining: completing the profile while still startup-less
+  // moves straight to step 2 (listing the first startup).
+  const handleSave = (updatedUser: User) => {
+    if (isProfileMinimumComplete(updatedUser) && hasStartups === false) {
+      router.push('/dashboard/startups/new');
+    }
+  };
 
   return (
     <AuthGate>
@@ -31,7 +45,7 @@ export default function ProfilePage() {
           )
         }>
         <div className="max-w-4xl">
-          <ProfileForm initialData={user} />
+          <ProfileForm initialData={user} onSave={handleSave} />
         </div>
       </DashboardShell>
     </AuthGate>

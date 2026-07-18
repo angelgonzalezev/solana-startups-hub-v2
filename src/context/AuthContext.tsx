@@ -12,9 +12,12 @@ import {
   unregisterSessionRefresher,
   type BridgeSession,
 } from '@/lib/auth/tokenBridge';
+import { clearOnboardingDismissal } from '@/lib/onboarding';
 import { isPrivyConfigured } from '@/lib/privy/config';
 import { mapProfileRow } from '@/lib/supabase/mappers';
+import { startupService } from '@/services/startupService';
 import { userService } from '@/services/userService';
+import { isProfileMinimumComplete } from '@/utils/validation';
 import type { User } from '@/interface/user';
 
 export type WalletOption = {
@@ -162,6 +165,9 @@ const PrivyAuthProvider = ({ children, initialAuth }: { children: React.ReactNod
     async (loggedInUser: PrivyUser | null, wasAlreadyAuthenticated: boolean) => {
       if (authenticationInFlight.current) return;
       authenticationInFlight.current = true;
+      // OAuth logins arrive here after a full page reload, so the pre-redirect
+      // "signing in" state was lost - restore it while the exchange runs.
+      setIsSigningIn(true);
       setError(null);
       try {
         // Belt and braces over createOnLogin: if the account still has no
@@ -174,8 +180,23 @@ const PrivyAuthProvider = ({ children, initialAuth }: { children: React.ReactNod
           });
         }
         const session = await runExchangeWaitingForWallet(ensureWallet);
+        // A fresh login always resurfaces the onboarding checklist while
+        // steps remain pending; dismissal only lasts the rest of the visit.
+        clearOnboardingDismissal(session.profile.wallet_address);
         applySession(session);
-        if (!wasAlreadyAuthenticated) router.replace('/startups');
+        if (!wasAlreadyAuthenticated) {
+          // Onboarding: land on the step that is still pending - profile
+          // first, then the first startup. Fully set-up users go straight to
+          // the marketplace.
+          let destination = '/startups';
+          if (!isProfileMinimumComplete(mapProfileRow(session.profile))) {
+            destination = '/dashboard/profile';
+          } else {
+            const startupCount = await startupService.countStartupsByOwner().catch(() => null);
+            if (startupCount === 0) destination = '/dashboard/startups/new';
+          }
+          router.replace(destination);
+        }
       } catch (exchangeFailure) {
         console.error('[auth] session exchange failed:', exchangeFailure);
         // A failed exchange leaves a Privy session with no app profile; log it

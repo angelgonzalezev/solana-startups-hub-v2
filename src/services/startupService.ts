@@ -127,6 +127,21 @@ export const startupService = {
     return mapRpcStartup(data);
   },
 
+  // Lightweight ownership check for onboarding: how many startups the current
+  // user has, without fetching the rows.
+  countStartupsByOwner: async (): Promise<number> => {
+    const profileId = await getAuthenticatedProfileId();
+    if (!profileId) return 0;
+
+    const { count, error } = await getSupabaseBrowserClient()
+      .from('startups')
+      .select('id', { count: 'exact', head: true })
+      .eq('owner_profile_id', profileId);
+
+    if (error) throw error;
+    return count ?? 0;
+  },
+
   listStartupsByOwner: async (): Promise<Startup[]> => {
     const profile = await getCurrentProfile();
     const { data, error } = await getSupabaseBrowserClient()
