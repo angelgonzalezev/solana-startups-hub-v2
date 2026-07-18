@@ -112,15 +112,13 @@ const MobileMenu = () => {
             </ul>
           </nav>
           <div className="space-y-3 border-t border-white/10 pt-5">
-            {!isAuthenticated && (
-              <Link
-                href="/startups"
-                onClick={closeMenu}
-                className="btn btn-white-dark btn-md flex w-full items-center justify-center gap-2 border border-white/10">
-                <Store aria-hidden="true" className="size-4" />
-                <span>Marketplace</span>
-              </Link>
-            )}
+            <Link
+              href="/startups"
+              onClick={closeMenu}
+              className="btn btn-white-dark btn-md flex w-full items-center justify-center gap-2 border border-white/10">
+              <Store aria-hidden="true" className="size-4" />
+              <span>Marketplace</span>
+            </Link>
             <div onClick={closeMenu}>
               <WalletConnectButton className="w-full" />
             </div>

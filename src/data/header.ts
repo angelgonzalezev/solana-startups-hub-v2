@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { CircleHelp, Globe, Info, LayoutDashboard, LayoutGrid, Rocket, Store, UserRound } from 'lucide-react';
+import { CircleHelp, Globe, Info, LayoutDashboard, LayoutGrid, Rocket, UserRound } from 'lucide-react';
 
 export interface NavigationItem {
   id: string;
@@ -37,13 +37,9 @@ export const navigationItems: NavigationItem[] = [
   },
 ];
 
+// Marketplace is not listed here: it renders as the persistent pill button
+// next to the session button, same style and position in both auth states.
 export const platformNavigationItems: NavigationItem[] = [
-  {
-    id: 'marketplace',
-    label: 'Marketplace',
-    href: '/startups',
-    icon: Store,
-  },
   {
     id: 'orbital',
     label: 'The Orbital',
@@ -58,15 +54,15 @@ export const platformNavigationItems: NavigationItem[] = [
     icon: LayoutDashboard,
   },
   {
-    id: 'my-startups',
-    label: 'My Startups',
-    href: '/dashboard/startups',
-    icon: Rocket,
-  },
-  {
     id: 'profile',
     label: 'Profile',
     href: '/dashboard/profile',
     icon: UserRound,
+  },
+  {
+    id: 'my-startups',
+    label: 'My Startups',
+    href: '/dashboard/startups',
+    icon: Rocket,
   },
 ];

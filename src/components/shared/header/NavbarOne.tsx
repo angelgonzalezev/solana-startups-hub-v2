@@ -50,14 +50,12 @@ const NavbarOne: FC<NavbarOneProps> = ({ className, btnClassName }) => {
             </ul>
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
-            {!isAuthenticated && (
-              <Link
-                href="/startups"
-                className="btn btn-white-dark btn-md inline-flex items-center gap-2 border border-white/10 hover:btn-primary">
-                <Store aria-hidden="true" className="size-4" />
-                <span>Marketplace</span>
-              </Link>
-            )}
+            <Link
+              href="/startups"
+              className="btn btn-white-dark btn-md inline-flex items-center gap-2 border border-white/10 hover:btn-primary">
+              <Store aria-hidden="true" className="size-4" />
+              <span>Marketplace</span>
+            </Link>
             <WalletConnectButton className={cn('btn-sm', btnClassName)} />
           </div>
           {/* mobile menu btn */}
