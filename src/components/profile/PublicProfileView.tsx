@@ -68,16 +68,16 @@ const PublicProfileView: React.FC<PublicProfileViewProps> = ({ profile, startups
 
                     {profile.bio && <p className="text-base leading-7 text-white/60">{profile.bio}</p>}
 
-                    <div className="flex w-full flex-wrap items-center justify-center gap-3 lg:justify-start">
+                    <div className="flex w-full flex-wrap items-center justify-center gap-2 sm:gap-3 lg:justify-start">
                       {profile.twitterHandle && (
                         <a
                           href={`https://x.com/${profile.twitterHandle}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex min-h-11 items-center gap-2.5 rounded-full border border-white/10 bg-[#0A0A0A] px-5 text-sm font-bold text-white/70 transition-all hover:border-primary-500/50 hover:bg-primary-500/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50">
+                          className="group flex min-h-9 min-w-0 items-center gap-2 rounded-full border border-white/10 bg-[#0A0A0A] px-3.5 text-xs font-bold text-white/70 transition-all hover:border-primary-500/50 hover:bg-primary-500/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 sm:min-h-11 sm:gap-2.5 sm:px-5 sm:text-sm">
                           <svg
                             aria-hidden="true"
-                            className="h-3.5 w-3.5 shrink-0 fill-white/40 transition-colors group-hover:fill-white"
+                            className="h-3 w-3 shrink-0 fill-white/40 transition-colors group-hover:fill-white sm:h-3.5 sm:w-3.5"
                             viewBox="0 0 24 24">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                           </svg>
@@ -89,10 +89,10 @@ const PublicProfileView: React.FC<PublicProfileViewProps> = ({ profile, startups
                           href={`https://t.me/${profile.telegramHandle}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex min-h-11 items-center gap-2.5 rounded-full border border-white/10 bg-[#0A0A0A] px-5 text-sm font-bold text-white/70 transition-all hover:border-primary-500/50 hover:bg-primary-500/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50">
+                          className="group flex min-h-9 min-w-0 items-center gap-2 rounded-full border border-white/10 bg-[#0A0A0A] px-3.5 text-xs font-bold text-white/70 transition-all hover:border-primary-500/50 hover:bg-primary-500/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 sm:min-h-11 sm:gap-2.5 sm:px-5 sm:text-sm">
                           <svg
                             aria-hidden="true"
-                            className="h-3.5 w-3.5 shrink-0 fill-white/40 transition-colors group-hover:fill-white"
+                            className="h-3 w-3 shrink-0 fill-white/40 transition-colors group-hover:fill-white sm:h-3.5 sm:w-3.5"
                             viewBox="0 0 24 24">
                             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.962 4.084-1.362 5.441-.168.575-.533.766-.74.785-.453.041-.795-.299-1.233-.584-.687-.446-1.074-.722-1.741-1.161-.77-.506-.271-.785.168-1.241.115-.12 2.112-1.939 2.15-2.103.005-.021.01-.1-.035-.139-.046-.039-.114-.026-.163-.015-.069.016-1.171.744-3.308 2.185-.313.215-.597.321-.852.315-.282-.007-.824-.16-1.228-.291-.494-.161-.887-.247-.852-.521.018-.143.214-.289.587-.439 2.296-.999 3.827-1.658 4.591-1.977 2.183-.91 2.637-1.068 2.933-1.073.065-.001.21.015.304.092.079.064.102.151.111.218.009.064.012.2.008.32z" />
                           </svg>
