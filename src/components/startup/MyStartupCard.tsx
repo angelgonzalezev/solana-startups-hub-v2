@@ -84,6 +84,16 @@ const MyStartupCard: React.FC<MyStartupCardProps> = ({ startup, onArchive, onDel
             <VerificationStatusBadge status={startup.verificationStatus} />
             <ListingStatusBadge status={startup.listingStatus} />
             {featured && <FeaturedBadge />}
+            {featured && startup.featuredUntil && (
+              <span suppressHydrationWarning className="text-xs font-medium text-amber-400/70">
+                until{' '}
+                {new Date(startup.featuredUntil).toLocaleDateString(undefined, {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric',
+                })}
+              </span>
+            )}
           </div>
           {actionError && <p className="text-sm font-medium text-red-500">{actionError}</p>}
         </div>
