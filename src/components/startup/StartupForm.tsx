@@ -564,6 +564,9 @@ const StartupForm: React.FC<StartupFormProps> = ({ initialData, onSave, isEditin
                       </span>
                       <span className="min-w-0">
                         <span className="block truncate font-semibold text-white">{user.displayName}</span>
+                        {user.username && (
+                          <span className="block truncate text-xs text-primary-400/80">@{user.username}</span>
+                        )}
                         <span className="block truncate text-xs text-white/35">{user.walletAddress}</span>
                       </span>
                     </button>
